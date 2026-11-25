@@ -25,12 +25,13 @@ Retenqo is a local-first Android AI memory and commitment assistant. It turns au
 
 | Scope | Recorded result |
 | --- | --- |
-| Published Android [v0.1.3](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3) | 114 JVM tests passed; 5 device tests passed; lint 0 errors (34 warnings, 1 hint) |
-| Subsequent [database fix](https://github.com/priyanshuchawda/retenqo-enterprise/commit/3edfbc0cff94d360d4127b92948309e5e656a686) | 6 instrumentation tests passed on Android 16; concurrent encrypted connection regression and debug launch |
+| Android [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) | Signed release built and verified; 114 JVM tests passed and 6/6 instrumentation tests passed on the source before the version-only bump |
+| Physical-device release upgrade | Existing production installation upgraded and launched successfully on Android 16 / API 36; original first-install timestamp retained |
+| Android source verification | Lint reported zero errors; see the [verification record](docs/TESTING.md) for scope |
 | Website [verification baseline](https://github.com/priyanshuchawda/retenqo-enterprise/commit/7a0ef6ec48cba2077486db7baa202cdc7dffb079) | 25 unit tests, 100 browser tests passed (68 skipped); dependency audit reported no known vulnerabilities |
 | Production Lighthouse, one mobile-simulated run | Performance 92, accessibility 100, best practices 100, SEO 100; LCP 1.263 s, CLS 0 |
 
-These results refer to distinct recorded revisions, not a new run of the documentation revision. See [verification scope](docs/TESTING.md).
+Android and website evidence is scoped to the recorded release or source baseline. See [verification scope](docs/TESTING.md).
 
 ## Problem and solution
 
@@ -66,7 +67,7 @@ flowchart TD
 | Voice | Whisper bridge and Android TTS; speech-model provisioning and full device workflow verification remain in scope |
 | Backup | Encrypted exports and additive restore, including legacy plaintext imports |
 
-Example: an authorized message asks for slides by Friday. Retenqo can produce a reviewable commitment, preserve its source, support a reminder and later completion review. This illustrates the intended workflow; full end-to-end device verification is tracked in [implementation status](docs/IMPLEMENTATION_STATUS.md).
+Example: an authorized message asks for slides by Friday. Retenqo can produce a reviewable commitment, preserve its source, support a reminder and later completion review. Illustrative workflow; see [implementation status](docs/IMPLEMENTATION_STATUS.md) for device verification scope.
 
 ## Technology and design
 
@@ -83,13 +84,13 @@ Recommended language model: Qwen3.5-0.8B Q4_0, a separate 563,036,064-byte downl
 
 ## Download and installation
 
-The latest published stable binary is [v0.1.3](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3), version code 4, Android 13+, ARM64, 39,374,311 bytes. The pooled-connection database fix is in subsequent source and has not yet been published as a signed replacement. Affected devices require verification of the fixed build before relying on it.
+The latest stable binary is [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4), version code 5, Android 13+, ARM64, 39,374,307 bytes (~37.55 MiB). [Download the signed APK](https://github.com/priyanshuchawda/retenqo-enterprise/releases/download/v0.1.4/Retenqo-v0.1.4-arm64-v8a.apk). The release includes the SQLCipher pooled-connection fix and a successful in-place production upgrade on Android 16. The published SHA-256 and pinned publisher certificate are listed in [release verification](docs/TESTING.md).
 
 Use the [download page](https://retenqo.pages.dev/download) for checksum and signer details and the [installation guide](https://retenqo.pages.dev/installation). Keep Android security protections enabled and back up personal data before updating.
 
 ## Privacy and security
 
-Local inference does not require cloud AI endpoints. Notification capture starts paused; source groups are opt-in. The core database is encrypted at rest and new backup exports are authenticated and encrypted. Pending notification text is app-private but not application-encrypted. See [threat model](docs/THREAT_MODEL.md), [security policy](SECURITY.md) and [current status](docs/IMPLEMENTATION_STATUS.md).
+Local inference does not require cloud AI endpoints. Notification capture starts paused; source groups are opt-in. The core database is encrypted at rest and new backup exports are authenticated and encrypted. The notification queue uses Android app-private preferences; application-level encryption covers Room records and new encrypted backup exports. See [threat model](docs/THREAT_MODEL.md), [security policy](SECURITY.md) and [current status](docs/IMPLEMENTATION_STATUS.md).
 
 ## Build from source
 

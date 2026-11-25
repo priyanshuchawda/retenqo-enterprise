@@ -16,9 +16,13 @@ Retenqo addresses fragmented personal context and forgotten commitments with a l
 | Accessibility | Existing labeled controls, semantic HTML, keyboard controls and theme-aware Chromium axe checks. |
 | Problem Statement Alignment | Capture → remember → retrieve → follow through, with local processing and user control. |
 
+## Current release evidence
+
+[Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) is the signed Android 13+ ARM64 release. Its production upgrade and launch were verified on Android 16. The source verification record reports 114 JVM tests passed, 6/6 instrumentation tests passed and zero Android Lint errors; the website baseline reports 25 unit tests and 100 browser tests passed (68 skipped). See [Testing](TESTING.md) for precise scope and [traceability](REQUIREMENTS_TRACEABILITY.md) for source evidence.
+
 ## Illustrative workflow
 
-An authorized message asks for slides by Friday. The processing pipeline produces a reviewable commitment. The user confirms it, retrieves its context through search or Ask, receives a reminder and can review later completion evidence. This is a representative scenario, not a claim of an executed full device workflow.
+An authorized message asks for slides by Friday. The processing pipeline produces a reviewable commitment. The user confirms it, retrieves its context through search or Ask, receives a reminder and can review later completion evidence. Representative workflow; device verification scope is recorded in [implementation status](IMPLEMENTATION_STATUS.md).
 
 ## Review order
 
@@ -28,4 +32,4 @@ An authorized message asks for slides by Friday. The processing pipeline produce
 4. [AI implementation](AI_IMPLEMENTATION.md) and [research](RESEARCH_INDEX.md) — algorithms and experimental rationale.
 5. [Threat model](THREAT_MODEL.md) and [performance](PERFORMANCE.md) — engineering trade-offs.
 
-The current source includes the post-v0.1.3 SQLCipher fix. The published APK and source verification are separate; remaining verification is recorded in [implementation status](IMPLEMENTATION_STATUS.md).
+The SQLCipher pooled-connection fix is included in v0.1.4 and backed by the concurrent-connection regression and signed upgrade evidence.

@@ -1,5 +1,5 @@
-# Form blurb
+# Product summary
 
-Retenqo ingests permitted WhatsApp, Calendar, LMS and captured content and converts them into structured commitment records (task, time, source, status). Deterministic rules handle dates and amounts; compact on-device models handle semantic extract and cited Ask. Records are indexed locally. Before generation the system filters unrelated cards, checks conflicts and selects the lowest-cost model. Answers are evidence-linked or refused. Pulse and Focus delete temporary media after the text card is written. Model routing is agnostic: quantized weights, NPU acceleration on iQOO 15, Office Kit push from Windows.
+Retenqo turns authorized Android context into source-linked memories and reviewable commitments. Seven configurable notification groups, explicit screen capture, selected-file intake and on-device OCR feed deterministic extraction and optional quantized local GGUF inference. Lexical retrieval and citation checks support memory recall, while reminders, decision history and human-approved completion suggestions support follow-through. SQLCipher with Android Keystore-backed key protection and authenticated backup exports protect persisted personal context. The official static website verifies published APK identity, digest and pinned signer. Signed v0.1.4 was upgraded and launched on Android 16; the source verification record reports 114 JVM tests and 6/6 instrumentation tests passed.
 
-github.com/priyanshuchawda/mneme
+[Repository](https://github.com/priyanshuchawda/retenqo-enterprise) · [Release](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) · [Website](https://retenqo.pages.dev) · [Engineering evidence](../docs/TESTING.md)

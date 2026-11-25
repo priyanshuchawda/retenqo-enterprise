@@ -15,7 +15,7 @@ Personal memories, notifications, screen/voice content, commitment integrity, da
 | Lost or duplicate memories | Queue and event identity logic | Durable atomic ingestion, crash recovery, backpressure and idempotency tests |
 | Incorrect task closure | User confirmation required for suggestions | Test invalid, conflicting and stale suggestions |
 | Backup tampering | AES-GCM and passphrase-derived key | Validate schema and limits; full device restore and interruption tests |
-| Compromised model/APK | Pinned recommended model checksum; website sync verifies APK identity, digest, size and pinned signer | Verify dependencies and signed replacement release |
+| Compromised model/APK | Pinned recommended model checksum; website sync verifies APK identity, digest, size and pinned signer | v0.1.4 signed artifact and pinned signer verified; continue dependency and release verification |
 | Resource exhaustion | Some bounded background and intake paths | Measure memory, thermal, cancellation and lifecycle behavior |
 | Demo state in production | Debug-only entry-point guard | Isolate release behavior and verify packaged output |
 

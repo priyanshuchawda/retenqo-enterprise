@@ -1,30 +1,54 @@
 # Architecture
 
-Retenqo is a local-first Android application implemented in Kotlin and Compose. This describes the current architecture and target boundaries, not a claim that every boundary is fully enforced.
+Retenqo is a local-first Kotlin Android app with a static website for product information and verified distribution.
 
 ```mermaid
 flowchart TD
-    A[Compose UI and Android entry points] --> B[ViewModel and orchestration]
-    C[Authorized capture sources] --> D[Ingestion and extraction]
-    B --> D
-    D --> E[Room repositories and evidence]
-    D --> F[OCR and local native model]
-    B --> E
-    B --> F
-    E --> G[Commitment review and reminders]
-    F --> H[Validated answer or suggestion]
-    H --> B
+ N[Opt-in notifications] --> Q[App-private pending queue]
+ Q --> W[WorkManager]
+ S[Explicit screen or selected media] --> P[Bounded intake and OCR]
+ V[Voice] --> T[Whisper transcription]
+ W --> R[Rules-first extraction]
+ P --> R
+ T --> R
+ R --> M{Local model needed?}
+ M -->|Yes| L[llama.cpp GGUF]
+ M -->|No| C[Candidate]
+ L --> C
+ C --> D[SQLCipher Room database]
+ K[Keystore-wrapped key] --> D
+ D --> A[Lexical retrieval and Ask]
+ D --> F[Review, reminders and history]
+ F --> D
+ D --> B[Encrypted backup export]
 ```
 
-| Area | Responsibility |
+| Component | Responsibility |
 | --- | --- |
-| Presentation | Compose screens, state and user interactions |
-| Capture | Notifications, user-started screen capture, explicit picker/share, optional accessibility context |
-| Processing | Bounded preprocessing, OCR, deterministic rules, optional local generation |
-| Persistence | Room cards, source evidence and commitment history |
-| AI runtime | llama.cpp GGUF, Whisper bridge, model lifecycle |
-| Scheduling | WorkManager and Android reminder APIs |
+| Android entry | [MainActivity.kt](../android/mneme/app/src/main/java/com/mneme/app/MainActivity.kt): intents, permissions and manual dependency construction |
+| Orchestration | [MnemeViewModel.kt](../android/mneme/app/src/main/java/com/mneme/app/ui/timeline/MnemeViewModel.kt): app operations and state |
+| Capture | [MnemeNotificationListener.kt](../android/mneme/app/src/main/java/com/mneme/app/notif/MnemeNotificationListener.kt), [ScreenCapture.kt](../android/mneme/app/src/main/java/com/mneme/app/pulse/ScreenCapture.kt), [MediaIngestPipeline.kt](../android/mneme/app/src/main/java/com/mneme/app/media/MediaIngestPipeline.kt) |
+| Processing | [PulsePipeline.kt](../android/mneme/app/src/main/java/com/mneme/app/pulse/PulsePipeline.kt), [RulesExtract.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/RulesExtract.kt), [NoteExtractor.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/NoteExtractor.kt) |
+| Persistence | [MnemeDatabase.kt](../android/mneme/app/src/main/java/com/mneme/app/data/MnemeDatabase.kt), [NoteRepository.kt](../android/mneme/app/src/main/java/com/mneme/app/data/NoteRepository.kt), [FollowThroughDao.kt](../android/mneme/app/src/main/java/com/mneme/app/data/FollowThroughDao.kt) |
+| AI | [MemoryAsk.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/MemoryAsk.kt), [LlmBridge.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/LlmBridge.kt), [WhisperBridge.kt](../android/mneme/app/src/main/java/com/mneme/app/voice/WhisperBridge.kt) |
+| Scheduling | [NotifIngestWorker.kt](../android/mneme/app/src/main/java/com/mneme/app/notif/NotifIngestWorker.kt), [DueReminderScheduler.kt](../android/mneme/app/src/main/java/com/mneme/app/remind/DueReminderScheduler.kt) |
+| Recovery | [MnemeBackupManager.kt](../android/mneme/app/src/main/java/com/mneme/app/data/MnemeBackupManager.kt), [BackupCrypto.kt](../android/mneme/app/src/main/java/com/mneme/app/data/BackupCrypto.kt) |
 
-The current implementation includes lexical retrieval, rule-first extraction and model-assisted suggestions. The intended direction is clearer domain interfaces, durable ingestion, explicit consent checks, atomic persistence, and lifecycle-safe native runtime ownership. Do not confuse future design with implemented behavior.
+## Decisions and boundaries
 
-See [implementation audit](IMPLEMENTATION_AUDIT.md), [follow-through plan](FOLLOW_THROUGH_PLAN.md), [threat model](THREAT_MODEL.md) and [implementation status](IMPLEMENTATION_STATUS.md).
+- SQLCipher protects Room data at rest; Android Keystore protects its passphrase. Explicit migrations preserve records. The pooled-connection fix retains the SQLCipher-owned array until database close.
+- Rules-first processing limits unnecessary inference. Current recall uses lexical ranking over recent candidates; semantic embeddings are research rather than the production retrieval mechanism.
+- Source context and decision history support reviewable commitments. Completion suggestions require user confirmation.
+- Queue bounds and media limits constrain processing. Pending notification text is app-private but not application-encrypted.
+- Android permissions, IPC, imported files, native model inputs and output, persistent keys and release publication are trust boundaries.
+
+```mermaid
+flowchart LR
+ G[Release API and APK] --> S[Verify artifact identity and signer]
+ S --> J[Validated metadata]
+ J --> W[Astro static build]
+ W --> C[Cloudflare Pages]
+ C --> U[Browser]
+```
+
+See [threat model](THREAT_MODEL.md), [AI implementation](AI_IMPLEMENTATION.md) and [implementation status](IMPLEMENTATION_STATUS.md).

@@ -1,5 +1,8 @@
 # Mneme: RAG / embeddings / model choice — research + tests
 
+> Historical engineering record. For current release behavior, configuration and verification, see [implementation status](../docs/IMPLEMENTATION_STATUS.md), [testing](../docs/TESTING.md) and [offline models](../docs/OFFLINE_MODELS.md).
+
+
 Date: 2026-08-23
 
 ## What “working well” means for Mneme

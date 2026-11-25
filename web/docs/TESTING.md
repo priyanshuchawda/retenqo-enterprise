@@ -1,63 +1,16 @@
-# Testing Guide
+# Website testing guide
 
-## Test stack
+From the repository's `web/` directory:
 
-| Layer         | Tool       | Coverage                                                 |
-| ------------- | ---------- | -------------------------------------------------------- |
-| Unit tests    | Vitest     | Release validation schemas, URL validators, utils        |
-| Browser tests | Playwright | Page rendering, navigation, accessibility, download flow |
-
-## Run all tests
-
-```powershell
-cd C:\Users\Admin\Desktop\mneme\web
-pnpm test
-```
-
-## Unit tests only
-
-```powershell
-pnpm test
-# or directly:
-npx vitest run
-```
-
-Unit test files live in `tests/unit/`.
-
-## Browser tests only
-
-```powershell
+```bash
+pnpm verify
 pnpm test:e2e
-# or directly:
-npx playwright test
+pnpm audit
+pnpm test:coverage
 ```
 
-Browser test files live in `tests/e2e/`.
+Unit tests live in [tests/unit](../tests/unit/) and browser tests in [tests/e2e](../tests/e2e/). They cover release metadata and validation, APK identity, synchronization failure preservation, navigation, theme switching, clipboard, download links, layout and accessibility.
 
-## What is tested
+The recorded 25 November 2026 baseline was 25 unit tests and 100 browser tests passed (68 skipped). Full axe scans ran in Chromium desktop/mobile; Firefox and WebKit had smoke coverage. See [engineering audit](ENGINEERING_AUDIT.md). Later changes need new results.
 
-### Unit (Vitest)
-
-- Zod schema validation for `release.generated.json`
-- `isTrustedReleasePageUrl()` — rejects non-GitHub URLs, wrong repos, custom ports
-- `isTrustedApkDownloadUrl()` — tag matching, path traversal rejection, extension validation
-- `ReleaseState` discriminated union narrowing
-
-### Browser (Playwright)
-
-- Homepage renders H1 and primary CTA button
-- Navigation links work across all pages
-- Download page shows "pending" state when no release is available
-- 404 page returns correct HTTP status
-- CSP and security headers present
-- Skip-to-content link is first focusable element
-- Mobile viewport rendering (375px)
-- Desktop viewport rendering (1440px)
-
-## Adding tests
-
-Place unit tests in `tests/unit/*.test.ts`. Place browser tests in `tests/browser/*.spec.ts`. Both are picked up automatically by their respective runners.
-
-## Evidence requirement
-
-Before claiming tests pass, run the actual command and record the output. A test file existing is not proof of a passing test.
+Record actual commands, revision, browser project and skips. Local preview checks do not establish deployed security headers; production verification is recorded separately.

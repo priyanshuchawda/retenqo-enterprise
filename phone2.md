@@ -1,5 +1,8 @@
 # Phone 2 — Redmi Note 11 Pro+ 5G
 
+> Historical engineering record. For current release behavior, configuration and verification, see [implementation status](docs/IMPLEMENTATION_STATUS.md), [testing](docs/TESTING.md) and [offline models](docs/OFFLINE_MODELS.md).
+
+
 **Author:** [Priyanshu Chawda](https://github.com/priyanshuchawda) (`priyanshuchawda`)  
 **Captured:** 2026-08-22 (live ADB dump)  
 **Role:** Secondary test device for Retenqo (after storage cleanup)  

@@ -17,7 +17,7 @@ These are targets, not measured results. Run Lighthouse against the deployed sit
 
 ## Why these targets are achievable
 
-- **Astro static output** — zero JS shipped by default; all pages are static HTML
+- **Astro static output** — static HTML with small local theme and clipboard scripts
 - **Tailwind CSS** — Tailwind purges unused classes; production CSS is small
 - **No third-party scripts** — no analytics, no ads, no tracking pixels
 - **SVG illustrations** — custom SVGs are lightweight and scale perfectly
@@ -27,7 +27,6 @@ These are targets, not measured results. Run Lighthouse against the deployed sit
 
 | Asset type        | Requirement                                              |
 | ----------------- | -------------------------------------------------------- |
-| App screenshots   | WebP or AVIF, `width`/`height` set, lazy-load below fold |
 | Hero image        | `fetchpriority="high"`, not lazy                         |
 | SVG illustrations | Optimized with SVGO, `aria-hidden` on decorative         |
 | Fonts             | System UI font stack (`ui-sans-serif, system-ui`)        |
@@ -50,7 +49,7 @@ npx lighthouse http://localhost:4321 --output=html --output-path=web/eval-result
 cd web
 pnpm build
 # Check dist/_astro/ directory for JS and CSS sizes
-Get-ChildItem web/dist/_astro -Recurse | Select-Object Name, Length | Sort-Object Length -Descending
+Get-ChildItem dist/_astro -Recurse | Select-Object Name, Length | Sort-Object Length -Descending
 ```
 
 ### Transfer size
@@ -68,8 +67,4 @@ No additional cache configuration is required for a static site.
 
 ## Actual measurements
 
-> **TODO:** Run Lighthouse after deploy and record results here.
-
-| Date | Commit | LCP | CLS | INP | Performance score |
-| ---- | ------ | --- | --- | --- | ----------------- |
-| TBD  | TBD    | TBD | TBD | TBD | TBD               |
+One production mobile-simulated Lighthouse 13.6.0 run on 25 November 2026 recorded performance 92, accessibility 100, best practices 100 and SEO 100; LCP 1.263 s, CLS 0, TBT 244 ms and Speed Index 4.971 s. The performance target is 95; field INP, compression and repeatability were not established. See [engineering audit](ENGINEERING_AUDIT.md).

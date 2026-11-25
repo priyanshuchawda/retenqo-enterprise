@@ -23,7 +23,7 @@ This document tracks every website finding and improvement ID supplied for the a
 | WEB-11 | Implemented       | Release sync uses typed validation and explicit failure paths, preserving the last valid metadata.                                                                   |
 | WEB-12 | Verified          | Playwright checks generated internal links and external link schemes. A full external uptime audit remains network-dependent.                                        |
 | WEB-13 | Implemented       | Astro routes, data and shared UI components remain separated by page/layout/component responsibility.                                                                |
-| WEB-14 | Pending final run | `pnpm verify` runs formatting, ESLint, Astro/TypeScript checks, unit tests, and production build. Record the final output below after it completes.                  |
+| WEB-14 | Verified | `pnpm verify` runs formatting, ESLint, Astro/TypeScript checks, unit tests, and production build. Recorded baseline output below.                  |
 
 ## Website security
 
@@ -94,7 +94,7 @@ This document tracks every website finding and improvement ID supplied for the a
 | WT-07 | Implemented             | Keyboard navigation coverage exists; manual keyboard-only acceptance across every page remains pending.                                                                                                 |
 | WT-08 | Implemented             | Mobile Chromium route and navigation checks exist.                                                                                                                                                      |
 | WT-09 | Implemented             | Storage and clipboard failure paths are covered where browser APIs permit.                                                                                                                              |
-| WT-10 | Implemented             | Playwright projects cover Chromium, Firefox and WebKit; record exact final result after suite completes.                                                                                                |
+| WT-10 | Implemented             | Playwright projects cover Chromium, Firefox and WebKit; recorded baseline result below.                                                                                                |
 | WT-11 | Implemented             | Responsive checks cover 320–1920 px representative widths.                                                                                                                                              |
 | WT-12 | Pending manual evidence | Axe catches detectable contrast violations; no complete manual WCAG 2.2 AA contrast audit is claimed.                                                                                                   |
 | WT-13 | Partial                 | Focusable overflow regions and keyboard controls are tested; full focus-management review remains pending.                                                                                              |
@@ -121,7 +121,7 @@ This document tracks every website finding and improvement ID supplied for the a
 
 ## Verification record
 
-Append exact final outcomes for this revision:
+Recorded baseline outcomes (25 November 2026; later source changes require new verification):
 
 | Command                            | Result                                                                                                                                                                                   |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

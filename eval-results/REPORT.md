@@ -1,5 +1,8 @@
 # Mneme — Fedora model eval results (fixed)
 
+> Historical engineering record. For current release behavior, configuration and verification, see [implementation status](../docs/IMPLEMENTATION_STATUS.md), [testing](../docs/TESTING.md) and [offline models](../docs/OFFLINE_MODELS.md).
+
+
 **Date:** 2026-08-23  
 **Host:** Fedora laptop (~16 GB RAM) · `llama-completion` from `tools/llama.cpp/build-host`  
 **Author:** Priyanshu Chawda  

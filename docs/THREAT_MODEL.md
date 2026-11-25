@@ -1,6 +1,6 @@
 # Threat model
 
-Scope: Android application, captured data, local model/runtime, backups, source repository and future APK distribution. This is an initial qualitative threat model, not a completed penetration test or OWASP certification.
+Scope: Android application, captured data, local model/runtime, backups, source repository and APK distribution. This is a qualitative threat model, not a completed penetration test or OWASP certification.
 
 ## Assets and trust boundaries
 
@@ -15,9 +15,9 @@ Personal memories, notifications, screen/voice content, commitment integrity, da
 | Lost or duplicate memories | Queue and event identity logic | Durable atomic ingestion, crash recovery, backpressure and idempotency tests |
 | Incorrect task closure | User confirmation required for suggestions | Test invalid, conflicting and stale suggestions |
 | Backup tampering | AES-GCM and passphrase-derived key | Validate schema and limits; full device restore and interruption tests |
-| Compromised model/APK | Pinned recommended model checksum | Verify signer, asset identity, dependencies and release integrity |
+| Compromised model/APK | Pinned recommended model checksum; website sync verifies APK identity, digest, size and pinned signer | Verify dependencies and signed replacement release |
 | Resource exhaustion | Some bounded background and intake paths | Measure memory, thermal, cancellation and lifecycle behavior |
-| Demo state in production | Demo paths exist | Isolate release behavior and verify packaged output |
+| Demo state in production | Debug-only entry-point guard | Isolate release behavior and verify packaged output |
 
 ## Residual risk and verification
 

@@ -1,7 +1,7 @@
 # Implementation status
 
 **Updated:** 2026-11-25
-**Branch:** `main` (Retenqo v0.1.2 release candidate)
+**Branch:** `main` (post-v0.1.3 engineering update)
 
 **Product target:** [Personal follow-through plan](FOLLOW_THROUGH_PLAN.md) — source-backed commitments, user-reviewed updates, and verified local actions.
 
@@ -38,6 +38,14 @@
 - Direct capture milestone: the Android photo/document picker now accepts up to eight selected image/PDF files per batch, processes them through OCR and the local extraction pipeline, enforces a 40 MB per-file cap, and deletes app-private temporary copies. Android `ACTION_SEND`/`ACTION_SEND_MULTIPLE` share targets accept text, images, and PDFs without broad file permission for those user-selected items. Build/package passed; PackageManager resolves Retenqo for shared text and PDF on the M32, and the app launches. Actual picker/share payload OCR was not exercised this turn.
 - Security milestone: removed `MANAGE_EXTERNAL_STORAGE`, `READ_EXTERNAL_STORAGE`, unused `READ_MEDIA_AUDIO`, and `requestLegacyExternalStorage`. Automatic WhatsApp scanning now queries recent image rows only under WhatsApp/WhatsApp Business media paths in MediaStore. PDFs remain available through explicit picker/share selection. Notification capture defaults to paused; existing explicit source selections are preserved. Current build and unit tests pass; OEM MediaStore and picker/share behavior still require device validation.
 - Accessibility milestone: the voice microphone is now a labeled 48 dp button that works through standard click accessibility actions; expandable Settings groups expose button role and expanded/collapsed state. Screen-reader and switch-control use still need hands-on device validation.
+
+## SQLCipher pooled-connection startup fix — 2026-11-25
+
+- Root cause: SQLCipher 4.20.0's `SupportOpenHelperFactory` retains the supplied passphrase byte array and reuses it when its WAL connection pool opens additional connections. `MnemeDatabase` zeroed that same array immediately after the first Room connection opened, so later pooled connections attempted to authenticate with a zeroed key and failed with `SQLiteNotADatabaseException`.
+- Fix: keep the SQLCipher-owned passphrase array alive for the Room database lifetime and zero it after `RoomDatabase.close()`. The transient Keystore-decrypted array is still zeroed after database initialization; encryption and existing database files remain intact.
+- Regression evidence: the concurrent-read instrumentation test failed before the fix with `SQLiteNotADatabaseException` while opening a second connection. After the fix, all 6 instrumentation tests passed on the connected Xiaomi 2406ERN9CI (Android 16 / API 36 / ARM64), invoked with `adb shell am instrument -w com.mneme.app.debug.test/androidx.test.runner.AndroidJUnitRunner`.
+- Device launch: updated debug APK started on the same handset (`am start -W` returned `Status: ok`; process remained present), with no matching SQLCipher or fatal exception in the captured log window.
+- Scope: this verifies the pooled-connection failure on one API 36 device. A signed release update with the existing production database, Android API 33 device, and additional OEMs still need verification before publishing an updated release.
 
 ## Rubric hardening — 2026-11-25
 

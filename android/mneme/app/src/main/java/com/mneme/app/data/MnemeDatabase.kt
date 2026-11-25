@@ -14,6 +14,26 @@ abstract class MnemeDatabase : RoomDatabase() {
     abstract fun notes(): NoteDao
     abstract fun followThrough(): FollowThroughDao
 
+    /** SQLCipher retains this array to authenticate each connection opened by its WAL pool. */
+    private var retainedCipherPassphrase: ByteArray? = null
+
+    @Synchronized
+    private fun retainCipherPassphrase(passphrase: ByteArray) {
+        check(retainedCipherPassphrase == null) { "Database passphrase is already initialized." }
+        retainedCipherPassphrase = passphrase
+    }
+
+    override fun close() {
+        try {
+            super.close()
+        } finally {
+            synchronized(this) {
+                retainedCipherPassphrase?.fill(0)
+                retainedCipherPassphrase = null
+            }
+        }
+    }
+
     companion object {
         @Volatile private var instance: MnemeDatabase? = null
         private const val DATABASE_NAME = "mneme.db"
@@ -106,8 +126,9 @@ abstract class MnemeDatabase : RoomDatabase() {
             try {
                 PlaintextDatabaseMigrator.encryptIfNeeded(databaseFile, passphrase)
                 val roomPassphrase = passphrase.copyOf()
-                val database = try {
-                    Room.databaseBuilder(context, MnemeDatabase::class.java, DATABASE_NAME)
+                var database: MnemeDatabase? = null
+                try {
+                    database = Room.databaseBuilder(context, MnemeDatabase::class.java, DATABASE_NAME)
                         .openHelperFactory(SupportOpenHelperFactory(roomPassphrase, null, true))
                         .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                         .addCallback(object : Callback() {
@@ -118,19 +139,16 @@ abstract class MnemeDatabase : RoomDatabase() {
                             }
                         })
                         .build()
-                } catch (error: Exception) {
-                    roomPassphrase.fill(0)
-                    throw error
-                }
-
-                try {
+                    database.retainCipherPassphrase(roomPassphrase)
                     database.openHelper.writableDatabase
                     return database
                 } catch (error: Exception) {
-                    runCatching { database.close() }
+                    if (database == null) {
+                        roomPassphrase.fill(0)
+                    } else {
+                        runCatching { database.close() }
+                    }
                     throw error
-                } finally {
-                    roomPassphrase.fill(0)
                 }
             } finally {
                 passphrase.fill(0)

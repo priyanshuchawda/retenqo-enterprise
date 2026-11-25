@@ -1,6 +1,7 @@
 import { rename, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { z } from 'zod';
+import { format } from 'prettier';
 import {
   isTrustedApkDownloadUrl,
   isTrustedReleasePageUrl,
@@ -33,7 +34,10 @@ const githubReleaseSchema = z.object({
 async function writeAtomicJson(filePath: string, data: unknown): Promise<void> {
   const tmpPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
   try {
-    await writeFile(tmpPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+    const json = await format(`${JSON.stringify(data, null, 2)}\n`, {
+      parser: 'json',
+    });
+    await writeFile(tmpPath, json, 'utf8');
     await rename(tmpPath, filePath);
   } catch (err) {
     await unlink(tmpPath).catch(() => {});
@@ -45,6 +49,12 @@ async function main(): Promise<void> {
   const now = new Date().toISOString();
   // Try /releases/latest first; fall back to tag-specific endpoint when given via RELEASE_TAG env var
   const targetTag = process.env.RELEASE_TAG;
+  const versionCode = Number(process.env.RELEASE_VERSION_CODE);
+  if (!Number.isSafeInteger(versionCode) || versionCode <= 0) {
+    throw new Error(
+      'Set RELEASE_VERSION_CODE to the positive Android versionCode of this APK.'
+    );
+  }
   const apiUrl = targetTag ? GITHUB_TAG_API_URL(targetTag) : GITHUB_API_URL;
 
   const response = await fetch(apiUrl, {
@@ -113,7 +123,7 @@ async function main(): Promise<void> {
     syncedAt: now,
     release: {
       version: parsed.tag_name,
-      versionCode: 1,
+      versionCode,
       publishedAt: parsed.published_at,
       releaseUrl: parsed.html_url,
       apkUrl: apkAsset.browser_download_url,

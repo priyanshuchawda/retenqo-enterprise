@@ -12,7 +12,7 @@ Retenqo is a local-first AI memory and commitment assistant for Android. It turn
 ![Architecture: ARM64](https://img.shields.io/badge/architecture-ARM64-475569)
 ![AI: local inference](https://img.shields.io/badge/AI-on--device-0f766e)
 
-> **Development status:** Actively developed Apache-2.0 open-source project. A signed ARM64 engineering preview is available from GitHub Releases as a pre-release. Application-level encryption for the core database remains outstanding; this build is not a production privacy certification. See the implementation report and open engineering issues for current limitations.
+> **Development status:** Actively developed Apache-2.0 open-source project. A signed ARM64 engineering preview is available from GitHub Releases as a pre-release. The core Room database uses SQLCipher with an Android Keystore-protected key. The notification processing queue remains in app-private preferences without application-level encryption; this build is not a production privacy certification. See the implementation report and open engineering issues for current limitations.
 
 ## Official website
 
@@ -119,7 +119,7 @@ Install only from a trusted source. Keep Android security protections enabled. M
 
 ## Privacy and security
 
-Retenqo's local-first architecture reduces reliance on external AI services. It is not a claim of complete anonymity, zero risk or application-level encryption of every stored record.
+Retenqo's local-first architecture reduces reliance on external AI services. It is not a claim of complete anonymity, zero risk or application-level encryption of every stored record. The Room database is encrypted at rest; the pending notification queue and ordinary settings/preferences do not yet use application-level encryption.
 
 | Access / data | Purpose and boundary |
 | --- | --- |
@@ -205,14 +205,13 @@ cd android/mneme
 | --- | --- |
 | JVM unit tests | 79 passed, 0 failures |
 | Debug assembly | Passed |
-| Android Lint | 0 errors, 32 warnings, 1 hint |
-| App instrumentation | 2 passed on the attached Android 16 device |
-| Aggregate connected instrumentation | Fails in the imported llama-runtime test APK because its AndroidJUnitRunner class is missing; app instrumentation passed |
+| Android Lint | 0 errors, 33 warnings, 1 hint |
+| App instrumentation | Encrypted database instrumentation source compiled; execution was not completed because Android's install confirmation was canceled |
+| Encrypted database smoke check | Debug app launched on the attached Android 16 device; database header did not match plaintext SQLite format |
 | Offline local generation | A short general question answered with connectivity disabled |
-| Room migration | v5 to v7 verified on-device with existing data retained |
-| Device observation | Galaxy M32, Android 13 / ARM64; approximately 831 MB process PSS in one model run |
+| Historical device observation | Galaxy M32, Android 13 / ARM64; approximately 831 MB process PSS in one model run; not re-measured for this revision |
 
-These results were reproduced locally for this source revision; they are not live CI badges or broad performance guarantees. The separate Galaxy M32 observations below remain historical measurements.
+The unit, lint, and debug assembly results were reproduced locally for this source revision; they are not live CI badges or broad performance guarantees. Historical device observations are labeled separately.
 
 Engineering priorities include durable capture, source and citation correctness, permission revocation, secure storage, lifecycle management, native resource bounds, reproducible tests and measurable accessibility.
 
@@ -223,7 +222,9 @@ Engineering priorities include durable capture, source and citation correctness,
 - The local model is not a reliable general-purpose autonomous planner. AI output and proposed task updates need human review.
 - Broad multilingual extraction, real-world retrieval accuracy, battery and thermal behavior are not yet comprehensively benchmarked.
 - Real-device end-to-end capture, voice, reminders, backup restore, permission behavior, and additional device compatibility need further verification.
+- Room database encryption uses SQLCipher and a random passphrase wrapped by Android Keystore. Legacy plaintext Room databases are converted before Room opens them; the plaintext migration copy is removed only after Room opens successfully. Back up important data before updating. If the device Keystore key is unavailable, the database fails closed and is not automatically replaced. The migration instrumentation test compiled but has not yet run.
 - New backup exports are encrypted; legacy JSON is not. Backup encryption is distinct from database encryption at rest.
+- Notification queue data remains in unencrypted app-private preferences until it is migrated to encrypted durable storage.
 - Manual screen-reader and switch-control testing remains outstanding.
 - No official stable release or verified production security certification is currently documented.
 

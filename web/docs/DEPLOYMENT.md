@@ -50,6 +50,7 @@ This calls `scripts/sync-release.ts` which fetches the latest release from the G
 | Variable                      | Purpose                                                                                                                                                            |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `RETENQO_SIGNING_CERT_SHA256` | SHA-256 of the APK signing certificate (not the file digest). Used by `sync-release.ts`. Optional — if unset, the cert fingerprint field is omitted from metadata. |
+| `RELEASE_VERSION_CODE`        | Positive Android `versionCode` embedded in the APK being published. Required by `sync-release.ts`; read it from the app build configuration for that release.      |
 | `CLOUDFLARE_API_TOKEN`        | Alternative to interactive `wrangler login`. Use in automated/non-interactive environments.                                                                        |
 
 ## Notes

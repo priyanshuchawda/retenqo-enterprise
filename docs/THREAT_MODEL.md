@@ -9,7 +9,7 @@ Personal memories, notifications, screen/voice content, commitment integrity, da
 | Threat | Current control or context | Required verification / improvement |
 | --- | --- | --- |
 | Overbroad capture | Source controls and explicit platform permissions | Recheck consent at processing time, revocation and sensitive-content tests |
-| Sensitive data exposure | Android sandbox; encrypted new backup exports | Audit logs, lock-screen output, queue data and at-rest encryption strategy |
+| Sensitive data exposure | SQLCipher Room database, Android Keystore-wrapped database key, encrypted new backup exports and Android sandbox | Encrypt pending notification queue/preferences; audit logs and lock-screen output |
 | Malicious intents or files | Picker/share and bounded file intake | Validate schemes, MIME, decoded dimensions, native parser and resource limits |
 | Prompt injection / false evidence | Rules-first extraction and citation guard | Treat content as data, verify cited IDs and supporting evidence, adversarial evaluation |
 | Lost or duplicate memories | Queue and event identity logic | Durable atomic ingestion, crash recovery, backpressure and idempotency tests |
@@ -21,6 +21,6 @@ Personal memories, notifications, screen/voice content, commitment integrity, da
 
 ## Residual risk and verification
 
-Local processing does not eliminate data exposure, malicious inputs or compromised-device risk. Backup encryption does not prove database encryption at rest. Human review cannot guarantee AI factual accuracy. Maintain synthetic security regression tests and evidence for each mitigation. Review this document when a trust boundary changes.
+Local processing does not eliminate data exposure, malicious inputs or compromised-device risk. Room is encrypted at rest, but notification queue contents in preferences are not application-encrypted. Loss of the Android Keystore key makes the database unavailable; the app fails closed and users should maintain encrypted backups. Human review cannot guarantee AI factual accuracy. Maintain synthetic security regression tests and evidence for each mitigation. Review this document when a trust boundary changes.
 
 See [security policy](../SECURITY.md) and [implementation audit](IMPLEMENTATION_AUDIT.md).

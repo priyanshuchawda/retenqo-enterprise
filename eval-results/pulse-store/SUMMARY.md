@@ -39,4 +39,4 @@ embed:   embed_text paragraph (for HashEmbed now / Qwen3-Embedding later)
 ## Files
 
 - App: `android/mneme/.../NoteExtractor.kt`, `PulsePipeline.kt`, `NoteRepository.kt`
-- Raw outs: `eval-results/pulse-store/*_schema{A,B,C}.out`
+- Generated outputs: `eval-results/pulse-store/*_schema{A,B,C}.out` (historical outputs remain in repository history).

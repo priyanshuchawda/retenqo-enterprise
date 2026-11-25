@@ -7,10 +7,14 @@ The current stable release is v0.1.4. Recorded outcomes identify the tested arti
 | Published v0.1.4 | Signed APK built; pinned single signer verified; in-place production upgrade and launch successful on Xiaomi 2406ERN9CI, Android 16/API 36, ARM64 | [Release notes](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) |
 | v0.1.4 source before version-only bump | 114 JVM tests passed; 6/6 Android instrumentation tests passed; Android Lint reported zero errors | [Implementation status](IMPLEMENTATION_STATUS.md), [database fix](https://github.com/priyanshuchawda/retenqo-enterprise/commit/3edfbc0cff94d360d4127b92948309e5e656a686) |
 | Website baseline | 25 unit tests, 100 browser tests passed, 68 skipped; format/lint/type/build passed; dependency audit reported no known vulnerabilities | [Audit](../web/docs/ENGINEERING_AUDIT.md), [baseline](https://github.com/priyanshuchawda/retenqo-enterprise/commit/7a0ef6ec48cba2077486db7baa202cdc7dffb079) |
-| Historical offline generation | Short general question answered with connectivity disabled | [Implementation status](IMPLEMENTATION_STATUS.md) |
+| Historical offline generation | Galaxy M32/API 33: Qwen3.5-0.8B Q4_0 answered a short general question with connectivity disabled; earlier Room schema migration and note preservation observed | Historical development record |
 | Earlier model experiments | Exploratory host and phone measurements | [Research index](RESEARCH_INDEX.md) |
 
 The concurrent-read device test reproduced the SQLCipher authentication failure before the fix. After retaining the required key array, the reported six tests passed. See [MnemeDatabaseDeviceTest.kt](../android/mneme/app/src/androidTest/java/com/mneme/app/data/MnemeDatabaseDeviceTest.kt) and [MnemeDatabase.kt](../android/mneme/app/src/main/java/com/mneme/app/data/MnemeDatabase.kt). The published v0.1.4 APK includes this fix. Signed upgrade verification succeeded on API 36; the same release's API 33 upgrade coverage remains to be established.
+
+## Device and workflow coverage
+
+The declared minimum API is 33. The v0.1.4 signed upgrade and launch were verified on API 36. Earlier Galaxy M32/API 33 observations covered local model generation, migration, launch and selected controls, not the v0.1.4 signed upgrade. The Galaxy M34 and full voice, reminder delivery, picker/share, screen-context and encrypted backup restore workflows require additional physical-device verification. Automated crypto and business-logic coverage is linked in [traceability](REQUIREMENTS_TRACEABILITY.md).
 
 ## Published artifact identity
 

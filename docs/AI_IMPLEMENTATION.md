@@ -5,7 +5,7 @@ Retenqo combines deterministic extraction with optional local generation to supp
 | Stage | Implementation |
 | --- | --- |
 | Extraction | [RulesExtract.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/RulesExtract.kt), [NoteExtractor.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/NoteExtractor.kt): rules-first dates, amounts, parties and optional model assistance |
-| Retrieval | [NoteRepository.kt](../android/mneme/app/src/main/java/com/mneme/app/data/NoteRepository.kt): lexical ranking over bounded recent candidates |
+| Retrieval | [NoteRepository.kt](../android/mneme/app/src/main/java/com/mneme/app/data/NoteRepository.kt): lexical scoring of a bounded candidate set |
 | Generation | [LlmBridge.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/LlmBridge.kt): CPU llama.cpp GGUF with bounded generation |
 | Answer validation | [AskAnswerGuard.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/AskAnswerGuard.kt), [MemoryAsk.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/MemoryAsk.kt): citation identifier checks and refusal handling |
 | Completion evidence | [CompletionEvidenceAgent.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/CompletionEvidenceAgent.kt), [FollowThroughMatcher.kt](../android/mneme/app/src/main/java/com/mneme/app/data/FollowThroughMatcher.kt): local suggestions and human review |
@@ -19,4 +19,4 @@ The August 2026 [model evaluation](../eval-results/REPORT.md) explored earlier 2
 
 ## Evidence and review policy
 
-The citation guard validates referenced identifiers, while the original memory context and explicit user approval support review of generated answers and completion suggestions. Identifier validation is distinct from factual entailment. Current retrieval covers a bounded recent candidate set; full-history retrieval, screen-only answers and broader adversarial and accuracy evaluations are tracked in the [engineering status](IMPLEMENTATION_STATUS.md).
+The citation guard validates referenced identifiers, while the original memory context and explicit user approval support review of generated answers and completion suggestions. Identifier validation is distinct from factual entailment. The repository selects recent candidates before ranking (20× the requested limit, capped at 1,000); older records outside that set may not be retrieved by Ask. Full-history search, screen-only answer handling and broader adversarial/accuracy evaluation are [roadmap](ROADMAP.md) priorities. Learned embeddings remain research, not a current production dependency.

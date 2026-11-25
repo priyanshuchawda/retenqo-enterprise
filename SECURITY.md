@@ -4,13 +4,13 @@ Retenqo handles sensitive personal context. We welcome responsible disclosure an
 
 ## Supported versions
 
-The latest published stable release is [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4). No guaranteed security support window is offered. Report issues affecting current main or any published release; include the commit or version. A fix in main does not imply that an installed APK has been updated.
+The latest published stable release is [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4). Security reports are welcome for the current release and main branch. Report issues affecting current main or any published release; include the commit or version. A fix in main does not imply that an installed APK has been updated.
 
 ## Reporting a vulnerability
 
 Use [GitHub private vulnerability reporting](https://github.com/priyanshuchawda/retenqo-enterprise/security) if available. If private reporting is unavailable, contact the repository maintainer privately; do not publish sensitive details in an issue. Include a minimal synthetic reproduction, affected versions, prerequisites, impact and proposed mitigation if known. Never send actual personal messages, authentication secrets, signing keys or unredacted backups.
 
-Please allow a reasonable opportunity to investigate and coordinate disclosure. Do not access other people's devices or data, perform destructive tests, or interfere with services. No response-time guarantee or bug bounty is currently offered.
+Please allow a reasonable opportunity to investigate and coordinate disclosure. Do not access other people's devices or data, perform destructive tests, or interfere with services. Reports are handled on a best-effort basis; no guaranteed response window or bug bounty is offered.
 
 ## Scope
 

@@ -37,9 +37,9 @@ flowchart TD
 ## Decisions and boundaries
 
 - SQLCipher protects Room data at rest; Android Keystore protects its passphrase. Explicit migrations preserve records. The pooled-connection fix retains the SQLCipher-owned array until database close.
-- Rules-first processing limits unnecessary inference. Current recall uses lexical ranking over recent candidates; semantic embeddings are research rather than the production retrieval mechanism.
+- Rules-first processing limits unnecessary inference. Recall uses bounded lexical ranking to select evidence for local generation. [AI implementation](AI_IMPLEMENTATION.md) specifies candidate selection.
 - Source context and decision history support reviewable commitments. Completion suggestions require user confirmation.
-- Queue bounds and media limits constrain processing. Pending notification text is app-private but not application-encrypted.
+- Queue bounds and media limits constrain processing. Storage protection boundaries are specified in the [threat model](THREAT_MODEL.md).
 - Android permissions, IPC, imported files, native model inputs and output, persistent keys and release publication are trust boundaries.
 
 ```mermaid

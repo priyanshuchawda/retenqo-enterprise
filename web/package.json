@@ -8,7 +8,7 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
-  "description": "Official enterprise-grade website and secure APK distribution platform for Retenqo",
+  "description": "Official Retenqo website and verified Android APK distribution",
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",

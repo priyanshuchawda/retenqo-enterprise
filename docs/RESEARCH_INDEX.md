@@ -1,16 +1,15 @@
-# Historical research and engineering records
+# Research and engineering evidence
 
-These are valuable development artifacts, not the current production baseline.
+Retenqo retains concise research reports and reproducible inputs. Generated console outputs and local device scratch files are excluded from the current checkout; earlier tracked artifacts remain in repository history. Reports preserve experimental outcomes, including unsuccessful configurations.
 
 | Material | Scope |
 | --- | --- |
-| [Model evaluation](../eval-results/REPORT.md) | August 2026 experiments with earlier models |
-| [Retrieval research](../eval-results/MODEL_RAG_RESEARCH.md) | Lexical, hash and embedding investigations |
-| [Generation fix](../eval-results/GENERATION_FIX.md) | Historical prompt/runtime debugging |
-| [Media experiments](../eval-results/media-vl/SUMMARY.md), [Pulse storage experiments](../eval-results/pulse-store/SUMMARY.md) | Earlier visual extraction and storage-format research |
+| [Model evaluation](../eval-results/REPORT.md) | Historical 2B/4B experiments and generation behavior |
+| [Retrieval research](../eval-results/MODEL_RAG_RESEARCH.md) | Lexical, hash and learned embedding investigations |
+| [Generation fix](../eval-results/GENERATION_FIX.md) | Prompt/runtime debugging |
+| [Media experiments](../eval-results/media-vl/SUMMARY.md), [Pulse storage experiments](../eval-results/pulse-store/SUMMARY.md) | Visual extraction and storage format |
 | [Embedding comparison](../eval-results/embed-qwen3-0.6b/rag_vs_hash.txt) | Exploratory ranking examples |
-| [Model notes](../MODELS.md) | Historical selection and provisioning |
-| [Initial design](../idea.md), [phone testing](../PHONE1_TESTING.md), [Redmi notes](../DEV_DEVICE_REDMi13.md), [phone 2 notes](../phone2.md) | Earlier device and design records |
-| [Follow-through plan](FOLLOW_THROUGH_PLAN.md), [implementation audit](IMPLEMENTATION_AUDIT.md) | Earlier milestones and gaps |
+| [Model guide](../MODELS.md) | Current model navigation |
+| [Follow-through plan](FOLLOW_THROUGH_PLAN.md), [historical implementation audit](IMPLEMENTATION_AUDIT.md) | Earlier design and engineering milestones |
 
-Current release: [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4). Current configuration: [offline models](OFFLINE_MODELS.md). Current evidence: [testing](TESTING.md), [AI implementation](AI_IMPLEMENTATION.md), [implementation status](IMPLEMENTATION_STATUS.md). Preserve unsuccessful experiments as evidence of the research process; do not substitute historical results for current-release benchmarks.
+Current evidence: [testing](TESTING.md), [AI implementation](AI_IMPLEMENTATION.md), [offline models](OFFLINE_MODELS.md), [implementation status](IMPLEMENTATION_STATUS.md). Historical results are not substituted for current-release verification.

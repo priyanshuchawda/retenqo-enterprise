@@ -17,7 +17,7 @@ Model download needs an internet connection and roughly 691 MB free space to pre
 
 ## Device verification
 
-The selected file is a small compatibility starting point, not a measured performance guarantee. Generation speed, peak memory, thermal behavior, and quality must be measured on each target phone. The current device run is on a Galaxy M32 (SM-M325F, Android 13, about 5.8 GB physical RAM), not the Galaxy M34.
+The selected file is a small compatibility starting point, not a measured performance guarantee. Generation speed, peak memory, thermal behavior, and quality must be measured on each target phone. Earlier local generation was observed on a Galaxy M32 (Android 13, about 5.8 GB physical RAM). See [Testing](TESTING.md) for device scope.
 
 ## Speech and historical model research
 

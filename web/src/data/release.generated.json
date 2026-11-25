@@ -1,14 +1,14 @@
 {
   "status": "available",
-  "syncedAt": "2026-11-25T10:27:58.147Z",
+  "syncedAt": "2026-11-25T10:51:23.684Z",
   "release": {
-    "version": "v0.1.1",
-    "versionCode": 2,
-    "publishedAt": "2026-11-25T10:26:21Z",
-    "releaseUrl": "https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.1",
-    "apkUrl": "https://github.com/priyanshuchawda/retenqo-enterprise/releases/download/v0.1.1/app-release.apk",
-    "apkSizeBytes": 39374991,
-    "sha256": "df664acb4abce9535580e94eb76a3a765cfba65e90cf069d004a606944c55e34",
+    "version": "v0.1.2",
+    "versionCode": 3,
+    "publishedAt": "2026-11-25T10:50:50Z",
+    "releaseUrl": "https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.2",
+    "apkUrl": "https://github.com/priyanshuchawda/retenqo-enterprise/releases/download/v0.1.2/Retenqo-v0.1.2-arm64-v8a.apk",
+    "apkSizeBytes": 39374995,
+    "sha256": "70a92143713051bad3e5c76ac9f7938c4a36aae79a44305ce3e806aaac68a2b9",
     "signingCertificateSha256": "b975fe4b5d929586e9bf0133ebde25c03d0acf990ddbba5c14f0f2b31ae38cca",
     "minimumAndroidApi": 33,
     "architectures": ["arm64-v8a"]

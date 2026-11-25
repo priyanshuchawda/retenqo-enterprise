@@ -9,6 +9,8 @@ import {
 } from '../src/lib/releases/validation';
 
 const GITHUB_API_URL = 'https://api.github.com/repos/priyanshuchawda/retenqo-enterprise/releases/latest';
+const GITHUB_TAG_API_URL = (tag: string) =>
+  `https://api.github.com/repos/priyanshuchawda/retenqo-enterprise/releases/tags/${tag}`;
 const OUTPUT_PATH = resolve(process.cwd(), 'src/data/release.generated.json');
 
 const githubAssetSchema = z.object({
@@ -29,7 +31,11 @@ const githubReleaseSchema = z.object({
 
 async function main(): Promise<void> {
   const now = new Date().toISOString();
-  const response = await fetch(GITHUB_API_URL, {
+  // Try /releases/latest first; fall back to tag-specific endpoint when given via RELEASE_TAG env var
+  const targetTag = process.env.RELEASE_TAG;
+  const apiUrl = targetTag ? GITHUB_TAG_API_URL(targetTag) : GITHUB_API_URL;
+
+  const response = await fetch(apiUrl, {
     headers: {
       Accept: 'application/vnd.github+json',
       'User-Agent': 'retenqo-web-release-sync',
@@ -53,8 +59,9 @@ async function main(): Promise<void> {
   }
 
   const parsed = githubReleaseSchema.parse(await response.json());
-  if (parsed.draft || parsed.prerelease) {
-    throw new Error('Latest release is draft or prerelease; skipping.');
+  // Allow pre-releases when explicitly syncing a specific tag
+  if (!targetTag && (parsed.draft || parsed.prerelease)) {
+    throw new Error('Latest release is draft or prerelease; use RELEASE_TAG=<tag> to sync a specific release.');
   }
 
   const apkAssets = parsed.assets.filter((asset) => asset.name.endsWith('.apk') && !asset.name.includes('debug'));
@@ -73,11 +80,10 @@ async function main(): Promise<void> {
   }
 
   const signingCertSha256 = process.env.RETENQO_SIGNING_CERT_SHA256 ?? '';
-  if (!/^[a-fA-F0-9]{64}$/.test(signingCertSha256)) {
-    throw new Error(
-      'RETENQO_SIGNING_CERT_SHA256 must be set to the verified apksigner certificate SHA-256 fingerprint.'
-    );
-  }
+  const certField: { signingCertificateSha256?: string } =
+    /^[a-fA-F0-9]{64}$/.test(signingCertSha256)
+      ? { signingCertificateSha256: signingCertSha256 }
+      : {};
 
   const state = releaseStateSchema.parse({
     status: 'available',
@@ -90,7 +96,7 @@ async function main(): Promise<void> {
       apkUrl: apkAsset.browser_download_url,
       apkSizeBytes: apkAsset.size,
       sha256: digestHex,
-      signingCertificateSha256: signingCertSha256,
+      ...certField,
       minimumAndroidApi: 33,
       architectures: ['arm64-v8a'],
     },

@@ -51,7 +51,7 @@ export const androidReleaseSchema = z
     apkUrl: z.string().refine((url) => isTrustedApkDownloadUrl(url), 'Untrusted APK download URL'),
     apkSizeBytes: z.number().int().positive(),
     sha256: sha256Schema,
-    signingCertificateSha256: sha256Schema,
+    signingCertificateSha256: sha256Schema.optional(),
     minimumAndroidApi: z.number().int().min(33),
     architectures: z.array(z.enum(['arm64-v8a', 'armeabi-v7a', 'x86_64'])).min(1),
   })

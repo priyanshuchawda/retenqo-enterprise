@@ -48,6 +48,39 @@ import { SITE_CONFIG } from '../config/site';
 
       <section>
         <h2 class="text-lg font-semibold text-[var(--text-primary)]">
+          Android data protection
+        </h2>
+        <p class="mt-2">
+          Retenqo encrypts its Room database with SQLCipher. A randomly
+          generated database passphrase is encrypted by an AES-GCM key held in
+          Android Keystore. The app migrates an existing plaintext Room database
+          before opening it and fails closed if the protected key is unavailable
+          rather than replacing the data.
+        </p>
+        <p class="mt-3">
+          Pending notification queue contents and ordinary preferences are
+          currently app-private but not application-encrypted. Notification
+          sources start paused and are user-selectable; screen context,
+          microphone, and file access require explicit Android permission or
+          user-selected files. Revoked notification sources are removed from the
+          pending queue before processing.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-[var(--text-primary)]">
+          Backup protection
+        </h2>
+        <p class="mt-2">
+          New backup exports use a password-derived AES-256-GCM key. The app
+          does not save the password. Legacy JSON backups may be imported and
+          are not encrypted; handle them as plaintext. Keep backup passwords and
+          exported files under your control.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-[var(--text-primary)]">
           Zero-Backend Attack Surface
         </h2>
         <p class="mt-2">

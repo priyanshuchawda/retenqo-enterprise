@@ -65,10 +65,159 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           4. The Retenqo Android Application
         </h2>
         <p class="mt-2">
-          Memories, commitments, and embeddings are stored locally on your
-          device. Core AI inference runs on-device. Network access is only used
-          when you explicitly choose to download an on-device model or check for
-          updates.
+          Memories and commitments are stored in a local Room database encrypted
+          with SQLCipher. A random database key is wrapped by a non-exportable
+          Android Keystore key. OCR, memory search, and AI inference run on the
+          device after any optional model download.
+        </p>
+        <p class="mt-3">
+          Pending notification content and ordinary settings are stored in
+          app-private preferences but are not application-level encrypted. The
+          Android app sandbox still applies. Notification capture is paused by
+          default; only source groups you enable are queued. Revoking a source
+          removes its pending items before further processing.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-[var(--text-primary)]">
+          5. How personal content moves
+        </h2>
+        <figure
+          class="mt-4 rounded-2xl border p-4"
+          style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+        >
+          <svg
+            viewBox="0 0 960 250"
+            role="img"
+            aria-labelledby="privacy-flow-title privacy-flow-desc"
+            class="h-auto w-full"
+          >
+            <title id="privacy-flow-title">
+              Retenqo processes selected content locally
+            </title>
+            <desc id="privacy-flow-desc"
+              >Selected messages, images, and voice enter the Android phone,
+              local OCR and inference process them, and memories are saved in
+              the SQLCipher database.</desc
+            >
+            <defs>
+              <linearGradient id="flow-line" x1="0" x2="1">
+                <stop stop-color="#67d8ff"></stop><stop
+                  offset="1"
+                  stop-color="#5ee8bd"></stop>
+              </linearGradient>
+            </defs>
+            <rect
+              x="16"
+              y="40"
+              width="230"
+              height="168"
+              rx="24"
+              fill="#111a29"
+              stroke="#233249"
+              stroke-width="2"></rect>
+            <rect
+              x="365"
+              y="40"
+              width="230"
+              height="168"
+              rx="24"
+              fill="#111a29"
+              stroke="#233249"
+              stroke-width="2"></rect>
+            <rect
+              x="714"
+              y="40"
+              width="230"
+              height="168"
+              rx="24"
+              fill="#111a29"
+              stroke="#233249"
+              stroke-width="2"></rect>
+            <path
+              d="M256 124h92m-14-14 14 14-14 14M605 124h92m-14-14 14 14-14 14"
+              fill="none"
+              stroke="url(#flow-line)"
+              stroke-width="5"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+            <g
+              fill="none"
+              stroke="#67d8ff"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M81 112h70v50H81zM93 99h70v50M105 86h70v50"></path>
+              <path d="M426 88h108v78H426zM446 108h68M446 126h50M446 144h38"
+              ></path>
+              <path
+                d="M776 93h104a10 10 0 0 1 10 10v66a10 10 0 0 1-10 10h-104a10 10 0 0 1-10-10v-66a10 10 0 0 1 10-10zM792 118h72M792 139h52"
+              ></path>
+            </g>
+            <text
+              x="131"
+              y="190"
+              text-anchor="middle"
+              fill="#f1f5f9"
+              font-family="sans-serif"
+              font-size="16">Your selected content</text
+            >
+            <text
+              x="480"
+              y="190"
+              text-anchor="middle"
+              fill="#f1f5f9"
+              font-family="sans-serif"
+              font-size="16">Local OCR and AI</text
+            >
+            <text
+              x="829"
+              y="190"
+              text-anchor="middle"
+              fill="#f1f5f9"
+              font-family="sans-serif"
+              font-size="16">Encrypted Room database</text
+            >
+          </svg>
+          <figcaption class="mt-3 text-xs" style="color: var(--text-muted);">
+            The notification queue is a temporary exception: its pending text is
+            local but not application-encrypted.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-[var(--text-primary)]">
+          6. Retention and deletion
+        </h2>
+        <p class="mt-2">
+          Saved memories remain until you delete them or use Delete all personal
+          data in Settings. That action also clears queued notifications,
+          background ingest work, media history, temporary selected-media files,
+          and the volatile screen snapshot. Disabling a notification source
+          stops new capture and causes its queued items to be removed before
+          processing. Android app data removal or uninstall removes app-private
+          data, but we cannot promise forensic erasure from flash storage.
+        </p>
+        <p class="mt-3">
+          Encrypted backup files are user-controlled exports. Retenqo cannot
+          delete copies you saved elsewhere; remove those separately. Keep a
+          backup before major updates and store its password safely.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-[var(--text-primary)]">
+          7. External providers
+        </h2>
+        <p class="mt-2">
+          The website is hosted by Cloudflare Pages. APK downloads connect to
+          GitHub Releases. If you choose to download the optional model, the
+          device connects to Hugging Face. Those providers may receive ordinary
+          request metadata under their own policies. Personal memory content is
+          not sent in these requests by the app.
         </p>
       </section>
     </div>

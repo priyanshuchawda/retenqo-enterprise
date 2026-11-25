@@ -22,4 +22,17 @@ export default [
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
+  {
+    files: ['public/scripts/*.js'],
+    languageOptions: {
+      globals: {
+        document: 'readonly',
+        Element: 'readonly',
+        HTMLElement: 'readonly',
+        navigator: 'readonly',
+        window: 'readonly',
+        localStorage: 'readonly',
+      },
+    },
+  },
 ];

@@ -28,73 +28,99 @@ const currentPath = Astro.url.pathname;
       <span>retenqo<span style="color: var(--accent-primary);">.</span></span>
     </a>
 
-    <!-- Desktop nav -->
-    <nav
-      aria-label="Primary navigation"
-      class="hidden md:flex md:items-center md:gap-1"
-    >
-      {
-        SITE_CONFIG.nav.map((item) => {
-          const isActive =
-            currentPath === item.href ||
-            (item.href !== '/' && currentPath.startsWith(item.href));
-          const isDownload = item.href === '/download';
-          return (
-            <a
-              href={item.href}
-              aria-current={isActive ? 'page' : undefined}
-              class={
-                isDownload
-                  ? 'ml-2 inline-flex min-h-[40px] items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors'
-                  : `inline-flex min-h-[40px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${isActive ? 'font-semibold' : ''}`
-              }
-              style={
-                isDownload
-                  ? `background: var(--btn-primary-bg); color: var(--btn-primary-text);`
-                  : `color: ${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'}; background: ${isActive ? 'var(--bg-tertiary)' : 'transparent'};`
-              }
-            >
-              {item.label}
-            </a>
-          );
-        })
-      }
-    </nav>
-
-    <!-- Mobile menu -->
-    <details class="relative md:hidden">
-      <summary
-        class="inline-flex min-h-[44px] min-w-[44px] cursor-pointer list-none items-center justify-center rounded-lg border text-sm font-medium"
-        style="border-color: var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary);"
-        aria-label="Toggle navigation menu"
-      >
-        ☰
-      </summary>
+    <div class="flex items-center gap-2">
+      <!-- Desktop nav -->
       <nav
-        aria-label="Mobile navigation"
-        class="absolute right-0 mt-2 w-56 rounded-2xl border p-2 shadow-xl"
-        style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+        aria-label="Primary navigation"
+        class="hidden md:flex md:items-center md:gap-1"
       >
-        <ul class="flex flex-col gap-1" role="list">
-          {
-            SITE_CONFIG.nav.map((item) => {
-              const isActive = currentPath === item.href;
-              return (
-                <li>
-                  <a
-                    href={item.href}
-                    aria-current={isActive ? 'page' : undefined}
-                    class="flex min-h-[44px] items-center rounded-xl px-3 py-2 text-sm font-medium"
-                    style={`color: ${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'}; background: ${isActive ? 'var(--bg-tertiary)' : 'transparent'};`}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })
-          }
-        </ul>
+        {
+          SITE_CONFIG.nav.map((item) => {
+            const isActive =
+              currentPath === item.href ||
+              (item.href !== '/' && currentPath.startsWith(item.href));
+            const isDownload = item.href === '/download';
+            return (
+              <a
+                href={item.href}
+                aria-current={isActive ? 'page' : undefined}
+                class={
+                  isDownload
+                    ? 'ml-2 inline-flex min-h-[40px] items-center rounded-lg px-4 py-2 text-sm font-semibold transition-colors'
+                    : `inline-flex min-h-[40px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${isActive ? 'font-semibold' : ''}`
+                }
+                style={
+                  isDownload
+                    ? `background: var(--btn-primary-bg); color: var(--btn-primary-text);`
+                    : `color: ${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'}; background: ${isActive ? 'var(--bg-tertiary)' : 'transparent'};`
+                }
+              >
+                {item.label}
+              </a>
+            );
+          })
+        }
       </nav>
-    </details>
+
+      <label class="sr-only" for="theme-select">Color theme</label>
+      <select
+        id="theme-select"
+        class="min-h-[44px] rounded-lg border px-2 text-sm"
+        style="border-color: var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary);"
+        data-theme-select
+      >
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+
+      <!-- Mobile menu -->
+      <details class="relative md:hidden">
+        <summary
+          class="inline-flex min-h-[44px] min-w-[44px] cursor-pointer list-none items-center justify-center rounded-lg border text-sm font-medium"
+          style="border-color: var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary);"
+          aria-label="Toggle navigation menu"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 7h16M4 12h16M4 17h16"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"></path>
+          </svg>
+        </summary>
+        <nav
+          aria-label="Mobile navigation"
+          class="absolute right-0 mt-2 w-56 rounded-2xl border p-2 shadow-xl"
+          style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+        >
+          <ul class="flex flex-col gap-1" role="list">
+            {
+              SITE_CONFIG.nav.map((item) => {
+                const isActive = currentPath === item.href;
+                return (
+                  <li>
+                    <a
+                      href={item.href}
+                      aria-current={isActive ? 'page' : undefined}
+                      class="flex min-h-[44px] items-center rounded-xl px-3 py-2 text-sm font-medium"
+                      style={`color: ${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'}; background: ${isActive ? 'var(--bg-tertiary)' : 'transparent'};`}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

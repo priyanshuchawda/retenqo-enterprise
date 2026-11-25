@@ -43,10 +43,11 @@ class MnemeNotificationListener : NotificationListenerService() {
             ?: messagingLastLine(extras)
 
         val candidate = NotifTextTriage.candidate(sbn.packageName, title, text) ?: return
+        val sourceId = NotificationCaptureSettings.sourceIdForPackage(sbn.packageName) ?: return
         val source = IngestSources.fromNotifLabel(candidate.sourceLabel)
         Log.i(TAG, "queue [$source] (${candidate.text.length} chars)")
         val eventId = IngestSources.notificationEventFingerprint(sbn.packageName, sbn.key)
-        NotifIngestQueue.offer(applicationContext, source, candidate.text, eventId)
+        NotifIngestQueue.offer(applicationContext, sourceId, source, candidate.text, eventId)
         NotifIngestWorker.enqueueSoon(applicationContext)
     }
 

@@ -1,68 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-interface Feature {
-  icon: string;
-  title: string;
-  description: string;
-}
-
-const features: readonly Feature[] = [
-  {
-    icon: '🔔',
-    title: 'Opt-in Notification Capture',
-    description:
-      'Selectively capture important messages and alerts from apps you choose. You can exclude sensitive apps or pause capture anytime in settings.',
-  },
-  {
-    icon: '📷',
-    title: 'Screenshot Understanding',
-    description:
-      'On-device OCR extracts text, dates, and key details from screenshots without sending them to a server.',
-  },
-  {
-    icon: '🎙️',
-    title: 'Voice-to-Memory',
-    description:
-      'Record a voice note and convert it into a structured, searchable memory — transcribed locally on-device.',
-  },
-  {
-    icon: '🧠',
-    title: 'Local AI Assistant',
-    description:
-      'Ask natural language questions and get answers generated entirely on your Android device, offline.',
-  },
-  {
-    icon: '🔗',
-    title: 'Source-Referenced Answers',
-    description:
-      'AI answers reference the specific saved memory they were derived from, so you can review the original context.',
-  },
-  {
-    icon: '✅',
-    title: 'Commitment Tracking & Smart Reminders',
-    description:
-      'Surface upcoming deadlines and turn confirmed commitments into smart local reminders.',
-  },
-  {
-    icon: '🔑',
-    title: 'Encrypted Backup Exports',
-    description:
-      'Export and restore your memory database with password-protected encryption. Your backup key stays on your device.',
-  },
-  {
-    icon: '🛡️',
-    title: 'Granular Privacy Controls',
-    description:
-      'Inspect, edit, or permanently delete any stored memory at any time. Includes full local wipe.',
-  },
-  {
-    icon: '📴',
-    title: 'Offline-First Processing',
-    description:
-      'Core capture, local search, and on-device AI inference work without an internet connection.',
-  },
-];
+import FeatureIcon from '../components/ui/FeatureIcon.astro';
+import { FEATURES, FEATURE_STORIES } from '../data/features';
 ---
 
 <BaseLayout
@@ -89,10 +28,10 @@ const features: readonly Feature[] = [
 
     <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
-        features.map((feature) => (
+        FEATURES.map((feature) => (
           <article class="card-hover rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-6">
-            <span class="text-2xl" aria-hidden="true">
-              {feature.icon}
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent-primary)]">
+              <FeatureIcon name={feature.icon} size={26} />
             </span>
             <h2 class="mt-4 text-base font-semibold text-[var(--text-primary)]">
               {feature.title}
@@ -103,6 +42,90 @@ const features: readonly Feature[] = [
           </article>
         ))
       }
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+    <div
+      class="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-6 sm:p-8"
+    >
+      <p
+        class="text-xs font-semibold tracking-widest text-[var(--accent-primary)] uppercase"
+      >
+        Try a sample workflow
+      </p>
+      <h2 class="mt-2 text-2xl font-bold text-[var(--text-primary)]">
+        A small example, using synthetic content
+      </h2>
+      <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+        This walkthrough is illustrative. It does not connect to the Android app
+        or collect data.
+      </p>
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
+        {
+          FEATURE_STORIES.map((story) => (
+            <details class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-primary)] p-5">
+              <summary class="min-h-11 cursor-pointer font-semibold text-[var(--text-primary)]">
+                {story.eyebrow}: {story.title}
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                {story.sample}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+    <h2 class="text-2xl font-bold text-[var(--text-primary)]">
+      A different job from notes or reminders
+    </h2>
+    <p class="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+      Retenqo links selected context to a reviewable follow-through flow; it can
+      complement the apps you already use.
+    </p>
+    <div
+      class="mt-6 overflow-x-auto rounded-2xl border border-[var(--border-subtle)]"
+    >
+      <table class="w-full min-w-[600px] border-collapse text-left text-sm">
+        <thead class="bg-[var(--bg-secondary)] text-[var(--text-primary)]">
+          <tr
+            ><th scope="col" class="p-4">Need</th><th scope="col" class="p-4"
+              >Retenqo</th
+            ><th scope="col" class="p-4">Notes app</th><th
+              scope="col"
+              class="p-4">Reminder app</th
+            ></tr
+          >
+        </thead>
+        <tbody
+          class="divide-y divide-[var(--border-subtle)] text-[var(--text-secondary)]"
+        >
+          <tr
+            ><th scope="row" class="p-4 font-medium text-[var(--text-primary)]"
+              >Keep selected messages and context</th
+            ><td class="p-4">Opt-in capture and file import</td><td class="p-4"
+              >Usually user-entered</td
+            ><td class="p-4">Usually date or task focused</td></tr
+          >
+          <tr
+            ><th scope="row" class="p-4 font-medium text-[var(--text-primary)]"
+              >Find personal context later</th
+            ><td class="p-4">Local keyword search and Ask</td><td class="p-4"
+              >Search notes</td
+            ><td class="p-4">Search scheduled items</td></tr
+          >
+          <tr
+            ><th scope="row" class="p-4 font-medium text-[var(--text-primary)]"
+              >Turn evidence into a commitment</th
+            ><td class="p-4">Review and confirm suggestions</td><td class="p-4"
+              >Manual note or checklist</td
+            ><td class="p-4">Manual reminder setup</td></tr
+          >
+        </tbody>
+      </table>
     </div>
   </section>
 </BaseLayout>

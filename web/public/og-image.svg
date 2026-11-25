@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Retenqo — Your life. Your memories. Your intelligence.</title>
+  <desc id="desc">A private, on-device memory and commitment assistant for Android.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0b1220" />
+      <stop offset="1" stop-color="#14263b" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#67d8ff" />
+      <stop offset="1" stop-color="#5ee8bd" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="32" fill="url(#bg)" />
+  <circle cx="960" cy="310" r="240" fill="#67d8ff" opacity=".07" />
+  <circle cx="960" cy="310" r="174" fill="none" stroke="#67d8ff" stroke-opacity=".28" stroke-width="2" />
+  <circle cx="960" cy="310" r="118" fill="none" stroke="#5ee8bd" stroke-opacity=".42" stroke-width="2" />
+  <g fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-width="10">
+    <path d="M960 218v-46m0 276v-46m-46-92h-46m230 0h-46m-125-33-34-34m162 162-34-34m0-94 34-34m-162 162 34-34" />
+  </g>
+  <g fill="#f1f5f9">
+    <circle cx="960" cy="310" r="22" />
+  </g>
+  <g fill="#5ee8bd">
+    <circle cx="960" cy="172" r="13" /><circle cx="960" cy="448" r="13" />
+    <circle cx="822" cy="310" r="13" /><circle cx="1098" cy="310" r="13" />
+    <circle cx="862" cy="212" r="13" /><circle cx="1058" cy="408" r="13" />
+    <circle cx="1058" cy="212" r="13" /><circle cx="862" cy="408" r="13" />
+  </g>
+  <text x="96" y="230" fill="#f1f5f9" font-family="Arial, sans-serif" font-size="78" font-weight="700">Retenqo</text>
+  <text x="100" y="310" fill="#67d8ff" font-family="Arial, sans-serif" font-size="34" font-weight="600">Your life. Your memories. Your intelligence.</text>
+  <text x="100" y="390" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="28">Private memory and follow-through, processed on your Android.</text>
+  <rect x="100" y="458" width="300" height="58" rx="29" fill="#123247" />
+  <text x="132" y="496" fill="#a6f3de" font-family="Arial, sans-serif" font-size="22" font-weight="700">LOCAL · PRIVATE · ANDROID</text>
+</svg>

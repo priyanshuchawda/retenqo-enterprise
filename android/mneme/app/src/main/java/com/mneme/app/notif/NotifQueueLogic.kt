@@ -1,25 +1,51 @@
 package com.mneme.app.notif
 
 /**
- * Pure queue ops. Each entry is `source\u001ftext`.
+ * Pure queue ops. New entries keep consent identity separate from the card display source.
  */
 object NotifQueueLogic {
     private const val SEP = '\u001f'
 
-    data class Entry(val source: String, val text: String, val sourceEventId: String? = null)
+    data class Entry(
+        val source: String,
+        val text: String,
+        val sourceEventId: String? = null,
+        val sourceId: String? = null,
+    )
 
     data class Claim(val batch: List<String>, val pending: String, val inFlight: String)
 
     fun encode(source: String, text: String, sourceEventId: String? = null): String =
         if (sourceEventId.isNullOrBlank()) "$source$SEP$text" else "$source$SEP$text$SEP$sourceEventId"
 
+    fun encodeStable(sourceId: String, source: String, text: String, sourceEventId: String? = null): String =
+        listOfNotNull("v2", sourceId, source, text, sourceEventId?.takeIf(String::isNotBlank))
+            .joinToString(SEP.toString())
+
     fun decodeEntry(entry: String): Entry {
+        if (entry.startsWith("v2$SEP")) return decodeStableEntry(entry)
         val i = entry.indexOf(SEP)
         if (i <= 0) return Entry("Notif", entry)
         val eventSeparator = entry.lastIndexOf(SEP)
         val eventId = entry.substring(eventSeparator + 1).takeIf { eventSeparator > i && it.matches(Regex("[a-fA-F0-9]{64}")) }
         val textEnd = if (eventId == null) entry.length else eventSeparator
         return Entry(entry.substring(0, i), entry.substring(i + 1, textEnd), eventId)
+    }
+
+    private fun decodeStableEntry(entry: String): Entry {
+        val idEnd = entry.indexOf(SEP, startIndex = 3)
+        val sourceEnd = if (idEnd < 0) -1 else entry.indexOf(SEP, startIndex = idEnd + 1)
+        if (idEnd <= 3 || sourceEnd <= idEnd) return Entry("Notif", entry)
+        val eventSeparator = entry.lastIndexOf(SEP)
+        val eventId = entry.substring(eventSeparator + 1)
+            .takeIf { eventSeparator > sourceEnd && it.matches(Regex("[a-fA-F0-9]{64}")) }
+        val textEnd = if (eventId == null) entry.length else eventSeparator
+        return Entry(
+            source = entry.substring(idEnd + 1, sourceEnd),
+            text = entry.substring(sourceEnd + 1, textEnd),
+            sourceEventId = eventId,
+            sourceId = entry.substring(3, idEnd),
+        )
     }
 
     /** Pair-compatible adapter retained for existing queue callers. */

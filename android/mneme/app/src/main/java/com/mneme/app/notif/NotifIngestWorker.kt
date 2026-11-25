@@ -51,7 +51,7 @@ class NotifIngestWorker(
         return try {
             while (idx < batch.size) {
                 val item = batch[idx]
-                if (!isSourceEnabled(item.source)) {
+                if (!isSourceEnabled(item)) {
                     completed += item
                     idx++
                     continue
@@ -84,9 +84,10 @@ class NotifIngestWorker(
         }
     }
 
-    private fun isSourceEnabled(label: String): Boolean {
-        val source = NotificationCaptureSettings.sources.firstOrNull { it.label == label } ?: return true
-        return source.id in NotificationCaptureSettings.enabledSources(applicationContext)
+    private fun isSourceEnabled(item: NotifQueueLogic.Entry): Boolean {
+        val sourceId = item.sourceId ?: NotificationCaptureSettings.sourceIdForCardSource(item.source) ?: return false
+        val configuredIds = NotificationCaptureSettings.sources.mapTo(mutableSetOf()) { it.id }
+        return sourceId in configuredIds && sourceId in NotificationCaptureSettings.enabledSources(applicationContext)
     }
 
     companion object {

@@ -30,7 +30,7 @@ export const FAQ_ITEMS: readonly FaqItem[] = [
     category: 'General',
     question: 'Does Retenqo work offline?',
     answer:
-      'Yes. Core memory capture, storage, search, and local AI inference work offline once the on-device model is available. Internet access is only needed if you explicitly download a model or check for app updates.',
+      'Core capture, storage, search, and local AI inference work offline after you have the model. Network access is used when you choose to download the model; the app does not currently check for app updates.',
   },
   {
     id: 'ios-availability',
@@ -57,21 +57,21 @@ export const FAQ_ITEMS: readonly FaqItem[] = [
     category: 'Installation & Updates',
     question: 'Will updating Retenqo delete my memories?',
     answer:
-      'No. Installing a newer signed release over the existing app preserves your local memory database. We still recommend exporting an encrypted backup before major updates.',
+      'A compatible update signed with the same publisher key normally retains Android app data. We cannot guarantee data preservation in every failure or migration scenario. Export an encrypted backup before updating.',
   },
   {
     id: 'where-data-stored',
     category: 'Privacy & Security',
     question: 'Where is my personal data stored?',
     answer:
-      'Your captured memories, commitments, and embeddings are stored locally on your Android device. Retenqo does not upload your personal memories to a cloud AI provider.',
+      'Your memories and commitments are stored locally in a SQLCipher-encrypted Room database. Its random key is protected by Android Keystore. The pending notification queue and ordinary preferences are app-private but are not application-level encrypted. Personal memory content is not sent to a cloud AI provider.',
   },
   {
     id: 'passwords-otps',
     category: 'Privacy & Security',
     question: 'Can Retenqo access my passwords, OTPs, or banking apps?',
     answer:
-      'Notification capture is strictly opt-in and user-controlled. You choose which apps are allowed, and you can pause capture or exclude sensitive apps at any time.',
+      'Notification capture starts paused. You can enable only the supported source groups in Settings and revoke Android Notification Access. Retenqo filters common OTP patterns, but this is not a guarantee that all sensitive content will be excluded. Banking applications are not among the supported notification sources.',
   },
   {
     id: 'encrypted-backups',
@@ -92,7 +92,7 @@ export const FAQ_ITEMS: readonly FaqItem[] = [
     category: 'AI & Features',
     question: 'How are AI answers connected to my saved memories?',
     answer:
-      'Retenqo uses retrieval-augmented generation locally on your device. Every answer links back to the specific saved memory or commitment it was derived from so you can verify accuracy.',
+      'When an answer uses retrieved personal memories or commitments, Retenqo can show the referenced sources. General-knowledge answers may not cite saved memories. Local model output can still be incorrect; check source details for important facts.',
   },
   {
     id: 'ai-mistakes',

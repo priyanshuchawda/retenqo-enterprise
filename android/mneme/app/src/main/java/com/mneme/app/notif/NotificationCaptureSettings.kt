@@ -2,6 +2,7 @@ package com.mneme.app.notif
 
 import android.content.Context
 import androidx.core.content.edit
+import com.mneme.app.data.IngestSources
 
 /** User-controlled notification sources. Package aliases are grouped into one setting per app. */
 object NotificationCaptureSettings {
@@ -41,9 +42,33 @@ object NotificationCaptureSettings {
         return isPackageEnabled(packageName, enabledSources(context))
     }
 
+    internal fun sourceIdForPackage(packageName: String?): String? =
+        packageName?.let { pkg -> sources.firstOrNull { pkg in it.packages }?.id }
+
+    internal fun sourceIdForCardSource(sourceLabel: String): String? = when (sourceLabel) {
+        IngestSources.WA_NOTIF -> "whatsapp"
+        IngestSources.GMAIL_NOTIF -> "gmail"
+        IngestSources.SMS_NOTIF -> "messages"
+        IngestSources.TELEGRAM_NOTIF -> "telegram"
+        IngestSources.OUTLOOK_NOTIF -> "outlook"
+        IngestSources.CALENDAR_NOTIF -> "calendar"
+        IngestSources.SLACK_NOTIF -> "slack"
+        else -> sources.firstOrNull { it.label == sourceLabel }?.id
+    }
+
+    internal fun normalizeQueueEntries(entries: List<String>, enabledSourceIds: Set<String>): List<String> =
+        entries.mapNotNull { encoded ->
+            val item = NotifQueueLogic.decodeEntry(encoded)
+            val id = item.sourceId?.takeIf { stableId -> sources.any { it.id == stableId } }
+                ?: sourceIdForCardSource(item.source)
+                ?: return@mapNotNull null
+            if (id !in enabledSourceIds) return@mapNotNull null
+            NotifQueueLogic.encodeStable(id, item.source, item.text, item.sourceEventId)
+        }
+
     internal fun isPackageEnabled(packageName: String?, enabledSourceIds: Set<String>): Boolean {
         if (packageName == null) return false
-        val source = sources.firstOrNull { packageName in it.packages } ?: return false
-        return source.id in enabledSourceIds
+        val sourceId = sourceIdForPackage(packageName) ?: return false
+        return sourceId in enabledSourceIds
     }
 }

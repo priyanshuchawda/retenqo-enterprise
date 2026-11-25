@@ -1,7 +1,8 @@
 {
   "status": "available",
-  "syncedAt": "2026-11-25T10:51:23.684Z",
+  "syncedAt": "2026-11-25T11:36:13.186Z",
   "release": {
+    "channel": "stable",
     "version": "v0.1.2",
     "versionCode": 3,
     "publishedAt": "2026-11-25T10:50:50Z",

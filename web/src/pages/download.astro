@@ -2,11 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_CONFIG } from '../config/site';
 import Button from '../components/ui/Button.astro';
+import CopyButton from '../components/ui/CopyButton.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
 import releaseData from '../data/release.generated.json';
 import { formatBytes, parseReleaseState } from '../lib/releases/validation';
 
 const state = parseReleaseState(releaseData);
+const apkFilename =
+  state.status === 'available'
+    ? (new URL(state.release.apkUrl).pathname.split('/').at(-1) ??
+      'Retenqo.apk')
+    : 'Retenqo.apk';
 ---
 
 <BaseLayout
@@ -91,7 +97,11 @@ const state = parseReleaseState(releaseData);
               class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold"
               style="border-color: var(--accent-primary); background: var(--accent-soft); color: var(--accent-primary);"
             >
-              ✓ Engineering Preview · {state.release.version}
+              ✓{' '}
+              {state.release.channel === 'stable'
+                ? 'Stable release'
+                : 'Engineering preview'}{' '}
+              · {state.release.version}
             </span>
 
             <dl class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -109,7 +119,8 @@ const state = parseReleaseState(releaseData);
                   class="mt-1 text-sm font-semibold"
                   style="color: var(--text-primary);"
                 >
-                  {state.release.version} (Engineering Preview)
+                  {state.release.version} (
+                  {state.release.channel === 'stable' ? 'Stable' : 'Preview'})
                 </dd>
               </div>
               <div
@@ -145,7 +156,38 @@ const state = parseReleaseState(releaseData);
                 >
                   {state.release.sha256}
                 </dd>
+                <dd class="mt-3">
+                  <CopyButton
+                    value={state.release.sha256}
+                    label="APK SHA-256 checksum"
+                  />
+                </dd>
               </div>
+              {state.release.signingCertificateSha256 && (
+                <div
+                  class="rounded-2xl border p-4 sm:col-span-2"
+                  style="border-color: var(--border-subtle); background: var(--bg-primary);"
+                >
+                  <dt
+                    class="text-xs font-medium"
+                    style="color: var(--text-muted);"
+                  >
+                    Signing certificate SHA-256
+                  </dt>
+                  <dd
+                    class="mt-1 break-all font-mono text-xs"
+                    style="color: var(--text-primary);"
+                  >
+                    {state.release.signingCertificateSha256}
+                  </dd>
+                  <dd class="mt-3">
+                    <CopyButton
+                      value={state.release.signingCertificateSha256}
+                      label="signing certificate fingerprint"
+                    />
+                  </dd>
+                </div>
+              )}
               <div
                 class="rounded-2xl border p-4"
                 style="border-color: var(--border-subtle); background: var(--bg-primary);"
@@ -219,7 +261,8 @@ const state = parseReleaseState(releaseData);
 
             <div class="mt-8 flex flex-wrap gap-4">
               <Button href={state.release.apkUrl} variant="primary" size="lg">
-                ⬇ Download Official APK ({state.release.version})
+                Download {state.release.version} APK (
+                {formatBytes(state.release.apkSizeBytes)})
               </Button>
               <Button
                 href={state.release.releaseUrl}
@@ -234,6 +277,16 @@ const state = parseReleaseState(releaseData);
       }
     </div>
 
+    {
+      state.status === 'available' && (
+        <p class="mt-3 text-sm" style="color: var(--text-secondary);">
+          Requires Android {state.release.minimumAndroidApi}+ ·{' '}
+          {state.release.architectures.join(', ')}. The optional AI model is a
+          separate ~563 MB download.
+        </p>
+      )
+    }
+
     <!-- Verification section -->
     <section
       class="mt-10 rounded-3xl border p-6"
@@ -243,20 +296,21 @@ const state = parseReleaseState(releaseData);
         Verify your download
       </h2>
       <p class="mt-2 text-sm" style="color: var(--text-secondary);">
-        After downloading, compare the SHA-256 hash and verify the APK signature
-        independently:
+        Downloaded filename: <code>{apkFilename}</code>. Compare its SHA-256
+        with the published digest above, then compare the signing certificate
+        fingerprint with the release details.
       </p>
       <div class="mt-5 space-y-4 text-xs">
         {
           [
             {
               label: 'Windows PowerShell',
-              code: 'Get-FileHash .\\Retenqo.apk -Algorithm SHA256',
+              code: `Get-FileHash .\\${apkFilename} -Algorithm SHA256`,
             },
-            { label: 'Linux / macOS', code: 'sha256sum Retenqo.apk' },
+            { label: 'Linux / macOS', code: `sha256sum ${apkFilename}` },
             {
               label: 'Android SDK (apksigner)',
-              code: 'apksigner verify --verbose --print-certs Retenqo.apk',
+              code: `apksigner verify --verbose --print-certs ${apkFilename}`,
             },
           ].map(({ label, code }) => (
             <div>
@@ -269,6 +323,12 @@ const state = parseReleaseState(releaseData);
               >
                 <code>{code}</code>
               </pre>
+              <div class="mt-2">
+                <CopyButton
+                  value={code}
+                  label={`${label} verification command`}
+                />
+              </div>
             </div>
           ))
         }
@@ -287,4 +347,40 @@ const state = parseReleaseState(releaseData);
       </a>
     </p>
   </section>
+
+  <section
+    class="mx-auto max-w-4xl px-4 pb-16 sm:px-6"
+    aria-labelledby="engineering-evidence"
+  >
+    <div
+      class="rounded-3xl border p-6 sm:p-8"
+      style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+    >
+      <h2
+        id="engineering-evidence"
+        class="text-2xl font-bold"
+        style="color: var(--text-primary);"
+      >
+        Engineering evidence
+      </h2>
+      <p class="mt-2 text-sm" style="color: var(--text-secondary);">
+        Latest local verification for this release candidate:
+      </p>
+      <ul
+        class="mt-4 grid gap-3 text-sm sm:grid-cols-2"
+        style="color: var(--text-primary);"
+      >
+        <li>114 JVM tests passed; 0 failures.</li>
+        <li>5 Android instrumentation tests passed on Android 16.</li>
+        <li>Android Lint: 0 errors, 34 warnings, 1 hint.</li>
+        <li>Debug and signed release APK builds succeeded.</li>
+      </ul>
+      <p class="mt-4 text-xs" style="color: var(--text-muted);">
+        These checks cover the current source and release candidate; they are
+        not a claim of exhaustive security or performance testing.
+      </p>
+    </div>
+  </section>
 </BaseLayout>
+
+<script is:inline src="/scripts/copy-to-clipboard.js"></script>

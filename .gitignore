@@ -54,3 +54,13 @@ pitch-assets/*.pptx
 pitch-assets/*.pdf
 pitch-assets/deck/__pycache__/
 pitch-assets/deck/out/
+
+# Local device notes and generated evaluation/pitch output
+/idea.md
+/phone2.md
+/DEV_DEVICE_REDMi13.md
+/PHONE1_TESTING.md
+/eval-results/**/*.err
+/eval-results/**/*.out
+/eval-results/**/*.raw
+/pitch-assets/*.png

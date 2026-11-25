@@ -8,7 +8,7 @@
 **Author:** Priyanshu Chawda  
 **Related:** [MODELS.md](../MODELS.md) · [GENERATION_FIX.md](./GENERATION_FIX.md) · [MODEL_RAG_RESEARCH.md](./MODEL_RAG_RESEARCH.md)
 
-This doc is the **source of truth** for what we actually measured after fixing generation. Older blank/garbage runs are explained under [Failures (not model quality)](#failures-not-model-quality).
+This report records historical results after correcting the generation configuration. Older blank/garbage runs are explained under [Failures (not model quality)](#failures-not-model-quality).
 
 ---
 
@@ -72,7 +72,7 @@ Qwen3.5 often fills `<think>…</think>` and burns the token budget. Short `-n` 
 ## Qwen3.5-4B — fixed suite (best Ask)
 
 **Command:** `./scripts/eval-fedora-text-models.sh models/eval/Qwen3.5-4B-Q4_K_M.gguf`  
-**Raw outs:** `eval-results/fedora-suite/text/Qwen3.5-4B-Q4_K_M/*.out`
+**Generated outputs:** `eval-results/fedora-suite/text/Qwen3.5-4B-Q4_K_M/*.out` (recreated by the command above; earlier outputs remain in repository history).
 
 Shared CONTEXT (4 notes): Uber ₹620 · Netflix ₹1,299 · Priya Thursday 4pm · doctor meds.
 

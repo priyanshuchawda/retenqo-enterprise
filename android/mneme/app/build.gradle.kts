@@ -27,8 +27,8 @@ android {
         applicationId = "com.mneme.app"
         minSdk = 33
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters += listOf("arm64-v8a")
@@ -122,6 +122,8 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.sqlite)
+    implementation(libs.sqlcipher.android)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.work.runtime.ktx)
 

@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
+import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 @Database(entities = [NoteEntity::class, FollowThroughSuggestion::class, CommitmentHistoryEvent::class], version = 7, exportSchema = true)
 abstract class MnemeDatabase : RoomDatabase() {
@@ -15,6 +16,7 @@ abstract class MnemeDatabase : RoomDatabase() {
 
     companion object {
         @Volatile private var instance: MnemeDatabase? = null
+        private const val DATABASE_NAME = "mneme.db"
 
         private val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
@@ -91,26 +93,58 @@ abstract class MnemeDatabase : RoomDatabase() {
             }
         }
 
-        fun get(context: Context): MnemeDatabase =
-            instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    MnemeDatabase::class.java,
-                    "mneme.db",
-                )
-                    .addMigrations(MIGRATION_2_3)
-                    .addMigrations(MIGRATION_3_4)
-                    .addMigrations(MIGRATION_4_5)
-                    .addMigrations(MIGRATION_5_6)
-                    .addMigrations(MIGRATION_6_7)
-                    .addCallback(object : Callback() {
-                        override fun onOpen(db: SupportSQLiteDatabase) {
-                            super.onOpen(db)
-                            db.query("PRAGMA secure_delete = ON").use { it.moveToFirst() }
-                        }
-                    })
-                    .build()
-                    .also { instance = it }
+        fun get(context: Context): MnemeDatabase = instance ?: synchronized(this) {
+            instance ?: createAndOpen(context.applicationContext).also { instance = it }
+        }
+
+        private fun createAndOpen(context: Context): MnemeDatabase {
+            System.loadLibrary("sqlcipher")
+            val databaseFile = context.getDatabasePath(DATABASE_NAME)
+            val allowKeyCreation = !databaseFile.exists() || databaseFile.length() == 0L ||
+                PlaintextDatabaseMigrator.hasPlaintextSqliteHeader(databaseFile)
+            val passphrase = DatabaseKeyStore(context).getOrCreatePassphrase(allowKeyCreation)
+            try {
+                PlaintextDatabaseMigrator.encryptIfNeeded(databaseFile, passphrase)
+                val roomPassphrase = passphrase.copyOf()
+                val database = try {
+                    Room.databaseBuilder(context, MnemeDatabase::class.java, DATABASE_NAME)
+                        .openHelperFactory(SupportOpenHelperFactory(roomPassphrase, null, true))
+                        .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                        .addCallback(object : Callback() {
+                            override fun onOpen(db: SupportSQLiteDatabase) {
+                                super.onOpen(db)
+                                db.query("PRAGMA secure_delete = ON").use { it.moveToFirst() }
+                                removePlaintextBackup(databaseFile)
+                            }
+                        })
+                        .build()
+                } catch (error: Exception) {
+                    roomPassphrase.fill(0)
+                    throw error
+                }
+
+                try {
+                    database.openHelper.writableDatabase
+                    return database
+                } catch (error: Exception) {
+                    runCatching { database.close() }
+                    throw error
+                } finally {
+                    roomPassphrase.fill(0)
+                }
+            } finally {
+                passphrase.fill(0)
             }
+        }
+
+        private fun removePlaintextBackup(databaseFile: java.io.File) {
+            val backup = PlaintextDatabaseMigrator.plaintextBackup(databaseFile)
+            listOf(backup, java.io.File(backup.parentFile, backup.name + "-wal"), java.io.File(backup.parentFile, backup.name + "-shm"))
+                .forEach { file ->
+                    if (file.exists() && !file.delete()) {
+                        throw IllegalStateException("Unable to remove the plaintext database migration backup.")
+                    }
+                }
+        }
     }
 }

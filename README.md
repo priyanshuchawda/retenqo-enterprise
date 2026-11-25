@@ -6,12 +6,13 @@ Retenqo is a local-first AI memory and commitment assistant for Android. It turn
 
 [Download / Releases](https://github.com/priyanshuchawda/retenqo-enterprise/releases) · [How it works](#how-it-works) · [Build from source](#build-from-source) · [Contribute](#contributing) · [Report an issue](https://github.com/priyanshuchawda/retenqo-enterprise/issues)
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 ![Platform: Android 13+](https://img.shields.io/badge/Android-13%2B-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-native-7F52FF?logo=kotlin&logoColor=white)
 ![Architecture: ARM64](https://img.shields.io/badge/architecture-ARM64-475569)
 ![AI: local inference](https://img.shields.io/badge/AI-on--device-0f766e)
 
-> **Development status:** Public, actively developed source repository. The first official downloadable APK is not yet published. See the implementation report for verified behavior and outstanding work. Production readiness and security assurance are goals, not certifications.
+> **Development status:** Actively developed Apache-2.0 open-source project. The first official downloadable APK is not yet published. See the implementation report for verified behavior and outstanding work. Production readiness and security assurance are goals, not certifications.
 
 ## Why Retenqo?
 
@@ -98,7 +99,7 @@ Retenqo's local-first architecture reduces reliance on external AI services. It 
 
 Accessibility access is sensitive even when processing is local. Enable it only if the behavior is desired. Do not capture other people's private information without appropriate permission. Keep backups and signing credentials secure.
 
-For suspected vulnerabilities, use [private vulnerability reporting](https://github.com/priyanshuchawda/retenqo-enterprise/security) if enabled; otherwise contact the maintainer privately. Do not post private messages, notifications, credentials or real memory exports in public issues.
+Read the [security policy](SECURITY.md). For suspected vulnerabilities, use [private vulnerability reporting](https://github.com/priyanshuchawda/retenqo-enterprise/security) if enabled; otherwise contact the maintainer privately. Do not post private messages, notifications, credentials or real memory exports in public issues.
 
 ## Technology and architecture
 
@@ -187,13 +188,13 @@ Engineering priorities include durable capture, source and citation correctness,
 - Real-device end-to-end capture, voice, reminders, backup restore, permission behavior, and additional device compatibility need further verification.
 - New backup exports are encrypted; legacy JSON is not. Backup encryption is distinct from database encryption at rest.
 - Manual screen-reader and switch-control testing remains outstanding.
-- No official release, root project license or verified production security certification is currently documented.
+- No official stable release or verified production security certification is currently documented.
 
 See [implementation audit](docs/IMPLEMENTATION_AUDIT.md) and [roadmap](docs/ROADMAP.md) for additional detail.
 
 ## Contributing
 
-Contributions, technical review, reproducible bug reports and improvement proposals are welcome. Before submitting code, check the repository's licensing status and coordinate with the maintainer.
+Contributions, technical review, reproducible bug reports and improvement proposals are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [AGENTS.md](AGENTS.md) before submitting code.
 
 Good starting areas include Android reliability, coroutine lifecycle, privacy and security, retrieval evaluation, accessibility, test coverage, native performance and documentation.
 
@@ -211,6 +212,11 @@ Never commit credentials, signing keys, personal memory databases, model binarie
 
 | Document | Purpose |
 | --- | --- |
+| [Architecture](docs/ARCHITECTURE.md) | System boundaries and design direction |
+| [Threat model](docs/THREAT_MODEL.md) | Risks and planned mitigations |
+| [Release process](docs/RELEASE_PROCESS.md) | Manual verification and APK publication |
+| [Accessibility](docs/ACCESSIBILITY.md) | Inclusive design and verification |
+| [Changelog](CHANGELOG.md) | Significant changes |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Verified behavior and current gaps |
 | [Implementation audit](docs/IMPLEMENTATION_AUDIT.md) | Component-level technical review |
 | [Follow-through plan](docs/FOLLOW_THROUGH_PLAN.md) | Product goals, review workflow and milestones |
@@ -221,7 +227,7 @@ Never commit credentials, signing keys, personal memory databases, model binarie
 
 ## License
 
-The repository is publicly viewable. A root-level project license has not yet been published; public source visibility alone does not grant open-source redistribution or modification rights. See [third-party notices](docs/THIRD_PARTY_NOTICES.md) for dependency-specific terms. A maintainer-approved project license is needed before presenting Retenqo as an officially licensed open-source project.
+Retenqo's original project code is licensed under the [Apache License 2.0](LICENSE). Third-party components, assets and model weights retain their respective licenses; see [third-party notices](docs/THIRD_PARTY_NOTICES.md).
 
 ---
 

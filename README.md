@@ -14,6 +14,37 @@ Retenqo is a local-first AI memory and commitment assistant for Android. It turn
 
 > **Development status:** Actively developed Apache-2.0 open-source project. The first official downloadable APK is not yet published. See the implementation report for verified behavior and outstanding work. Production readiness and security assurance are goals, not certifications.
 
+## Official website
+
+**[retenqo.pages.dev](https://retenqo.pages.dev)** — The production website is live. It includes download instructions, feature explanations, permission transparency, security architecture, privacy policy, and the official APK distribution page.
+
+The website source lives in [`web/`](web/) alongside the Android application in this monorepo.
+
+| Resource                     | Link                                                                 |
+| ---------------------------- | -------------------------------------------------------------------- |
+| 🌐 Official website          | https://retenqo.pages.dev                                            |
+| 📦 APK releases              | https://github.com/priyanshuchawda/retenqo-enterprise/releases       |
+| 📋 Download page             | https://retenqo.pages.dev/download                                   |
+| 🔒 Privacy policy            | https://retenqo.pages.dev/privacy                                    |
+| 🔑 Permissions explained     | https://retenqo.pages.dev/permissions                                |
+
+## Repository structure
+
+```
+retenqo-enterprise/
+├── android/           Kotlin Android application (Compose, Room, llama.cpp, Whisper)
+├── web/               Astro static website (TypeScript, Tailwind CSS v4)
+│   ├── src/           Pages, components, layouts, config, styles
+│   ├── public/        Static assets, security headers, security.txt
+│   ├── scripts/       Release sync and verification scripts
+│   ├── tests/         Vitest unit tests + Playwright browser tests
+│   ├── docs/          Website architecture, design system, threat model
+│   └── AGENTS.md      Website engineering rules
+├── docs/              Shared architecture, threat model, release process docs
+├── scripts/           Build, native setup and verification scripts
+└── eval-results/      Evaluation artifacts
+```
+
 ## Why Retenqo?
 
 Important information is scattered across notifications, conversations, screenshots, documents and personal notes. Finding a message later is often easier than remembering the commitment it contained.
@@ -122,6 +153,7 @@ Read the [security policy](SECURITY.md). For suspected vulnerabilities, use [pri
 ```text
 android/mneme/       Android application and native runtime integration
 android/mneme-test/  Experimental / test application
+web/                 Astro static website (TypeScript, Tailwind CSS v4)
 scripts/             Build, native dependency setup and verification
 docs/                Implementation, audit, model and design documentation
 eval-results/        Evaluation artifacts
@@ -136,7 +168,7 @@ Presentation assets can include scripted states; they should not be interpreted 
 
 - Git, Bash and a compatible Linux development environment (or WSL with the necessary Android tooling)
 - JDK 21
-- Android SDK with platform 36, appropriate build tools, NDK 29.0.14206865 and CMake
+- Android SDK with platform 36, build tools, NDK 28.2.13676358 and CMake 4.1.2
 - Internet access to provision build dependencies and pinned native sources
 
 ```bash
@@ -155,7 +187,7 @@ For a connected, authorized Android device:
 adb install -r android/mneme/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-The debug build has a separate application ID suffix. A release assembly is not automatically a signed, publishable distribution artifact; release signing must be configured securely before publication.
+The debug build has a separate application ID suffix. On Windows, create a local release signing key once with `scripts/create-release-key.ps1`, then run `scripts/build-mneme.ps1 -Task assembleRelease`. The key and a Windows DPAPI protected password stay under the user's `.android` directory and are never written to Git. Keep both files backed up securely; future APK updates must use the same key. The build helper verifies the APK signature and prints the SHA-256 certificate fingerprint.
 
 ## Testing and engineering evidence
 
@@ -167,19 +199,20 @@ cd android/mneme
 ./gradlew :app:connectedDebugAndroidTest
 ```
 
-### Documented verification baseline — 25 November 2026
+### Verification run — 25 November 2026
 
 | Check | Reported result |
 | --- | --- |
-| JVM unit tests | 74 passed |
+| JVM unit tests | 79 passed, 0 failures |
 | Debug assembly | Passed |
-| Android Lint | Passed, with 27 non-blocking findings |
-| Android crypto instrumentation | 1 passed on Galaxy M32 |
+| Android Lint | 0 errors, 32 warnings, 1 hint |
+| App instrumentation | 2 passed on the attached Android 16 device |
+| Aggregate connected instrumentation | Fails in the imported llama-runtime test APK because its AndroidJUnitRunner class is missing; app instrumentation passed |
 | Offline local generation | A short general question answered with connectivity disabled |
 | Room migration | v5 to v7 verified on-device with existing data retained |
 | Device observation | Galaxy M32, Android 13 / ARM64; approximately 831 MB process PSS in one model run |
 
-Source: [implementation status](docs/IMPLEMENTATION_STATUS.md). These are historical reported results, not live CI badges, independently reproduced results, or broad performance guarantees.
+These results were reproduced locally for this source revision; they are not live CI badges or broad performance guarantees. The separate Galaxy M32 observations below remain historical measurements.
 
 Engineering priorities include durable capture, source and citation correctness, permission revocation, secure storage, lifecycle management, native resource bounds, reproducible tests and measurable accessibility.
 

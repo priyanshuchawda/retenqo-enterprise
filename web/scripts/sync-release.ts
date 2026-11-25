@@ -1,4 +1,4 @@
-import { rename, writeFile } from 'node:fs/promises';
+import { rename, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { z } from 'zod';
 import {
@@ -31,9 +31,14 @@ const githubReleaseSchema = z.object({
 });
 
 async function writeAtomicJson(filePath: string, data: unknown): Promise<void> {
-  const tmpPath = `${filePath}.tmp`;
-  await writeFile(tmpPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
-  await rename(tmpPath, filePath);
+  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+  try {
+    await writeFile(tmpPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+    await rename(tmpPath, filePath);
+  } catch (err) {
+    await unlink(tmpPath).catch(() => {});
+    throw err;
+  }
 }
 
 async function main(): Promise<void> {

@@ -91,7 +91,7 @@ const state = parseReleaseState(releaseData);
               class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold"
               style="border-color: var(--accent-primary); background: var(--accent-soft); color: var(--accent-primary);"
             >
-              ✓ Release {state.release.version}
+              ✓ Engineering Preview · {state.release.version}
             </span>
 
             <dl class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -109,7 +109,7 @@ const state = parseReleaseState(releaseData);
                   class="mt-1 text-sm font-semibold"
                   style="color: var(--text-primary);"
                 >
-                  {state.release.version}
+                  {state.release.version} (Engineering Preview)
                 </dd>
               </div>
               <div
@@ -144,6 +144,41 @@ const state = parseReleaseState(releaseData);
                   style="color: var(--text-primary);"
                 >
                   {state.release.sha256}
+                </dd>
+              </div>
+              <div
+                class="rounded-2xl border p-4"
+                style="border-color: var(--border-subtle); background: var(--bg-primary);"
+              >
+                <dt
+                  class="text-xs font-medium"
+                  style="color: var(--text-muted);"
+                >
+                  Published &amp; Synced
+                </dt>
+                <dd
+                  class="mt-1 text-sm font-semibold"
+                  style="color: var(--text-primary);"
+                >
+                  {state.release.publishedAt.slice(0, 10)} (synced{' '}
+                  {state.syncedAt.slice(0, 10)})
+                </dd>
+              </div>
+              <div
+                class="rounded-2xl border p-4"
+                style="border-color: var(--border-subtle); background: var(--bg-primary);"
+              >
+                <dt
+                  class="text-xs font-medium"
+                  style="color: var(--text-muted);"
+                >
+                  On-device AI model
+                </dt>
+                <dd
+                  class="mt-1 text-sm font-semibold"
+                  style="color: var(--text-primary);"
+                >
+                  Qwen3.5-0.8B Q4_0 (~563 MB download in app)
                 </dd>
               </div>
               <div

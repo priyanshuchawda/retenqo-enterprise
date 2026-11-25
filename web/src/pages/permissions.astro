@@ -9,11 +9,18 @@ interface Permission {
 
 const permissions: readonly Permission[] = [
   {
+    name: 'Notification Listener Service (Optional)',
+    purpose:
+      'Reads notifications from apps you explicitly allow so Retenqo can surface commitments and memories.',
+    control:
+      'Disabled by default. You choose which app groups are included and can pause capture anytime in settings.',
+  },
+  {
     name: 'Accessibility Service (Optional)',
     purpose:
-      "Reads notification text from apps you explicitly allow, using Android's Accessibility Service API. Retenqo captures only the notification text snapshot — it does not observe keystrokes, passwords, or any other screen content.",
+      'Reads eligible visible screen text from external applications to maintain a bounded, short-lived snapshot for explicitly opted-in Ask queries.',
     control:
-      'Disabled by default. You grant it in Android Accessibility Settings and can revoke it at any time. You control which apps are included.',
+      'Disabled by default. You grant it in Android Accessibility Settings and can revoke it at any time. Never included in Ask unless you explicitly select it.',
   },
   {
     name: 'Screen Capture via MediaProjection (Optional)',

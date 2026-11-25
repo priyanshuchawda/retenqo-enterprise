@@ -5,6 +5,7 @@ import MemoryWorkflow from '../components/home/MemoryWorkflow.astro';
 import FeatureGrid from '../components/home/FeatureGrid.astro';
 import DownloadCTA from '../components/home/DownloadCTA.astro';
 import { SITE_CONFIG } from '../config/site';
+import { PRODUCT_INFO } from '../config/product';
 ---
 
 <BaseLayout title={SITE_CONFIG.name}>
@@ -15,7 +16,7 @@ import { SITE_CONFIG } from '../config/site';
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
         name: 'Retenqo',
-        operatingSystem: 'Android 13+',
+        operatingSystem: `${PRODUCT_INFO.android.minimumOsLabel}+`,
         applicationCategory: 'ProductivityApplication',
         description: SITE_CONFIG.description,
         url: SITE_CONFIG.url,

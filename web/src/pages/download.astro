@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_CONFIG } from '../config/site';
+import { PRODUCT_INFO } from '../config/product';
 import Button from '../components/ui/Button.astro';
 import CopyButton from '../components/ui/CopyButton.astro';
 import SectionHeading from '../components/ui/SectionHeading.astro';
@@ -23,6 +24,7 @@ const apkFilename =
     <SectionHeading
       eyebrow="Official Application Distribution"
       heading="Retenqo for Android"
+      headingLevel={1}
       subheading="All APK builds are distributed directly from official GitHub Releases. No intermediate proxy."
     />
 
@@ -46,8 +48,11 @@ const apkFilename =
                 ['APK size', 'Pending release'],
                 ['SHA-256 checksum', 'Available after publication'],
                 ['Signing certificate', 'Available after verification'],
-                ['Min. Android', 'Android 13 (API 33)'],
-                ['Architecture', 'arm64-v8a'],
+                [
+                  'Min. Android',
+                  `Android ${PRODUCT_INFO.android.minimumApi} (API ${PRODUCT_INFO.android.minimumApi})`,
+                ],
+                ['Architecture', PRODUCT_INFO.android.architectures.join(', ')],
               ].map(([dt, dd]) => (
                 <div
                   class="rounded-2xl border p-4"
@@ -220,7 +225,8 @@ const apkFilename =
                   class="mt-1 text-sm font-semibold"
                   style="color: var(--text-primary);"
                 >
-                  Qwen3.5-0.8B Q4_0 (~563 MB download in app)
+                  {PRODUCT_INFO.model.name} (
+                  {PRODUCT_INFO.model.downloadSizeLabel} download in app)
                 </dd>
               </div>
               <div
@@ -237,7 +243,8 @@ const apkFilename =
                   class="mt-1 text-sm font-semibold"
                   style="color: var(--text-primary);"
                 >
-                  Android 13 (API {state.release.minimumAndroidApi})
+                  {PRODUCT_INFO.android.minimumOsLabel} (API{' '}
+                  {state.release.minimumAndroidApi})
                 </dd>
               </div>
               <div
@@ -282,7 +289,7 @@ const apkFilename =
         <p class="mt-3 text-sm" style="color: var(--text-secondary);">
           Requires Android {state.release.minimumAndroidApi}+ ·{' '}
           {state.release.architectures.join(', ')}. The optional AI model is a
-          separate ~563 MB download.
+          separate {PRODUCT_INFO.model.downloadSizeLabel} download.
         </p>
       )
     }
@@ -320,6 +327,8 @@ const apkFilename =
               <pre
                 class="overflow-x-auto rounded-xl border p-3 font-mono leading-relaxed"
                 style="border-color: var(--border-subtle); background: var(--bg-primary); color: var(--text-secondary);"
+                tabindex="0"
+                aria-label={`${label} verification command`}
               >
                 <code>{code}</code>
               </pre>

@@ -1,4 +1,5 @@
 export interface ApkMetadata {
+  readonly packageName: string;
   readonly versionCode: number;
   readonly versionName: string;
   readonly minimumAndroidApi: number;
@@ -7,7 +8,9 @@ export interface ApkMetadata {
 
 export function parseApkBadging(output: string): ApkMetadata {
   const packageLine =
-    /^package:.*?versionCode='(\d+)'.*?versionName='([^']+)'/m.exec(output);
+    /^package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'/m.exec(
+      output
+    );
   const minApi = /^sdkVersion:'(\d+)'/m.exec(output);
   const nativeCode = /^native-code:\s*(.+)$/m.exec(output);
   if (!packageLine || !minApi || !nativeCode) {
@@ -15,11 +18,18 @@ export function parseApkBadging(output: string): ApkMetadata {
       'Unable to read version, minSdkVersion, or ABI from APK metadata.'
     );
   }
-  const versionCode = packageLine[1];
-  const versionName = packageLine[2];
+  const packageName = packageLine[1];
+  const versionCode = packageLine[2];
+  const versionName = packageLine[3];
   const minimumAndroidApi = minApi[1];
   const nativeCodeList = nativeCode[1];
-  if (!versionCode || !versionName || !minimumAndroidApi || !nativeCodeList) {
+  if (
+    !packageName ||
+    !versionCode ||
+    !versionName ||
+    !minimumAndroidApi ||
+    !nativeCodeList
+  ) {
     throw new Error('APK metadata is incomplete.');
   }
 
@@ -35,9 +45,23 @@ export function parseApkBadging(output: string): ApkMetadata {
   }
 
   return {
+    packageName,
     versionCode: Number(versionCode),
     versionName,
     minimumAndroidApi: Number(minimumAndroidApi),
     architectures,
   };
+}
+
+export function parseApkSignerFingerprint(output: string): string {
+  const match = /certificate SHA-256 digest:\s*([a-fA-F0-9:]{64,95})/i.exec(
+    output
+  );
+  const fingerprint = match?.[1]?.replaceAll(':', '').toLowerCase();
+  if (!fingerprint || !/^[a-f0-9]{64}$/.test(fingerprint)) {
+    throw new Error(
+      'apksigner did not report a valid SHA-256 signer fingerprint.'
+    );
+  }
+  return fingerprint;
 }

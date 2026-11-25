@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { PRODUCT_INFO } from '../config/product';
 
 const steps = [
   {
@@ -29,8 +30,7 @@ const steps = [
   },
   {
     title: '6. Configure privacy & local AI',
-    detail:
-      'Open Retenqo, enable only the capture sources you want, and set up your on-device AI model.',
+    detail: `Open Retenqo, enable only the capture sources you want, and optionally download the ${PRODUCT_INFO.model.name} model. The model download (${PRODUCT_INFO.model.downloadSizeLabel}) is separate from the APK and also needs device storage. Runtime memory varies by device and is not stated as a guaranteed minimum.`,
   },
 ];
 ---
@@ -69,5 +69,20 @@ const steps = [
         ))
       }
     </ol>
+    <aside
+      class="mt-8 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-5 text-sm text-[var(--text-secondary)]"
+    >
+      <h2 class="font-semibold text-[var(--text-primary)]">
+        APK and AI model are separate
+      </h2>
+      <p class="mt-2">
+        The APK is the app installer. The optional {PRODUCT_INFO.model.name} model
+        is a separate {PRODUCT_INFO.model.downloadSizeLabel} download from inside
+        the app. Allow additional free space for the downloaded model; runtime memory
+        depends on the device and workload. A historical single model run measured
+        about 831 MB process PSS on a Galaxy M32; this is not a minimum requirement
+        or repeatable benchmark.
+      </p>
+    </aside>
   </section>
 </BaseLayout>

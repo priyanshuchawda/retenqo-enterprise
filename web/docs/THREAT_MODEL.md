@@ -1,111 +1,46 @@
-# Website Threat Model
+# Retenqo website and release synchronization threat model
 
-## Scope
+**Reviewed:** 2026-11-25<br>
+**Scope:** Static website, browser-delivered assets, published release metadata, and the local release synchronization tool. The Android application has separate security documentation and is outside this website threat model.
 
-This threat model covers the Retenqo **website** (`web/`) only. It does not cover the Android application, GitHub account security, or the Cloudflare account.
+## Assets
 
-## Assets to protect
+- Integrity and availability of the official website and APK download link.
+- Authenticity, package identity, version, size, digest, Android API/ABI metadata and signing identity of a stable APK.
+- Integrity of the generated release metadata consumed by website pages.
+- User trust in privacy, security, compatibility and product claims.
+- Developer machine temporary download files and release synchronization credentials/environment.
 
-| Asset                       | Sensitivity | Notes                                       |
-| --------------------------- | ----------- | ------------------------------------------- |
-| APK download link integrity | High        | A tampered link could serve a malicious APK |
-| Release metadata            | Medium      | Schema-validated JSON committed to the repo |
-| Visitor browser security    | Medium      | No user data collected, but headers matter  |
-| Repository credentials      | High        | Out of scope (GitHub account security)      |
+## Trust boundaries
 
-## Architecture summary
+1. **Browser to static host:** visitors receive prebuilt HTML, CSS, JavaScript, images and generated JSON from the website host.
+2. **Release tool to GitHub:** the sync script reads release API metadata and downloads an APK asset over HTTPS. API metadata is untrusted until cross-checked with the actual artifact.
+3. **APK to Android SDK tools:** the downloaded file is parsed by `aapt` and verified by `apksigner`; parsing and tool output can fail and must not produce accepted metadata.
+4. **Verified output to repository/build:** only fully verified release metadata is atomically written and then included in the static build.
 
-The website is a **fully static site** with no backend, no database, no user authentication, and no server-side logic. All pages are pre-rendered at build time. The only dynamic behavior is APK download link rendering, which is driven by a committed JSON file (`release.generated.json`) that is generated offline and schema-validated before build.
+## Threats and controls
 
-## Threat surface
+| Threat                                                           | Control                                                                                                                             | Residual risk                                                                                                                    |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| GitHub release metadata advertises a different version/tag/asset | Strict tag, version, asset-count and filename checks; compare actual APK manifest version/package/API/ABI.                          | A compromised GitHub account can publish a malicious APK signed by the trusted key only if signing material is also compromised. |
+| APK replaced or redirected to an untrusted host                  | HTTPS-only allowlisted hosts, final redirect host validation, streamed size cap, digest and actual size checks.                     | DNS/TLS/platform trust failures are delegated to the operating system and host infrastructure.                                   |
+| APK signed by an unexpected key                                  | `apksigner verify` and exact certificate SHA-256 pin comparison.                                                                    | Key rotation requires a reviewed pin update; compromised trusted signing key defeats this control.                               |
+| Malformed or oversized APK consumes disk/memory                  | Download is streamed to a bounded temporary file; APK parsing follows size validation; temporary directory is removed in `finally`. | Native/platform parser vulnerabilities remain possible; tooling should be kept updated.                                          |
+| Failed sync destroys last good website metadata                  | Validate before atomic replacement; regression tests check failure preservation.                                                    | Filesystem failure during atomic replacement can still fail the sync; old file should remain available.                          |
+| Personal information leaks to website analytics/third parties    | Static site has no analytics/tracking dependency; browser test checks no unexpected third-party requests.                           | External browser extensions, network operators and hosting access logs are outside page code control.                            |
+| Script injection through the website                             | Self-hosted scripts only via CSP `script-src 'self'`; no backend or user-generated HTML rendering.                                  | `style-src` currently allows inline styles for existing markup. CSP headers must be checked on production.                       |
+| False privacy/security or AI claims                              | Shared product configuration and evidence-led copy; privacy/security pages describe scope and limitations.                          | Android implementation can change; documentation needs release-by-release reconciliation.                                        |
+| Stale or misleading search/social metadata                       | Canonicals, structured data, sitemap, robots and social preview are generated from site configuration.                              | Search engine indexing and social crawler rendering require external verification.                                               |
 
-### In scope (what this website can affect)
+## Operational requirements
 
-- HTTP response headers served to visitors
-- HTML and content delivered to browsers
-- APK download link correctness
-- Cloudflare Pages deployment pipeline
+- Keep the trusted signing certificate fingerprint under review and never store private signing credentials in this repository.
+- Do not replace generated release metadata by hand; run the verifier and inspect its reported artifact identity.
+- Keep dependency lockfile changes reviewed and rerun `pnpm audit` periodically. A clean audit means no known advisories at query time, not that code is vulnerability-free.
+- Verify production security headers, cache/compression behavior, 404 response, and Lighthouse metrics after deployment.
+- Preserve last-known-valid release metadata when GitHub or artifact validation fails.
+- Keep privacy and security copy synchronized with the Android implementation and clearly distinguish implemented controls from planned work.
 
-### Out of scope (handled elsewhere)
+## Out of scope
 
-- APK signing and provenance (Android build process)
-- GitHub release integrity (GitHub platform)
-- Cloudflare account security (Cloudflare platform)
-- User device security
-
-## Identified threats and mitigations
-
-### T-01 — Malicious APK link substitution
-
-**Threat:** An attacker modifies `release.generated.json` to point to a malicious APK.  
-**Likelihood:** Low (requires GitHub push access)  
-**Mitigation:**
-
-- `release.generated.json` is schema-validated by Zod at build time
-- URL validator (`isTrustedApkDownloadUrl`) only accepts GitHub release asset URLs for `priyanshuchawda/retenqo-enterprise`
-- Tag in URL must match the release version tag
-- Port numbers in URLs are rejected
-
-### T-02 — Clickjacking
-
-**Threat:** Embedding the website in an iframe to trick users into clicking buttons.  
-**Mitigation:** `X-Frame-Options: DENY` header enforced at Cloudflare Pages edge.
-
-### T-03 — MIME-type sniffing
-
-**Threat:** Browser interprets served files as a different content type.  
-**Mitigation:** `X-Content-Type-Options: nosniff` header enforced.
-
-### T-04 — Cross-site scripting (XSS)
-
-**Threat:** Injected scripts execute in visitor browsers.  
-**Mitigation:**
-
-- No user input or dynamic content — all HTML is static and pre-rendered
-- CSP header restricts script/style/connect sources in `public/_headers`
-- Referrer-Policy and Permissions-Policy headers restrict browser capabilities
-
-### T-05 — Sensitive data leakage via Referer
-
-**Threat:** Browser sends Referer header exposing navigation context to third parties.  
-**Mitigation:** `Referrer-Policy: no-referrer` enforced.
-
-### T-06 — Browser-level capability abuse
-
-**Threat:** Malicious content accessed via camera, microphone, or geolocation.  
-**Mitigation:** `Permissions-Policy` disables camera, microphone, geolocation at the browser level.
-
-### T-07 — Supply chain compromise via dependencies
-
-**Threat:** A compromised npm package is included in the build.  
-**Mitigation:**
-
-- `pnpm` frozen lockfile — exact versions pinned
-- Run `pnpm audit` before each release
-- Minimal dependency surface (Astro, Tailwind, Zod, Vitest, Playwright)
-
-### T-08 — Protocol downgrade / MITM
-
-**Threat:** Attacker downgrades connection from HTTPS to HTTP.  
-**Mitigation:** HSTS header with 1-year max-age; Cloudflare Pages enforces HTTPS.
-
-### T-09 — Release metadata staleness
-
-**Threat:** A revoked or yanked APK remains linked on the website.  
-**Mitigation:** `pnpm release:sync` regenerates `release.generated.json`. Re-deploy is manual but fast via Wrangler. Future work: add a `revoked` release state.
-
-## Residual risks
-
-| Risk                                                   | Status                                                                  |
-| ------------------------------------------------------ | ----------------------------------------------------------------------- |
-| APK cryptographic signature not verified at build time | Accepted — this requires `apksigner` tooling and a trusted cert env var |
-| Cloudflare account not under attacker control          | Assumed — MFA recommended                                               |
-| `unsafe-inline` in CSP for Astro inline scripts        | Accepted — Astro generates inline JSON-LD and style attributes          |
-| No automated secret scanning                           | Recommended — run `git secret scan` or Trufflehog periodically          |
-
-## Controls not implemented (intentionally)
-
-- No Content-Security-Policy nonce (Astro static output uses inline styles/scripts)
-- No Subresource Integrity for self-hosted assets (all assets are self-hosted, no CDN injection)
-- No server-side rate limiting (zero backend)
-- No automated dependency vulnerability scanning in CI (no CI by design)
+This document does not establish end-to-end Android database encryption, Android Keystore correctness, notification consent behavior, backup security, model safety, device integrity, GitHub account security, or Cloudflare account configuration. Those require separate implementation evidence and audits.

@@ -2,6 +2,24 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeatureIcon from '../components/ui/FeatureIcon.astro';
 import { FEATURES, FEATURE_STORIES } from '../data/features';
+
+const USE_CASES = [
+  {
+    audience: 'Students',
+    example:
+      'Keep a deadline or reading note from a selected class message findable.',
+  },
+  {
+    audience: 'Professionals',
+    example:
+      'Recall a meeting detail and review a suggested follow-up before creating a reminder.',
+  },
+  {
+    audience: 'Freelancers',
+    example:
+      'Keep a client request beside its source and confirm a delivery commitment.',
+  },
+] as const;
 ---
 
 <BaseLayout
@@ -38,6 +56,33 @@ import { FEATURES, FEATURE_STORIES } from '../data/features';
             </h2>
             <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
               {feature.description}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 pb-16 sm:px-6"
+    aria-labelledby="use-cases"
+  >
+    <h2 id="use-cases" class="text-2xl font-bold text-[var(--text-primary)]">
+      Everyday examples
+    </h2>
+    <p class="mt-2 text-sm text-[var(--text-secondary)]">
+      Illustrative situations with synthetic content; these are not customer
+      stories.
+    </p>
+    <div class="mt-5 grid gap-4 md:grid-cols-3">
+      {
+        USE_CASES.map((useCase) => (
+          <article class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-5">
+            <h3 class="font-semibold text-[var(--text-primary)]">
+              {useCase.audience}
+            </h3>
+            <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+              {useCase.example}
             </p>
           </article>
         ))
@@ -88,6 +133,9 @@ import { FEATURES, FEATURE_STORIES } from '../data/features';
     </p>
     <div
       class="mt-6 overflow-x-auto rounded-2xl border border-[var(--border-subtle)]"
+      role="region"
+      aria-label="Retenqo and traditional notes or reminder apps comparison"
+      tabindex="0"
     >
       <table class="w-full min-w-[600px] border-collapse text-left text-sm">
         <thead class="bg-[var(--bg-secondary)] text-[var(--text-primary)]">

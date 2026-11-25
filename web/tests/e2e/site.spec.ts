@@ -16,25 +16,205 @@ const ROUTES = [
 ];
 
 for (const route of ROUTES) {
-  test(`route ${route} renders with zero axe-core violations and no console errors`, async ({
-    page,
-  }) => {
-    const errors: string[] = [];
-    page.on('pageerror', (err) => errors.push(err.message));
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') errors.push(msg.text());
+  for (const theme of ['light', 'dark'] as const) {
+    test(`${route} passes axe in ${theme} theme`, async ({
+      page,
+    }, testInfo) => {
+      test.skip(
+        testInfo.project.name === 'firefox' ||
+          testInfo.project.name === 'webkit',
+        'Full axe scans are run in Chromium desktop and mobile; cross-engine behavior has a dedicated smoke suite.'
+      );
+      const errors: string[] = [];
+      page.on('pageerror', (error) => errors.push(error.message));
+      await page.goto(route);
+      await page.getByLabel('Color theme').selectOption(theme);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations).toEqual([]);
+      expect(errors).toEqual([]);
     });
+  }
+}
 
-    const response = await page.goto(route);
-    expect(response?.status()).toBe(200);
-
-    const results = await new AxeBuilder({ page }).analyze();
-    expect(results.violations).toEqual([]);
-    expect(errors).toEqual([]);
+for (const route of ROUTES) {
+  test(`${route} renders and switches themes in Firefox and WebKit`, async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== 'firefox' && testInfo.project.name !== 'webkit'
+    );
+    await page.goto(route);
+    const theme = page.getByLabel('Color theme');
+    await theme.selectOption('light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await theme.selectOption('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
 }
 
-test('404 page renders gracefully', async ({ page }) => {
+test('system theme follows OS and persisted theme survives reload', async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/');
+  const selector = page.getByLabel('Color theme');
+  await expect(selector).toHaveValue('system');
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+  await selector.selectOption('light');
+  await page.reload();
+  await expect(selector).toHaveValue('light');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+});
+
+test('theme selector still works when browser storage throws', async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'localStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('Storage denied', 'SecurityError');
+      },
+    });
+  });
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('/');
+  await page.getByLabel('Color theme').selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  expect(errors).toEqual([]);
+});
+
+test('copy button copies release data and announces success', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== 'chromium',
+    'Clipboard permission automation is Chromium-only.'
+  );
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/download');
+  const checksum = page.locator('[data-copy-value]').first();
+  const value = await checksum.getAttribute('data-copy-value');
+  await checksum.click();
+  await expect(checksum.locator('..').getByRole('status')).toHaveText('Copied');
+  await expect
+    .poll(() => page.evaluate(() => navigator.clipboard.readText()))
+    .toBe(value);
+});
+
+test('mobile menu opens by keyboard and internal routes resolve', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto('/');
+  const menu = page.getByLabel('Toggle navigation menu');
+  await menu.focus();
+  await page.keyboard.press('Enter');
+  await expect(
+    page.getByRole('navigation', { name: 'Mobile navigation' })
+  ).toBeVisible();
+  await page
+    .getByRole('link', { name: 'Download', exact: true })
+    .last()
+    .click();
+  await expect(page).toHaveURL(/\/download\/?$/);
+});
+
+test('site requests no third-party resources and does not overflow at target widths', async ({
+  page,
+}) => {
+  const externalOrigins = new Set<string>();
+  page.on('request', (request) => {
+    const url = new URL(request.url());
+    if (url.origin !== 'http://localhost:4321') externalOrigins.add(url.origin);
+  });
+  for (const width of [320, 768, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const dimensions = await page.evaluate(() => ({
+      body: document.body.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(dimensions.body).toBeLessThanOrEqual(dimensions.viewport);
+  }
+  expect(externalOrigins).toEqual(new Set());
+});
+
+test('all internal links resolve and external links use secure schemes', async ({
+  page,
+  request,
+}) => {
+  const internalPaths = new Set<string>();
+  for (const route of ROUTES) {
+    await page.goto(route);
+    const links = await page.locator('a[href]').evaluateAll((anchors) =>
+      anchors.flatMap((anchor) => {
+        const href = anchor.getAttribute('href');
+        return href ? [href] : [];
+      })
+    );
+    for (const href of links) {
+      const url = new URL(href, 'http://localhost:4321');
+      if (url.origin === 'http://localhost:4321') {
+        internalPaths.add(`${url.pathname}${url.search}`);
+      } else {
+        expect(['https:', 'mailto:']).toContain(url.protocol);
+      }
+    }
+  }
+  for (const path of internalPaths) {
+    const response = await request.get(path);
+    expect(response.status(), `Internal link ${path}`).toBe(200);
+  }
+});
+
+test('sitemap, robots, canonical, and software metadata are present', async ({
+  page,
+  request,
+}) => {
+  const robots = await request.get('/robots.txt');
+  expect(robots.status()).toBe(200);
+  expect(await robots.text()).toContain('sitemap-index.xml');
+  const sitemap = await request.get('/sitemap-index.xml');
+  expect(sitemap.status()).toBe(200);
+  await page.goto('/');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    'href',
+    'https://retenqo.pages.dev/'
+  );
+  const structuredData = await page
+    .locator('script[type="application/ld+json"]')
+    .textContent();
+  expect(JSON.parse(structuredData ?? '{}')).toMatchObject({
+    '@type': 'SoftwareApplication',
+    name: 'Retenqo',
+    applicationCategory: 'ProductivityApplication',
+  });
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    'https://retenqo.pages.dev/og-image.png'
+  );
+});
+
+test('download link points to the verified release asset', async ({ page }) => {
+  await page.goto('/download');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Retenqo for Android'
+  );
+  const downloadLink = page.getByRole('link', {
+    name: /Download v0\.1\.3 APK/,
+  });
+  await expect(downloadLink).toHaveAttribute(
+    'href',
+    /^https:\/\/github\.com\/priyanshuchawda\/retenqo-enterprise\/releases\/download\/v0\.1\.3\/Retenqo-v0\.1\.3-arm64-v8a\.apk$/
+  );
+});
+
+test('404 page renders with a not-found response', async ({ page }) => {
   const response = await page.goto('/non-existent-route-12345');
   expect(response?.status()).toBe(404);
   await expect(

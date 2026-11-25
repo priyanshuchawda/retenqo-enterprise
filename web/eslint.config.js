@@ -29,6 +29,7 @@ export default [
         document: 'readonly',
         Element: 'readonly',
         HTMLElement: 'readonly',
+        HTMLSelectElement: 'readonly',
         navigator: 'readonly',
         window: 'readonly',
         localStorage: 'readonly',

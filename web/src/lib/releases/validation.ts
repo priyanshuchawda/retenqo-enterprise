@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { PRODUCT_INFO, RELEASE_CONFIG } from '../../config/product';
 
-const TRUSTED_OWNER = 'priyanshuchawda';
-const TRUSTED_REPO = 'retenqo-enterprise';
+const TRUSTED_OWNER = RELEASE_CONFIG.githubOwner;
+const TRUSTED_REPO = RELEASE_CONFIG.githubRepository;
 const TRUSTED_PREFIX = `/${TRUSTED_OWNER}/${TRUSTED_REPO}/releases/`;
 
 function hasValidBaseUrl(rawUrl: string): URL | null {
@@ -66,7 +67,7 @@ export const androidReleaseSchema = z
     channel: z.enum(['stable', 'preview']),
     version: z.string().min(1).max(32),
     versionCode: z.number().int().positive(),
-    publishedAt: z.string().datetime(),
+    publishedAt: z.iso.datetime(),
     releaseUrl: z.string(),
     apkUrl: z
       .string()
@@ -77,7 +78,7 @@ export const androidReleaseSchema = z
     apkSizeBytes: z.number().int().positive(),
     sha256: sha256Schema,
     signingCertificateSha256: sha256Schema.optional(),
-    minimumAndroidApi: z.number().int().min(33),
+    minimumAndroidApi: z.number().int().min(PRODUCT_INFO.android.minimumApi),
     architectures: z
       .array(z.enum(['arm64-v8a', 'armeabi-v7a', 'x86_64']))
       .min(1),
@@ -103,12 +104,12 @@ export const androidReleaseSchema = z
 export const releaseStateSchema = z.discriminatedUnion('status', [
   z.object({
     status: z.literal('available'),
-    syncedAt: z.string().datetime(),
+    syncedAt: z.iso.datetime(),
     release: androidReleaseSchema,
   }),
   z.object({
     status: z.literal('pending'),
-    syncedAt: z.string().datetime(),
+    syncedAt: z.iso.datetime(),
     reason: z.string().min(1),
   }),
 ]);

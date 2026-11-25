@@ -2,6 +2,7 @@
 
 /* ─── Design Tokens ───────────────────────────────────────────────────── */
 :root {
+  color-scheme: light dark;
   /* Light theme – Clean Intelligence */
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;

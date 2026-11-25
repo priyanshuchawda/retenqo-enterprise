@@ -61,10 +61,10 @@ flowchart TD
 | --- | --- |
 | Capture | Configurable notification groups, user-initiated MediaProjection, optional bounded accessibility context |
 | Selected media | System picker and share targets; on-device OCR |
-| Recall | Lexical retrieval over bounded recent candidates, evidence-linked answers, general local questions |
+| Recall | Lexical ranking, evidence-linked answers and general local questions; [retrieval scope](docs/AI_IMPLEMENTATION.md) |
 | Commitments | Review, accept, dismiss, edit, complete, snooze, reopen; completion suggestions |
 | Reminders and widget | Local reminders and a count of confirmed follow-ups |
-| Voice | Whisper bridge and Android TTS; speech-model provisioning and full device workflow verification remain in scope |
+| Voice | Whisper bridge and Android TTS; [verification scope](docs/TESTING.md) |
 | Backup | Encrypted exports and additive restore, including legacy plaintext imports |
 
 Example: an authorized message asks for slides by Friday. Retenqo can produce a reviewable commitment, preserve its source, support a reminder and later completion review. Illustrative workflow; see [implementation status](docs/IMPLEMENTATION_STATUS.md) for device verification scope.
@@ -90,7 +90,7 @@ Use the [download page](https://retenqo.pages.dev/download) for checksum and sig
 
 ## Privacy and security
 
-Local inference does not require cloud AI endpoints. Notification capture starts paused; source groups are opt-in. The core database is encrypted at rest and new backup exports are authenticated and encrypted. The notification queue uses Android app-private preferences; application-level encryption covers Room records and new encrypted backup exports. See [threat model](docs/THREAT_MODEL.md), [security policy](SECURITY.md) and [current status](docs/IMPLEMENTATION_STATUS.md).
+Local inference does not require cloud AI endpoints. Notification capture starts paused; source groups are opt-in. The core database is encrypted at rest and new backup exports are authenticated and encrypted. Application-level encryption covers Room records and new encrypted backup exports. See the [storage and capture boundaries](docs/THREAT_MODEL.md), [security reporting policy](SECURITY.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
 ## Build from source
 
@@ -115,7 +115,7 @@ Windows: `./scripts/build-mneme.ps1 -Task verify` or `-Task assembleDebug -Insta
 | [Testing](docs/TESTING.md) | Revision-specific results |
 | [Performance](docs/PERFORMANCE.md) | Resource bounds and recorded measurements |
 | [Accessibility](docs/ACCESSIBILITY.md) | Implemented measures and verification |
-| [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Current boundaries and historical milestones |
+| [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Current capabilities and verification scope |
 | [Website engineering audit](web/docs/ENGINEERING_AUDIT.md) | Distribution, browser coverage and production measurements |
 | [Research index](docs/RESEARCH_INDEX.md) | Historical experiments and design evolution |
 | [Changelog](CHANGELOG.md) | Releases and unreleased changes |

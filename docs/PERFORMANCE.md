@@ -3,9 +3,9 @@
 | Design choice | Evidence |
 | --- | --- |
 | Rule-first extraction | [RulesExtract.kt](../android/mneme/app/src/main/java/com/mneme/app/ai/RulesExtract.kt) limits unnecessary inference |
-| Bounded queue | [NotifIngestQueue.kt](../android/mneme/app/src/main/java/com/mneme/app/notif/NotifIngestQueue.kt): pending capacity 500; overflow behavior needs reliability review |
+| Bounded queue | [NotifIngestQueue.kt](../android/mneme/app/src/main/java/com/mneme/app/notif/NotifIngestQueue.kt): pending capacity 500; [capture reliability scope](ROADMAP.md) |
 | Power-aware work | [MnemePowerGates.kt](../android/mneme/app/src/main/java/com/mneme/app/media/MnemePowerGates.kt) |
-| Bounded retrieval | [NoteRepository.kt](../android/mneme/app/src/main/java/com/mneme/app/data/NoteRepository.kt): recent-candidate limit trades recall for bounded work |
+| Bounded retrieval | [NoteRepository.kt](../android/mneme/app/src/main/java/com/mneme/app/data/NoteRepository.kt): bounded ranking; [retrieval scope](AI_IMPLEMENTATION.md) |
 | Quantized model | Qwen3.5-0.8B Q4_0, 563,036,064-byte separate download |
 | Static website | [astro.config.mjs](../web/astro.config.mjs): lightweight self-hosted scripts |
 

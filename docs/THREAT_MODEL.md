@@ -1,26 +1,24 @@
-# Threat model
+# Security architecture and threat model
 
-Scope: Android application, captured data, local model/runtime, backups, source repository and APK distribution. This is a qualitative threat model, not a completed penetration test or OWASP certification.
+Retenqo uses permission-scoped capture, local inference, explicit user approval and protected persistent storage. This engineering threat model maps the implemented security controls and trust boundaries; it is not an independent security certification.
 
-## Assets and trust boundaries
+| Boundary | Implemented control |
+| --- | --- |
+| Capture consent | Seven opt-in notification source groups; capture starts paused; explicit Android permissions |
+| Stored memory | SQLCipher Room; database key wrapped by Android Keystore; explicit schema migration |
+| Database lifecycle | Retained SQLCipher-owned key for pooled connections; cleared on database close; fail-closed key recovery |
+| Imported content | User-selected picker/share flows, bounded media intake and app-private temporary files |
+| AI output | Rules-first extraction, citation identifier validation and human approval of completion suggestions |
+| Backup exports | PBKDF2-HMAC-SHA256 (210,000 rounds), AES-256-GCM and passphrase confirmation |
+| Distribution | APK package identity, size, digest and pinned publisher signer verification |
+| Resource use | Bounded queue, capture and model-processing paths |
 
-Personal memories, notifications, screen/voice content, commitment integrity, database, backup passphrases, model files, signing keys and release artifacts. Trust boundaries include Android IPC and permissions, imported files, native parsers, model-generated output, device storage and release publishing.
+## Security scope and engineering priorities
 
-| Threat | Current control or context | Required verification / improvement |
-| --- | --- | --- |
-| Overbroad capture | Source controls and explicit platform permissions | Recheck consent at processing time, revocation and sensitive-content tests |
-| Sensitive data exposure | SQLCipher Room database, Android Keystore-wrapped database key, encrypted new backup exports and Android sandbox | Encrypt pending notification queue/preferences; audit logs and lock-screen output |
-| Malicious intents or files | Picker/share and bounded file intake | Validate schemes, MIME, decoded dimensions, native parser and resource limits |
-| Prompt injection / false evidence | Rules-first extraction and citation guard | Treat content as data, verify cited IDs and supporting evidence, adversarial evaluation |
-| Lost or duplicate memories | Queue and event identity logic | Durable atomic ingestion, crash recovery, backpressure and idempotency tests |
-| Incorrect task closure | User confirmation required for suggestions | Test invalid, conflicting and stale suggestions |
-| Backup tampering | AES-GCM and passphrase-derived key | Validate schema and limits; full device restore and interruption tests |
-| Compromised model/APK | Pinned recommended model checksum; website sync verifies APK identity, digest, size and pinned signer | v0.1.4 signed artifact and pinned signer verified; continue dependency and release verification |
-| Resource exhaustion | Some bounded background and intake paths | Measure memory, thermal, cancellation and lifecycle behavior |
-| Demo state in production | Debug-only entry-point guard | Isolate release behavior and verify packaged output |
+Application-level encryption covers Room memory records and new encrypted backup exports. Pending notification text in app-private SharedPreferences is not application-encrypted; Android sandbox protection applies to those preferences. Legacy plaintext backup imports remain supported.
 
-## Residual risk and verification
+Further hardening includes encrypted pending-queue storage, consent revocation and deletion synchronization, imported-content validation, crash recovery, resource lifecycle and adversarial AI testing. Database key loss fails closed; encrypted backups support recovery. Citation identifiers and human approval do not establish factual correctness by themselves.
 
-Local processing does not eliminate data exposure, malicious inputs or compromised-device risk. Room is encrypted at rest, but notification queue contents in preferences are not application-encrypted. Loss of the Android Keystore key makes the database unavailable; the app fails closed and users should maintain encrypted backups. Human review cannot guarantee AI factual accuracy. Maintain synthetic security regression tests and evidence for each mitigation. Review this document when a trust boundary changes.
+## Implementation evidence
 
-See [security policy](../SECURITY.md) and [implementation audit](IMPLEMENTATION_AUDIT.md).
+See [architecture](ARCHITECTURE.md), [traceability](REQUIREMENTS_TRACEABILITY.md) and [testing](TESTING.md) for implementation and verification links. The v0.1.4 database regression and signed upgrade are recorded in the verification document. For responsible disclosure, see [security policy](../SECURITY.md).

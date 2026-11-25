@@ -18,7 +18,7 @@ Retenqo addresses fragmented personal context and forgotten commitments with a l
 
 ## Current release evidence
 
-[Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) is the signed Android 13+ ARM64 release. Its production upgrade and launch were verified on Android 16. The source verification record reports 114 JVM tests passed, 6/6 instrumentation tests passed and zero Android Lint errors; the website baseline reports 25 unit tests and 100 browser tests passed (68 skipped). See [Testing](TESTING.md) for precise scope and [traceability](REQUIREMENTS_TRACEABILITY.md) for source evidence.
+[Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) is the signed Android 13+ ARM64 release. Its production upgrade and launch were verified on Android 16. The [verification record](TESTING.md) contains release identity, source tests, browser coverage and device scope. The [traceability matrix](REQUIREMENTS_TRACEABILITY.md) links source evidence.
 
 ## Illustrative workflow
 

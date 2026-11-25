@@ -1,77 +1,22 @@
 # Implementation status
 
-## Current baseline — 25 November 2026
-
-Published v0.1.4 contains the SQLCipher pooled-connection fix. Its signed APK was verified against the pinned publisher certificate and installed as an in-place upgrade on Android 16 / API 36. The source revision passed 114 JVM tests, six instrumentation tests and lint with zero errors. See [Testing](TESTING.md). Website results are recorded separately in the [website audit](../web/docs/ENGINEERING_AUDIT.md).
-
-Current engineering priorities: additional-device verification, encrypted notification queue, consent/deletion races, full-history retrieval, screen-only answers and full backup/voice/reminder workflows. The following dated entries preserve earlier evidence; older counts are not the current test baseline.
-
+**Current release:** [Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) · Android 13+ · ARM64  
 **Updated:** 2026-11-25
-**Branch:** `main` (v0.1.4 stable release)
 
-**Product target:** [Personal follow-through plan](FOLLOW_THROUGH_PLAN.md) — source-backed commitments, user-reviewed updates, and verified local actions.
+Retenqo implements local-first contextual capture, personal memory and user-reviewed follow-through. The signed release includes the SQLCipher pooled-connection reliability fix and was upgraded in place on Android 16. [Verification evidence](TESTING.md) is the authoritative record for test totals, artifact identity and device scope.
 
-| Phase | Status | Evidence / remaining work |
-|---|---|---|
-| Repository audit | Complete for current checkout | See [IMPLEMENTATION_AUDIT.md](IMPLEMENTATION_AUDIT.md). Baseline and previous Gemini migration were verified against source and Git history. |
-| Offline AI runtime | On-device generation verified on Galaxy M32 | Pinned llama.cpp CPU backend is now linked into the Android runtime instead of being discovered as dynamic plugins. Verified installed Qwen3.5-0.8B Q4_0 GGUF load and generation; a short arithmetic prompt also succeeded with Wi-Fi and mobile data disabled. The model is downloaded/imported into app-specific storage. The runtime still needs model-specific latency/thermal evaluation on the M34. |
-| Memory and follow-through | Task workbench, decision history and notification event IDs implemented | Room cards, rules extraction, keyword retrieval, citation guard, source-linked completion suggestions, and v5 review state exist. Qwen compares qualifying new evidence against up to eight open commitments; known-ID, confidence >= 0.75 and user confirmation are required. Captured actionable cards are pending until accepted, and pending cards are excluded from Ask and reminders. The Tasks tab supports review, edit, due/active/done filters, and a durable source/evidence/action timeline. Room now migrates to v7; notification event keys are hashed, queued, retained on cards, and deduped. Other capture sources still lack stable upstream IDs. Runtime accuracy/latency, export/restore, and broader evaluation remain. |
-| Capture pipelines | Notification, screen, SAF/share and scoped media capture implemented | Pulse/OCR, notification ingest, a MediaStore query limited to recent WhatsApp images, and seven notification source toggles exist. Notification capture starts paused until the user selects sources. A user-enabled AccessibilityService keeps a bounded volatile snapshot of visible external-app text; Ask includes it only after the user switches on screen context for that question. Password nodes, Retenqo, keyboard, and system UI are excluded. Settings offers Android document/photo selection and Retenqo accepts shared text, images, and PDFs from other apps. Picked files are copied into bounded app-private cache, OCR/extraction stays local, and temporary files are deleted. All-files and media-audio permissions have been removed. Accessibility remains disabled; device validation, broad document support, and screen extraction/model inference remain. |
-| Voice and actions | Native bridges and local action paths implemented | Whisper bridge, tap-to-talk, TTS, deterministic command routing, alarms, and reminders exist. Real-device offline voice/TTS, relative-date reminders, and action confirmation/error coverage remain. |
-| Product experience | Task review, encrypted backup, direct capture and widget summary implemented | Memory, Tasks, Ask, Settings, permission setup, and pitch/demo paths exist. Tasks groups pending review, completion evidence, active, due-soon, and completed commitments; supports accept/dismiss/edit/done/snooze/reopen. Task edits refresh hash/embedding and due reminders. Passphrase-encrypted backup/additive restore, durable decision history, selected media/share intake, and a widget count of confirmed active follow-ups are implemented; encrypted backup round-trip, privacy retention controls, and labeling demo content remain. |
-| Testing and release | Stable v0.1.4 published | 114 JVM tests passed; Android Lint reported 0 errors; all 6 instrumentation tests passed on Xiaomi 2406ERN9CI (Android 16 / API 36 / ARM64). The signed v0.1.4 APK matches the pinned publisher certificate and upgraded the existing installation in place. |
+| Area | Implemented capability | Evidence |
+| --- | --- | --- |
+| Capture | Seven opt-in notification groups, selected documents/images, explicit screen capture and bounded screen context | [Architecture](ARCHITECTURE.md) |
+| Intelligence | Deterministic extraction, local GGUF inference, lexical memory ranking and citation validation | [AI implementation](AI_IMPLEMENTATION.md) |
+| Follow-through | Reviewable commitments, due reminders, completion suggestions and decision history | [Traceability](REQUIREMENTS_TRACEABILITY.md) |
+| Persistence | SQLCipher Room, Keystore-protected key, migrations and source-event identity | [Threat model](THREAT_MODEL.md) |
+| Recovery | PBKDF2-HMAC-SHA256 and AES-GCM backup exports; additive restore | [Security boundaries](THREAT_MODEL.md) |
+| Voice | Whisper integration, local command routing and Android TTS | [AI implementation](AI_IMPLEMENTATION.md) |
+| Distribution | Versioned signed APK, matching generated website metadata and pinned publisher signer | [Testing](TESTING.md) |
 
-## Release and source verification
+## Engineering scope
 
-- `:app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest` — passed: 114 JVM tests, 0 failures; lint reported 0 errors. The suite ran on the v0.1.4 source revision before its version-only release metadata change.
-- `:app:connectedDebugAndroidTest` — passed: 6/6 on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64, including concurrent SQLCipher pooled-connection access.
-- `:app:assembleRelease` — passed for v0.1.4; `apksigner` verified one signer with the pinned certificate `b975fe4b5d929586e9bf0133ebde25c03d0acf990ddbba5c14f0f2b31ae38cca`.
-- Published APK SHA-256: `b31770666bf7b860e9dc3e562a97de7286c6ad31347f67a1ce8fa96fdabf8f98` (39,374,307 bytes; package `com.mneme.app`; version code 5; minimum API 33; ARM64).
-- Device upgrade — `adb install -r` succeeded over the existing production package; Android reports version 0.1.4 and the original first-install timestamp. The app launched, and the captured log window contained no SQLCipher startup exception or fatal application exception.
-- `git diff --check` — passed before release publication.
-- Historical model/device observation — Samsung SM-M325F (Galaxy M32), Android 13 / API 33, ARM64; this is not the Galaxy M34 target.
-- Model — Qwen3.5-0.8B Q4_0 GGUF, 563,036,064 bytes; app model path is `active.gguf`. Native logs show `Backend initiated`, CPU NEON/FMA support, and `Model loaded`.
-- Device run — `What is two plus two` returned `Two plus two equals four.` with no memory citation. Repeated successfully after Wi-Fi and mobile data were disabled. One generation process used about 831 MB PSS; observed load times ranged from about 1.1 to 3.7 seconds. These are single-device observations, not a benchmark.
-- Retrieval regression — added tests ensuring a note with unrelated content does not match an arithmetic question through hash-vector collisions.
-- `git diff --check` — passed.
-- The app has `INTERNET` permission for explicit model download. Inference and local memory search were verified with connectivity disabled; normal use after model installation does not require network access.
-- `git diff --check` — passed after removing trailing whitespace.
-- Current ADB inspection confirms the handset is a Samsung Galaxy M32 (SM-M325F), Android 13 / API 33. The app's notification listener is enabled; microphone and image permissions are granted. This inspection did not run model inference or exercise capture/actions.
-- Follow-through slice: the native-enabled debug APK compiled and installed on the Galaxy M32. Launching it migrated Room through v5; direct database inspection confirmed user_version 5, the new `reviewState` column, and 59 notes preserved as confirmed. The current Settings screen shows the seven per-source toggles. Completion-agent inference and captured-card review actions still need a seeded or real end-to-end run.
-- Local model now participates in completion matching on qualifying incoming evidence; Kotlin compilation passed after this change. Device inference through the new evidence-agent prompt and full task lifecycle have not yet been measured.
-- After installing the model-aware build, the Galaxy M32 Ask screen loaded the installed Qwen model and returned “Two plus two is four.” This confirms the app-to-model generation path is live on the current build; it does not exercise the follow-through prompt or provide a latency benchmark.
-- Galaxy M34 / other physical-device checks — pending.
-- Screen context milestone: `:app:compileDebugKotlin :app:assembleDebug` passed, APK installed, Ask UI inspected on the connected Galaxy M32. The “Use current screen” action opens Android accessibility settings when permission is not enabled. The device's service was off at the start and was left off; an actual capture and local-model answer needs the user to enable it and run a question from the app.
-- Task workbench milestone: task filters, editing, and the commitment history dialog were inspected on the Galaxy M32. A v5→v6→v7 Room migration passed on-device: schema version 7, 62 notes retained, 62 honest baseline history rows, zero foreign-key errors, and the unique notification-event index present. The pre-upgrade count was 59; three notification cards arrived between snapshots. The debug app is installed and launched. The Accessibility service remains disabled (`accessibility_enabled=0`, no enabled-service list); notification source keys are hashed and flow through the backward-compatible queue into a unique card field.
-- Direct capture milestone: the Android photo/document picker now accepts up to eight selected image/PDF files per batch, processes them through OCR and the local extraction pipeline, enforces a 40 MB per-file cap, and deletes app-private temporary copies. Android `ACTION_SEND`/`ACTION_SEND_MULTIPLE` share targets accept text, images, and PDFs without broad file permission for those user-selected items. Build/package passed; PackageManager resolves Retenqo for shared text and PDF on the M32, and the app launches. Actual picker/share payload OCR was not exercised this turn.
-- Security milestone: removed `MANAGE_EXTERNAL_STORAGE`, `READ_EXTERNAL_STORAGE`, unused `READ_MEDIA_AUDIO`, and `requestLegacyExternalStorage`. Automatic WhatsApp scanning now queries recent image rows only under WhatsApp/WhatsApp Business media paths in MediaStore. PDFs remain available through explicit picker/share selection. Notification capture defaults to paused; existing explicit source selections are preserved. Current build and unit tests pass; OEM MediaStore and picker/share behavior still require device validation.
-- Accessibility milestone: the voice microphone is now a labeled 48 dp button that works through standard click accessibility actions; expandable Settings groups expose button role and expanded/collapsed state. Screen-reader and switch-control use still need hands-on device validation.
+[Testing](TESTING.md) distinguishes signed-release verification, earlier Android 13 observations and implementation-only coverage. [Threat model](THREAT_MODEL.md) specifies storage and permission boundaries; [AI implementation](AI_IMPLEMENTATION.md) specifies retrieval and answer-validation scope. The [roadmap](ROADMAP.md) tracks further engineering work.
 
-## Stable release v0.1.4 — 2026-11-25
-
-- Published [Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) as the latest stable Android release. The signed APK is available for Android 13+ ARM64 devices.
-- Release metadata has been synchronized from the published GitHub asset and verified by the website release-validation pipeline.
-- The existing production installation upgraded in place on the connected Android 16 / API 36 device; no uninstall or data reset was performed.
-
-## SQLCipher pooled-connection startup fix — 2026-11-25
-
-- Root cause: SQLCipher 4.20.0's `SupportOpenHelperFactory` retains the supplied passphrase byte array and reuses it when its WAL connection pool opens additional connections. `MnemeDatabase` zeroed that same array immediately after the first Room connection opened, so later pooled connections attempted to authenticate with a zeroed key and failed with `SQLiteNotADatabaseException`.
-- Fix: keep the SQLCipher-owned passphrase array alive for the Room database lifetime and zero it after `RoomDatabase.close()`. The transient Keystore-decrypted array is still zeroed after database initialization; encryption and existing database files remain intact.
-- Regression evidence: the concurrent-read instrumentation test failed before the fix with `SQLiteNotADatabaseException` while opening a second connection. After the fix, all 6 instrumentation tests passed on the connected Xiaomi 2406ERN9CI (Android 16 / API 36 / ARM64), invoked with `adb shell am instrument -w com.mneme.app.debug.test/androidx.test.runner.AndroidJUnitRunner`.
-- Device launch: updated debug APK started on the same handset (`am start -W` returned `Status: ok`; process remained present), with no matching SQLCipher or fatal exception in the captured log window.
-- Release verification: the v0.1.4 signed APK upgraded and launched over the existing app installation on the same API 36 device while preserving its first-install timestamp.
-
-## Earlier engineering milestone — 2026-11-25
-
-- Quality/security: notification capture now starts paused until the user selects sources; a regression test protects that default. Broad filesystem and unused media permissions are absent from the merged and installed debug manifests.
-- Efficiency: background WhatsApp photo discovery is bounded to recent MediaStore rows and a small candidate limit; selected PDFs continue through Android's explicit picker/share grants.
-- Testing: `:app:testDebugUnitTest :app:assembleDebug :app:lintDebug` passed (74 tests, 0 failures/errors/skips), and `:app:connectedDebugAndroidTest` passed the Android crypto provider test (1/1) on the Galaxy M32. `git diff --check` is clean. The latest APK installed, launched, and its export-password dialog was inspected without creating a backup. This device cannot exercise Android 14's selected-photo dialog.
-- Accessibility: voice and expandable Settings controls expose standard actions/semantics in code. A clean screen-reader/switch-control review was not completed; the handset screenshot included active system/app overlays.
-- Privacy/alignment: Android 14 selected-photo access is now requested and recognized; model resolution is limited to app-scoped storage and bundled assets. The home-screen widget counts confirmed follow-ups without exposing card text or canned demo content; it refreshes when the app resumes or the launcher requests a widget update.
-- Backup security: new exports use PBKDF2-HMAC-SHA256 (210,000 rounds) and AES-256-GCM, with password confirmation and no saved password. Older plaintext JSON remains importable. Crypto unit tests cover round-trip, wrong passwords, tampering, and minimum password length; Android provider round-trip/wrong-password behavior is tested. Full Room/SAF export-restore round-trip remains untested.
-- Static analysis: Android Lint completed successfully with 27 non-blocking findings, mainly dependency-version notices, AndroidX style suggestions, and resource-lifecycle warnings on streams/cursors already closed with Kotlin `use`. The Android 14 selected-photo warning, shared-storage model fallback, obsolete SDK checks, backup extraction rules, and canned widget text were addressed.
-- Remaining rubric work: validate real picker, WhatsApp MediaStore, voice, widget updates, and task flows on-device; test encrypted backup round-trip and screen-reader use; measure performance on the intended M34; upgrade Gradle after compatibility review. Older JSON backups are still unencrypted, and lexical retrieval remains a quality limitation.
-
-## Current runtime behavior
-
-The app integrates a local llama.cpp CPU runtime and supports downloading or importing a compatible GGUF model. With a model installed, text generation runs locally; the tested model answers a short general question while Wi-Fi and mobile data are disabled. No text is sent to a cloud model. Screen snapshots stay in process memory, expire after two minutes, are capped at 220 accessibility nodes / 5,000 characters, and are sent to the model only for the next explicitly opted-in Ask query. Broader offline flows (screen context, Pulse, notifications, voice, reminders) and Galaxy M34 performance still need device verification.
+Earlier dated milestones are preserved in repository history. Current test results are maintained in the verification record rather than repeated here.

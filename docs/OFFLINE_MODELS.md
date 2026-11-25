@@ -18,3 +18,7 @@ Model download needs an internet connection and roughly 691 MB free space to pre
 ## Device verification
 
 The selected file is a small compatibility starting point, not a measured performance guarantee. Generation speed, peak memory, thermal behavior, and quality must be measured on each target phone. The current device run is on a Galaxy M32 (SM-M325F, Android 13, about 5.8 GB physical RAM), not the Galaxy M34.
+
+## Speech and historical model research
+
+The Whisper bridge expects a separate `ggml-base-q5_1.bin` model in app-scoped storage or bundled assets. Fresh-install availability and transcription need verification. Earlier 2B/4B and embedding experiments are indexed in [research](RESEARCH_INDEX.md); they are not the current recommended configuration.

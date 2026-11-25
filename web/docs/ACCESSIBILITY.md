@@ -11,9 +11,9 @@ WCAG 2.2 Level AA — this is a **target**, not a certified result.
 | Semantic landmarks (`header`, `nav`, `main`, `footer`) | ✅ Done   | All pages use correct HTML5 landmarks in BaseLayout                             |
 | Logical heading hierarchy (H1 → H2 → H3)               | ✅ Done   | Each page has exactly one H1; sections use H2/H3                                |
 | Skip-to-content link                                   | ✅ Done   | First focusable element in BaseLayout; visible on focus                         |
-| Full keyboard navigation                               | ✅ Done   | All interactive elements are natively focusable                                 |
+| Native keyboard navigation                               | ✅ Done   | Native controls and representative keyboard tests; full manual walkthrough pending                                 |
 | Visible focus indicators                               | ✅ Done   | `:focus-visible` with 3px offset ring in global.css                             |
-| Minimum 44×44 CSS pixel touch targets                  | ✅ Done   | `min-h-[44px]` on all buttons and CTAs                                          |
+| Minimum 44×44 CSS pixel touch targets                  | ✅ Done   | 44px target for primary controls; audit remaining targets manually                                          |
 | Color contrast ≥ 4.5:1 for body text                   | 🎯 Target | Tokens designed for AA compliance; not yet independently verified               |
 | `prefers-reduced-motion` support                       | ✅ Done   | CSS transitions disabled via media query in global.css                          |
 | System light/dark theme support                        | ✅ Done   | CSS custom properties respond to `[data-theme="light"]`                         |
@@ -38,7 +38,7 @@ WCAG 2.2 Level AA — this is a **target**, not a certified result.
 
 ## Known limitations
 
-- CSP `unsafe-inline` is required for Astro-generated inline scripts — this is acceptable for a static site but noted for transparency.
+- CSP restricts executable scripts to self-hosted resources; inline styles remain allowed.
 - Sticky header focus-scroll behavior has not been manually verified with screen readers.
 
 ## Automated testing
@@ -56,3 +56,5 @@ axe http://localhost:4321/features --exit
 axe http://localhost:4321/download --exit
 axe http://localhost:4321/permissions --exit
 ```
+
+Recorded browser baseline: Chromium desktop/mobile axe checks in light and dark themes; Firefox/WebKit smoke checks. Manual screen-reader and 200% zoom verification remain open. See [engineering audit](ENGINEERING_AUDIT.md).

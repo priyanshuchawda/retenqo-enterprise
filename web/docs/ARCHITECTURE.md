@@ -8,7 +8,7 @@ The Retenqo website is a **fully static site** built with [Astro](https://astro.
 
 | Layer       | Choice                      | Rationale                                       |
 | ----------- | --------------------------- | ----------------------------------------------- |
-| Framework   | Astro 4 (static output)     | Zero JS by default, island architecture, fast   |
+| Framework   | Astro 7 (static output)     | Static HTML with small local scripts   |
 | Language    | TypeScript (strictest mode) | Type safety, maintainability                    |
 | Styling     | Tailwind CSS v4             | Utility-first, design tokens, purged output     |
 | Validation  | Zod                         | Schema-validated release metadata at build time |
@@ -23,7 +23,7 @@ The Retenqo website is a **fully static site** built with [Astro](https://astro.
 GitHub Releases API
       │
       ▼
-scripts/sync-release.ts   (pnpm release:sync)
+scripts/sync-release.ts   (verify digest, package, signer)
       │
       ▼
 src/data/release.generated.json   (committed, schema-validated)

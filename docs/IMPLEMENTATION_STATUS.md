@@ -1,5 +1,11 @@
 # Implementation status
 
+## Current baseline — 25 November 2026
+
+Published v0.1.3 reports 114 JVM tests, 5 instrumentation tests and zero lint errors (34 warnings, 1 hint). The later SQLCipher fix reports 6 instrumentation passes and successful debug startup on API 36; signed replacement and API 33 verification remain open. See [Testing](TESTING.md). Website results are recorded separately in the [website audit](../web/docs/ENGINEERING_AUDIT.md).
+
+Current engineering priorities: signed-device verification, encrypted notification queue, consent/deletion races, full-history retrieval, screen-only answers and full backup/voice/reminder workflows. The following dated entries preserve earlier evidence; older counts are not the current test baseline.
+
 **Updated:** 2026-11-25
 **Branch:** `main` (post-v0.1.3 engineering update)
 

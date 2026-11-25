@@ -1,175 +1,97 @@
-# Retenqo
+# Retenqo — Private personal intelligence
 
 **Remember what matters. Follow through. Keep personal context local.**
 
-Retenqo is a local-first AI memory and commitment assistant for Android. It turns authorized phone context into searchable, source-backed memories and reviewable commitments, helping people remember important details and act on them without sending their prompts or memories to a cloud AI service.
+Retenqo is a local-first Android AI memory and commitment assistant. It turns authorized phone context into searchable memories, source-linked answers and reviewable commitments, helping people recover important information and act on deadlines without sending their prompts or memories to a cloud AI service.
 
-[Download / Releases](https://github.com/priyanshuchawda/retenqo-enterprise/releases) · [How it works](#how-it-works) · [Build from source](#build-from-source) · [Contribute](#contributing) · [Report an issue](https://github.com/priyanshuchawda/retenqo-enterprise/issues)
+[Official website](https://retenqo.pages.dev) · [Download](https://retenqo.pages.dev/download) · [Evaluation guide](docs/EVALUATION_GUIDE.md) · [Architecture](docs/ARCHITECTURE.md) · [Verification](docs/TESTING.md)
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-![Platform: Android 13+](https://img.shields.io/badge/Android-13%2B-3DDC84?logo=android&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-native-7F52FF?logo=kotlin&logoColor=white)
-![Architecture: ARM64](https://img.shields.io/badge/architecture-ARM64-475569)
-![AI: local inference](https://img.shields.io/badge/AI-on--device-0f766e)
 
-> **Release status:** Retenqo v0.1.2 is the current stable ARM64 release, available from GitHub Releases. The core Room database uses SQLCipher with an Android Keystore-protected key. The notification processing queue remains in app-private preferences without application-level encryption; this release is not a security certification. See the implementation report and open engineering issues for current limitations.
+## Engineering highlights
 
-## Official website
-
-**[retenqo.pages.dev](https://retenqo.pages.dev)** — The production website is live. It includes download instructions, feature explanations, permission transparency, security architecture, privacy policy, and the official APK distribution page.
-
-The website source lives in [`web/`](web/) alongside the Android application in this monorepo.
-
-| Resource                     | Link                                                                 |
-| ---------------------------- | -------------------------------------------------------------------- |
-| 🌐 Official website          | https://retenqo.pages.dev                                            |
-| 📦 APK releases              | https://github.com/priyanshuchawda/retenqo-enterprise/releases       |
-| 📋 Download page             | https://retenqo.pages.dev/download                                   |
-| 🔒 Privacy policy            | https://retenqo.pages.dev/privacy                                    |
-| 🔑 Permissions explained     | https://retenqo.pages.dev/permissions                                |
-
-## Repository structure
-
-```
-retenqo-enterprise/
-├── android/           Kotlin Android application (Compose, Room, llama.cpp, Whisper)
-├── web/               Astro static website (TypeScript, Tailwind CSS v4)
-│   ├── src/           Pages, components, layouts, config, styles
-│   ├── public/        Static assets, security headers, security.txt
-│   ├── scripts/       Release sync and verification scripts
-│   ├── tests/         Vitest unit tests + Playwright browser tests
-│   ├── docs/          Website architecture, design system, threat model
-│   └── AGENTS.md      Website engineering rules
-├── docs/              Shared architecture, threat model, release process docs
-├── scripts/           Build, native setup and verification scripts
-└── eval-results/      Evaluation artifacts
-```
-
-## Why Retenqo?
-
-Important information is scattered across notifications, conversations, screenshots, documents and personal notes. Finding a message later is often easier than remembering the commitment it contained.
-
-Retenqo's focus is **personal memory and follow-through**, in the personal productivity / on-device AI vertical: capture information from sources a person chooses, preserve its evidence, turn actionable context into reviewable commitments, and help the person keep track of what happens next.
-
-Unlike a general-purpose phone autopilot, Retenqo is designed around supported Android APIs, explicit permission controls, source-linked evidence and human approval of uncertain task updates.
-
-## Capabilities
-
-| Capability | What the current implementation provides |
+| Capability | Engineering achievement |
 | --- | --- |
-| Notification capture | Seven configurable source groups; capture starts paused until sources are enabled. |
-| Screenshots and screen context | On-demand MediaProjection capture; optional, bounded Accessibility text context for an explicitly opted-in Ask query. |
-| Document and image intake | Android share targets and system pickers for selected text, photos and PDFs; on-device OCR. |
-| Personal memory | Local memory cards, lexical retrieval and evidence-linked questions and answers. |
-| Commitment tracking | Review, accept, dismiss, edit, complete, snooze and reopen commitments; inspect their decision history. |
-| Completion suggestions | Local evidence matching can suggest completion; the user confirms the change. |
-| Reminders and widget | Due reminders and a home-screen count of confirmed follow-ups without exposing card text. |
-| Local AI | CPU inference through llama.cpp with a compatible imported or downloaded GGUF model. |
-| Voice | Tap-to-talk, Whisper native bridge and Android TTS implementation; full device verification is pending. |
-| Backup and recovery | Passphrase-encrypted exports and additive restore; older plaintext JSON backups can still be imported. |
+| Local intelligence | Quantized GGUF inference via llama.cpp; rules-first extraction and lexical retrieval |
+| Contextual capture | Seven opt-in notification source groups; explicit screen and selected-media intake |
+| Commitment lifecycle | Review, source evidence, reminders, completion suggestions and decision history |
+| Protected persistence | SQLCipher Room database, Android Keystore-backed key protection, explicit migrations |
+| Recovery | Passphrase-derived AES-256-GCM backup exports |
+| Trusted distribution | Static Astro website; streamed APK digest, package identity and pinned signer verification |
 
-The table describes implemented paths, not a claim that every workflow has been fully verified on physical devices.
+## Verification at a glance
+
+| Scope | Recorded result |
+| --- | --- |
+| Published Android [v0.1.3](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3) | 114 JVM tests passed; 5 device tests passed; lint 0 errors (34 warnings, 1 hint) |
+| Subsequent [database fix](https://github.com/priyanshuchawda/retenqo-enterprise/commit/3edfbc0cff94d360d4127b92948309e5e656a686) | 6 instrumentation tests passed on Android 16; concurrent encrypted connection regression and debug launch |
+| Website [verification baseline](https://github.com/priyanshuchawda/retenqo-enterprise/commit/7a0ef6ec48cba2077486db7baa202cdc7dffb079) | 25 unit tests, 100 browser tests passed (68 skipped); dependency audit reported no known vulnerabilities |
+| Production Lighthouse, one mobile-simulated run | Performance 92, accessibility 100, best practices 100, SEO 100; LCP 1.263 s, CLS 0 |
+
+These results refer to distinct recorded revisions, not a new run of the documentation revision. See [verification scope](docs/TESTING.md).
+
+## Problem and solution
+
+Important information is scattered across notifications, conversations, screenshots, documents and personal notes. Finding the original message is often easier than remembering the responsibility it contained. Retenqo connects contextual capture, private memory, evidence-aware recall and human-controlled follow-through in the personal productivity / on-device AI vertical.
+
+Unlike an autonomous phone agent, Retenqo uses supported Android APIs, explicit permissions and user approval of uncertain task updates.
 
 ## How it works
 
 ```mermaid
 flowchart TD
-    A["Authorized phone context"] --> B["Capture and bounded preprocessing"]
-    B --> C["OCR / rules-first extraction"]
-    C --> D{"Local model needed and available?"}
-    D -->|Yes| E["On-device GGUF inference"]
-    D -->|No| F["Deterministic candidate"]
-    E --> G["Memory or reviewable commitment"]
-    F --> G
-    G --> H["Room storage and source evidence"]
-    H --> I["Search and Ask"]
-    H --> J["Task review and reminders"]
-    J --> K["User-confirmed updates and history"]
-    K --> H
+ A[Authorized phone context] --> B[Bounded preprocessing and OCR]
+ B --> C[Deterministic extraction]
+ C --> D{Model needed and available?}
+ D -->|Yes| E[Local GGUF inference]
+ D -->|No| F[Rule-based candidate]
+ E --> G[Memory or reviewable commitment]
+ F --> G
+ G --> H[SQLCipher Room database]
+ H --> I[Search and Ask]
+ H --> J[Review and reminders]
+ J --> K[User-confirmed updates and history]
+ K --> H
 ```
 
-**Approach and logic.** Deterministic rules handle straightforward extraction first. A compatible local model can assist with ambiguous text and candidate completion matching. Retrieval currently uses lexical matching rather than a learned semantic embedding model. The Ask pipeline attempts to ground memory answers in retrieved evidence; the model can still produce incorrect or unsupported output.
-
-On Windows, `./scripts/build-mneme.ps1 -Task verify` runs unit tests, Android Lint, and a debug APK build while printing only Gradle output plus a compact report summary. Use `-Task assembleDebug -Install` to build and install the debug APK on the connected device.
-
-Requires JDK 21 and the Android SDK. The debug APK targets ARM64. Device measurements are single-device observations, not performance guarantees.
-
-**Example workflow (illustrative, not a benchmark):**
-
-1. An enabled notification source receives: “Can you send me the slides by Friday?”
-2. Retenqo surfaces a reviewable commitment candidate with available source context.
-3. The user reviews and accepts it, then tracks the deadline.
-4. Later evidence may suggest that the commitment has been fulfilled.
-5. The user confirms or dismisses the suggestion; the decision becomes part of the history.
-
-## Download and installation
-
-Official binaries will be distributed through [GitHub Releases](https://github.com/priyanshuchawda/retenqo-enterprise/releases). Until a release is available, developers can build the debug APK from source.
-
-| Requirement | Current build configuration |
+| Capability | Current implementation |
 | --- | --- |
-| Platform | Android 13+ (API 33+) |
-| CPU architecture | ARM64 / arm64-v8a |
-| Application version | See the Android Gradle configuration and published release tags when available |
-| AI model | Compatible GGUF, downloaded explicitly or imported into app-scoped storage |
-| Recommended starting model | Qwen3.5-0.8B Q4_0, 563 MB download |
-| Network | Required for model download; local text generation can operate offline after setup |
+| Capture | Configurable notification groups, user-initiated MediaProjection, optional bounded accessibility context |
+| Selected media | System picker and share targets; on-device OCR |
+| Recall | Lexical retrieval over bounded recent candidates, evidence-linked answers, general local questions |
+| Commitments | Review, accept, dismiss, edit, complete, snooze, reopen; completion suggestions |
+| Reminders and widget | Local reminders and a count of confirmed follow-ups |
+| Voice | Whisper bridge and Android TTS; speech-model provisioning and full device workflow verification remain in scope |
+| Backup | Encrypted exports and additive restore, including legacy plaintext imports |
 
-Install only from a trusted source. Keep Android security protections enabled. Model compatibility and device performance vary; see the [offline model guide](docs/OFFLINE_MODELS.md) for the pinned model source, checksum, license and storage requirements.
+Example: an authorized message asks for slides by Friday. Retenqo can produce a reviewable commitment, preserve its source, support a reminder and later completion review. This illustrates the intended workflow; full end-to-end device verification is tracked in [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
-## Privacy and security
-
-Retenqo's local-first architecture reduces reliance on external AI services. It is not a claim of complete anonymity, zero risk or application-level encryption of every stored record. The Room database is encrypted at rest; the pending notification queue and ordinary settings/preferences do not yet use application-level encryption.
-
-| Access / data | Purpose and boundary |
-| --- | --- |
-| Notification access | Read notifications only after Android access and source selection; capture starts paused. |
-| Screen capture | User-initiated Android MediaProjection consent. |
-| Accessibility | Optional service that maintains a bounded, short-lived visible-text snapshot; included in Ask only when explicitly selected for that query. |
-| Photos and documents | Scoped media access for optional WhatsApp image discovery; explicit picker/share grants for selected files. No all-files permission. |
-| Microphone | Voice capture, subject to Android permission. |
-| Local storage | Room memory records and app-scoped model files; Android sandbox protections apply. |
-| Internet | Explicit model download; prompts and memories are not sent to a cloud model by the implemented inference path. |
-| Backup | New exports use AES-256-GCM with a PBKDF2-HMAC-SHA256-derived key; the passphrase is not stored. Legacy JSON is plaintext. |
-
-Accessibility access is sensitive even when processing is local. Enable it only if the behavior is desired. Do not capture other people's private information without appropriate permission. Keep backups and signing credentials secure.
-
-Read the [security policy](SECURITY.md). For suspected vulnerabilities, use [private vulnerability reporting](https://github.com/priyanshuchawda/retenqo-enterprise/security) if enabled; otherwise contact the maintainer privately. Do not post private messages, notifications, credentials or real memory exports in public issues.
-
-## Technology and architecture
+## Technology and design
 
 | Layer | Technology |
 | --- | --- |
-| UI | Kotlin, Jetpack Compose, Material 3 |
-| State and concurrency | ViewModel, Kotlin Coroutines, Flow |
-| Persistence | Room / SQLite, schema migrations |
-| Background processing | WorkManager |
-| Capture | NotificationListenerService, MediaProjection, Android share and picker APIs |
-| Text recognition | ML Kit |
-| Local model runtime | llama.cpp, GGUF, C/C++ and JNI |
-| Speech | whisper.cpp and Android TTS |
-| Build | Gradle Kotlin DSL, JDK 21, Android SDK 36, NDK |
+| Android | Kotlin, Compose, Material 3, ViewModel, coroutines, Flow |
+| Persistence | Room / SQLCipher, Android Keystore, schema migrations |
+| Processing | WorkManager, deterministic extraction, ML Kit OCR |
+| AI | llama.cpp, JNI, GGUF, whisper.cpp and Android TTS |
+| Toolchain | Gradle Kotlin DSL, JDK 21, Android SDK 36, NDK |
+| Website | Astro static output, TypeScript, Tailwind CSS v4, Zod, Vitest, Playwright |
 
-```text
-android/mneme/       Android application and native runtime integration
-android/mneme-test/  Experimental / test application
-web/                 Astro static website (TypeScript, Tailwind CSS v4)
-scripts/             Build, native dependency setup and verification
-docs/                Implementation, audit, model and design documentation
-eval-results/        Evaluation artifacts
-pitch-assets/        Presentation and demo assets
-```
+Recommended language model: Qwen3.5-0.8B Q4_0, a separate 563,036,064-byte download. See [model setup](docs/OFFLINE_MODELS.md) and [AI implementation](docs/AI_IMPLEMENTATION.md).
 
-Presentation assets can include scripted states; they should not be interpreted as independent evidence of real-world AI performance.
+## Download and installation
+
+The latest published stable binary is [v0.1.3](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3), version code 4, Android 13+, ARM64, 39,374,311 bytes. The pooled-connection database fix is in subsequent source and has not yet been published as a signed replacement. Affected devices require verification of the fixed build before relying on it.
+
+Use the [download page](https://retenqo.pages.dev/download) for checksum and signer details and the [installation guide](https://retenqo.pages.dev/installation). Keep Android security protections enabled and back up personal data before updating.
+
+## Privacy and security
+
+Local inference does not require cloud AI endpoints. Notification capture starts paused; source groups are opt-in. The core database is encrypted at rest and new backup exports are authenticated and encrypted. Pending notification text is app-private but not application-encrypted. See [threat model](docs/THREAT_MODEL.md), [security policy](SECURITY.md) and [current status](docs/IMPLEMENTATION_STATUS.md).
 
 ## Build from source
 
-### Prerequisites
-
-- Git, Bash and a compatible Linux development environment (or WSL with the necessary Android tooling)
-- JDK 21
-- Android SDK with platform 36, build tools, NDK 28.2.13676358 and CMake 4.1.2
-- Internet access to provision build dependencies and pinned native sources
+Prerequisites: Git, Bash (Linux/WSL) or PowerShell on Windows, JDK 21, Android SDK platform 36, NDK 28.2.13676358 and CMake 4.1.2.
 
 ```bash
 git clone https://github.com/priyanshuchawda/retenqo-enterprise.git
@@ -177,96 +99,22 @@ cd retenqo-enterprise
 ./scripts/build-mneme.sh
 ```
 
-The build script provisions native dependencies and uses the Gradle wrapper. Set `ANDROID_HOME` and, if needed, `MNEME_JAVA_HOME` to the local installations.
+Windows: `./scripts/build-mneme.ps1 -Task verify` or `-Task assembleDebug -Install` with an authorized connected device. Debug and release application identities differ. See [release process](docs/RELEASE_PROCESS.md).
 
-Debug APK: `android/mneme/app/build/outputs/apk/debug/app-debug.apk`
-
-For a connected, authorized Android device:
-
-```bash
-adb install -r android/mneme/app/build/outputs/apk/debug/app-debug.apk
-```
-
-The debug build has a separate application ID suffix. On Windows, create a local release signing key once with `scripts/create-release-key.ps1`, then run `scripts/build-mneme.ps1 -Task assembleRelease`. The key and a Windows DPAPI protected password stay under the user's `.android` directory and are never written to Git. Keep both files backed up securely; future APK updates must use the same key. The build helper verifies the APK signature and prints the SHA-256 certificate fingerprint.
-
-## Testing and engineering evidence
-
-```bash
-./scripts/test-mneme.sh
-cd android/mneme
-./gradlew :app:lintDebug :app:assembleDebug
-# Requires a compatible connected Android device:
-./gradlew :app:connectedDebugAndroidTest
-```
-
-### Verification run — 25 November 2026
-
-| Check | Reported result |
-| --- | --- |
-| JVM unit tests | 79 passed, 0 failures |
-| Debug assembly | Passed |
-| Android Lint | 0 errors, 33 warnings, 1 hint |
-| App instrumentation | 5 passed on attached Android 16 device, including encrypted migration, row preservation, wrong-key rejection, and missing-key failure |
-| Release APK | v0.1.2, signed, aligned, ARM64; SHA-256 `70a92143713051bad3e5c76ac9f7938c4a36aae79a44305ce3e806aaac68a2b9` |
-| Offline local generation | A short general question answered with connectivity disabled |
-| Historical device observation | Galaxy M32, Android 13 / ARM64; approximately 831 MB process PSS in one model run; not re-measured for this revision |
-
-The unit, lint, and debug assembly results were reproduced locally for this source revision; they are not live CI badges or broad performance guarantees. Historical device observations are labeled separately.
-
-Engineering priorities include durable capture, source and citation correctness, permission revocation, secure storage, lifecycle management, native resource bounds, reproducible tests and measurable accessibility.
-
-## Known limitations and assumptions
-
-- Local generation requires a compatible installed model and adequate device resources.
-- Retrieval is lexical; learned semantic embeddings are not integrated.
-- The local model is not a reliable general-purpose autonomous planner. AI output and proposed task updates need human review.
-- Broad multilingual extraction, real-world retrieval accuracy, battery and thermal behavior are not yet comprehensively benchmarked.
-- Real-device end-to-end capture, voice, reminders, backup restore, permission behavior, and additional device compatibility need further verification.
-- Room database encryption uses SQLCipher and a random passphrase wrapped by Android Keystore. Legacy plaintext Room databases are converted before Room opens them; the plaintext migration copy is removed only after Room opens successfully. Back up important data before updating. If the device Keystore key is unavailable, the database fails closed and is not automatically replaced. The migration instrumentation suite passed 5/5 on the connected Android 16 device for this release revision.
-- New backup exports are encrypted; legacy JSON is not. Backup encryption is distinct from database encryption at rest.
-- Notification queue data remains in unencrypted app-private preferences until it is migrated to encrypted durable storage.
-- Manual screen-reader and switch-control testing remains outstanding.
-- The stable release designation describes the published app version; it does not imply a security certification. Queue encryption, broad device coverage, and accessibility verification remain open work.
-
-See [implementation audit](docs/IMPLEMENTATION_AUDIT.md) and [roadmap](docs/ROADMAP.md) for additional detail.
-
-## Contributing
-
-Contributions, technical review, reproducible bug reports and improvement proposals are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [AGENTS.md](AGENTS.md) before submitting code.
-
-Good starting areas include Android reliability, coroutine lifecycle, privacy and security, retrieval evaluation, accessibility, test coverage, native performance and documentation.
-
-**Suggested workflow**
-
-1. Check [existing issues](https://github.com/priyanshuchawda/retenqo-enterprise/issues) and open an issue describing the problem, impact and acceptance criteria.
-2. Agree on scope, then fork or create a focused branch.
-3. Make small, reviewable commits; follow Kotlin conventions and preserve existing data compatibility.
-4. Add meaningful regression tests and run the relevant build, lint and test commands.
-5. Open a pull request linking the issue. Include implementation rationale, verification output, remaining limitations and screenshots for UI changes.
-
-Never commit credentials, signing keys, personal memory databases, model binaries without distribution rights or real private capture data. Use synthetic test fixtures and redact diagnostics. Security-sensitive changes should include a threat assessment and failure-path tests. Avoid unrelated refactors and do not claim checks passed unless they were actually run.
-
-## Project documentation
+## Engineering documentation
 
 | Document | Purpose |
 | --- | --- |
-| [Architecture](docs/ARCHITECTURE.md) | System boundaries and design direction |
-| [Threat model](docs/THREAT_MODEL.md) | Risks and planned mitigations |
-| [Release process](docs/RELEASE_PROCESS.md) | Manual verification and APK publication |
-| [Accessibility](docs/ACCESSIBILITY.md) | Inclusive design and verification |
-| [Changelog](CHANGELOG.md) | Significant changes |
-| [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Verified behavior and current gaps |
-| [Implementation audit](docs/IMPLEMENTATION_AUDIT.md) | Component-level technical review |
-| [Follow-through plan](docs/FOLLOW_THROUGH_PLAN.md) | Product goals, review workflow and milestones |
-| [Extraction rules](docs/EXTRACT_RULES.md) | Rules-first extraction design |
-| [Offline models](docs/OFFLINE_MODELS.md) | Model provenance, setup and device constraints |
-| [Roadmap](docs/ROADMAP.md) | Planned improvements |
-| [Third-party notices](docs/THIRD_PARTY_NOTICES.md) | Dependency and model licensing information |
+| [Evaluation guide](docs/EVALUATION_GUIDE.md) | All eleven criteria and evidence |
+| [Requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md) | Exact implementation and test references |
+| [Architecture](docs/ARCHITECTURE.md) | Component relationships, data flow and trust boundaries |
+| [AI implementation](docs/AI_IMPLEMENTATION.md) | Extraction, retrieval, inference and research |
+| [Testing](docs/TESTING.md) | Revision-specific results |
+| [Performance](docs/PERFORMANCE.md) | Resource bounds and recorded measurements |
+| [Accessibility](docs/ACCESSIBILITY.md) | Implemented measures and verification |
+| [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Current boundaries and historical milestones |
+| [Website engineering audit](web/docs/ENGINEERING_AUDIT.md) | Distribution, browser coverage and production measurements |
+| [Research index](docs/RESEARCH_INDEX.md) | Historical experiments and design evolution |
+| [Changelog](CHANGELOG.md) | Releases and unreleased changes |
 
-## License
-
-Retenqo's original project code is licensed under the [Apache License 2.0](LICENSE). Third-party components, assets and model weights retain their respective licenses; see [third-party notices](docs/THIRD_PARTY_NOTICES.md).
-
----
-
-**Retenqo — personal memory with evidence, private AI and human-controlled follow-through.**
+Source: [Android](android/mneme/), [website](web/), [build helpers](scripts/), [research artifacts](eval-results/). Contributions: [CONTRIBUTING.md](CONTRIBUTING.md). License: [Apache 2.0](LICENSE); [third-party notices](docs/THIRD_PARTY_NOTICES.md).

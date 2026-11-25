@@ -12,7 +12,7 @@ Retenqo is a local-first AI memory and commitment assistant for Android. It turn
 ![Architecture: ARM64](https://img.shields.io/badge/architecture-ARM64-475569)
 ![AI: local inference](https://img.shields.io/badge/AI-on--device-0f766e)
 
-> **Development status:** Actively developed Apache-2.0 open-source project. The first official downloadable APK is not yet published. See the implementation report for verified behavior and outstanding work. Production readiness and security assurance are goals, not certifications.
+> **Development status:** Actively developed Apache-2.0 open-source project. A signed ARM64 engineering preview is available from GitHub Releases as a pre-release. Application-level encryption for the core database remains outstanding; this build is not a production privacy certification. See the implementation report and open engineering issues for current limitations.
 
 ## Official website
 

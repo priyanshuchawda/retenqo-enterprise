@@ -1,9 +1,22 @@
+import java.io.File
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
 }
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+val releaseKeyStore = providers.environmentVariable("RETENQO_RELEASE_KEYSTORE")
+    .orElse(File(System.getProperty("user.home"), ".android/retenqo-release.p12").absolutePath)
+    .get()
+val releasePassword = providers.environmentVariable("RETENQO_RELEASE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("RETENQO_RELEASE_KEY_ALIAS").orElse("retenqo-release").get()
+val releaseSigningConfigured = File(releaseKeyStore).isFile && !releasePassword.isNullOrBlank()
 
 android {
     namespace = "com.mneme.app"
@@ -22,6 +35,17 @@ android {
         }
     }
 
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            create("release") {
+                storeFile = file(releaseKeyStore)
+                storePassword = releasePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releasePassword
+            }
+        }
+    }
+
     buildTypes {
         debug {
             isMinifyEnabled = false
@@ -31,6 +55,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = if (releaseSigningConfigured) signingConfigs.getByName("release") else null
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -51,6 +76,16 @@ android {
         jvmToolchain(21)
     }
 
+}
+
+tasks.configureEach {
+    if (name == "preReleaseBuild") {
+        doFirst {
+            check(releaseSigningConfigured) {
+                "Release signing is required. Run scripts/create-release-key.ps1 or provide RETENQO_RELEASE_KEYSTORE and RETENQO_RELEASE_PASSWORD."
+            }
+        }
+    }
 }
 
 configurations.all {

@@ -21,6 +21,30 @@ switch ($Task) {
 )
 $gradleArgs += @('--no-daemon', '--console=plain')
 $buildLog = Join-Path $env:TEMP "retenqo-$Task-build.log"
+$releasePasswordPointer = [IntPtr]::Zero
+$savedReleaseEnvironment = @{
+    Keystore = $env:RETENQO_RELEASE_KEYSTORE
+    Password = $env:RETENQO_RELEASE_PASSWORD
+    Alias = $env:RETENQO_RELEASE_KEY_ALIAS
+}
+
+if ($Task -eq 'assembleRelease') {
+    if ([string]::IsNullOrWhiteSpace($env:RETENQO_RELEASE_KEYSTORE) -or [string]::IsNullOrWhiteSpace($env:RETENQO_RELEASE_PASSWORD)) {
+        $releaseKeyStore = Join-Path $env:USERPROFILE '.android\retenqo-release.p12'
+        $protectedPasswordFile = Join-Path $env:USERPROFILE '.android\retenqo-release-password.dpapi'
+        if (!(Test-Path -LiteralPath $releaseKeyStore -PathType Leaf) -or !(Test-Path -LiteralPath $protectedPasswordFile -PathType Leaf)) {
+            throw 'Release key is not configured. Run scripts/create-release-key.ps1 once, then retry.'
+        }
+        $protectedPassword = Get-Content -LiteralPath $protectedPasswordFile -Raw
+        $securePassword = ConvertTo-SecureString $protectedPassword
+        $releasePasswordPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
+        $env:RETENQO_RELEASE_PASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($releasePasswordPointer)
+        $env:RETENQO_RELEASE_KEYSTORE = $releaseKeyStore
+    }
+    if ([string]::IsNullOrWhiteSpace($env:RETENQO_RELEASE_KEY_ALIAS)) {
+        $env:RETENQO_RELEASE_KEY_ALIAS = 'retenqo-release'
+    }
+}
 
 Push-Location $projectRoot
 try {
@@ -59,9 +83,28 @@ try {
         Write-Output "LINT errors=$lintErrors warnings=$lintWarnings hints=$lintHints"
         Write-Output "APK bytes=$((Get-Item $apk).Length)"
     }
+    if ($Task -eq 'assembleRelease') {
+        $apk = Join-Path $projectRoot 'app\build\outputs\apk\release\app-release.apk'
+        $apksigner = Get-ChildItem (Join-Path $env:ANDROID_HOME 'build-tools') -Filter 'apksigner.bat' -Recurse |
+            Sort-Object { [version]$_.Directory.Name } -Descending |
+            Select-Object -First 1
+        if (!(Test-Path -LiteralPath $apk) -or $null -eq $apksigner) { throw 'Signed release APK or apksigner was not found.' }
+        $signature = & $apksigner.FullName verify --verbose --print-certs $apk 2>&1
+        if ($LASTEXITCODE -ne 0) { throw 'Release APK signature verification failed.' }
+        $sha256 = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+        $certificate = $signature | Where-Object { $_ -match 'certificate SHA-256 digest:' } | Select-Object -First 1
+        Write-Output "RELEASE_APK path=$apk bytes=$((Get-Item $apk).Length) sha256=$sha256"
+        if ($certificate) { Write-Output $certificate.ToString().Trim() }
+    }
 } catch {
     Write-Error $_
     exit 1
 } finally {
     Pop-Location
+    if ($releasePasswordPointer -ne [IntPtr]::Zero) {
+        [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($releasePasswordPointer)
+    }
+    $env:RETENQO_RELEASE_PASSWORD = $savedReleaseEnvironment.Password
+    $env:RETENQO_RELEASE_KEYSTORE = $savedReleaseEnvironment.Keystore
+    $env:RETENQO_RELEASE_KEY_ALIAS = $savedReleaseEnvironment.Alias
 }

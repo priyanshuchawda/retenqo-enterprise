@@ -21,6 +21,9 @@ models/
 .env
 .env.*
 *.keystore
+*.jks
+*.p12
+release-signing.properties
 google-services.json
 
 # OS / editor

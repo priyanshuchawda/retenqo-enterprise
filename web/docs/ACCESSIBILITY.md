@@ -6,35 +6,35 @@ WCAG 2.2 Level AA — this is a **target**, not a certified result.
 
 ## Implemented measures
 
-| Item                                                | Status   | Notes                                                    |
-| --------------------------------------------------- | -------- | -------------------------------------------------------- |
-| Semantic landmarks (`header`, `nav`, `main`, `footer`) | ✅ Done | All pages use correct HTML5 landmarks in BaseLayout     |
-| Logical heading hierarchy (H1 → H2 → H3)           | ✅ Done  | Each page has exactly one H1; sections use H2/H3        |
-| Skip-to-content link                                | ✅ Done  | First focusable element in BaseLayout; visible on focus |
-| Full keyboard navigation                            | ✅ Done  | All interactive elements are natively focusable         |
-| Visible focus indicators                            | ✅ Done  | `:focus-visible` with 3px offset ring in global.css     |
-| Minimum 44×44 CSS pixel touch targets               | ✅ Done  | `min-h-[44px]` on all buttons and CTAs                  |
-| Color contrast ≥ 4.5:1 for body text                | 🎯 Target| Tokens designed for AA compliance; not yet independently verified |
-| `prefers-reduced-motion` support                    | ✅ Done  | CSS transitions disabled via media query in global.css  |
-| System light/dark theme support                     | ✅ Done  | CSS custom properties respond to `[data-theme="light"]` |
-| Decorative SVGs hidden from assistive technology    | ✅ Done  | `aria-hidden="true"` on all decorative elements         |
-| Descriptive alt text for meaningful images          | ✅ Done  | Phone frame uses `aria-label`; illustrations have `role="img"` and `aria-label` |
-| Screen-reader-friendly FAQ disclosures              | ✅ Done  | Native `<details>/<summary>` — no JS, no ARIA hacks    |
-| No information conveyed by color alone              | ✅ Done  | Icons and text labels accompany all color-coded states  |
-| 320px responsive layout                             | ✅ Done  | Mobile-first CSS; tested to 320px viewport              |
-| Accurate accessibility statement                    | ✅ Done  | `accessibility.astro` reflects actual implementation    |
+| Item                                                   | Status    | Notes                                                                           |
+| ------------------------------------------------------ | --------- | ------------------------------------------------------------------------------- |
+| Semantic landmarks (`header`, `nav`, `main`, `footer`) | ✅ Done   | All pages use correct HTML5 landmarks in BaseLayout                             |
+| Logical heading hierarchy (H1 → H2 → H3)               | ✅ Done   | Each page has exactly one H1; sections use H2/H3                                |
+| Skip-to-content link                                   | ✅ Done   | First focusable element in BaseLayout; visible on focus                         |
+| Full keyboard navigation                               | ✅ Done   | All interactive elements are natively focusable                                 |
+| Visible focus indicators                               | ✅ Done   | `:focus-visible` with 3px offset ring in global.css                             |
+| Minimum 44×44 CSS pixel touch targets                  | ✅ Done   | `min-h-[44px]` on all buttons and CTAs                                          |
+| Color contrast ≥ 4.5:1 for body text                   | 🎯 Target | Tokens designed for AA compliance; not yet independently verified               |
+| `prefers-reduced-motion` support                       | ✅ Done   | CSS transitions disabled via media query in global.css                          |
+| System light/dark theme support                        | ✅ Done   | CSS custom properties respond to `[data-theme="light"]`                         |
+| Decorative SVGs hidden from assistive technology       | ✅ Done   | `aria-hidden="true"` on all decorative elements                                 |
+| Descriptive alt text for meaningful images             | ✅ Done   | Phone frame uses `aria-label`; illustrations have `role="img"` and `aria-label` |
+| Screen-reader-friendly FAQ disclosures                 | ✅ Done   | Native `<details>/<summary>` — no JS, no ARIA hacks                             |
+| No information conveyed by color alone                 | ✅ Done   | Icons and text labels accompany all color-coded states                          |
+| 320px responsive layout                                | ✅ Done   | Mobile-first CSS; tested to 320px viewport                                      |
+| Accurate accessibility statement                       | ✅ Done   | `accessibility.astro` reflects actual implementation                            |
 
 ## Items requiring manual verification
 
-| Item                                       | How to verify                                                     |
-| ------------------------------------------ | ----------------------------------------------------------------- |
-| Color contrast ratios                      | Run axe DevTools or Colour Contrast Analyser on deployed site     |
-| Screen reader — NVDA (Windows)             | Navigate all pages with NVDA + Chrome                             |
-| Screen reader — TalkBack (Android)         | Load site on Android device; navigate all interactive elements    |
-| Screen reader — VoiceOver (macOS/iOS)      | Navigate all pages with VoiceOver + Safari                        |
-| Keyboard-only navigation                   | Tab through every interactive element on every page               |
-| 200% and 400% browser zoom                 | Test in Chrome at 200% and 400% zoom                              |
-| Download state accessibility               | Verify download button accessible name in both pending/available states |
+| Item                                  | How to verify                                                           |
+| ------------------------------------- | ----------------------------------------------------------------------- |
+| Color contrast ratios                 | Run axe DevTools or Colour Contrast Analyser on deployed site           |
+| Screen reader — NVDA (Windows)        | Navigate all pages with NVDA + Chrome                                   |
+| Screen reader — TalkBack (Android)    | Load site on Android device; navigate all interactive elements          |
+| Screen reader — VoiceOver (macOS/iOS) | Navigate all pages with VoiceOver + Safari                              |
+| Keyboard-only navigation              | Tab through every interactive element on every page                     |
+| 200% and 400% browser zoom            | Test in Chrome at 200% and 400% zoom                                    |
+| Download state accessibility          | Verify download button accessible name in both pending/available states |
 
 ## Known limitations
 

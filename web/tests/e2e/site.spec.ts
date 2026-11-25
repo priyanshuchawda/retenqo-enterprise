@@ -16,7 +16,9 @@ const ROUTES = [
 ];
 
 for (const route of ROUTES) {
-  test(`route ${route} renders with zero axe-core violations and no console errors`, async ({ page }) => {
+  test(`route ${route} renders with zero axe-core violations and no console errors`, async ({
+    page,
+  }) => {
     const errors: string[] = [];
     page.on('pageerror', (err) => errors.push(err.message));
     page.on('console', (msg) => {
@@ -35,5 +37,7 @@ for (const route of ROUTES) {
 test('404 page renders gracefully', async ({ page }) => {
   const response = await page.goto('/non-existent-route-12345');
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Page not found' })
+  ).toBeVisible();
 });

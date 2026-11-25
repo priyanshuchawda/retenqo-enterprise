@@ -2,10 +2,10 @@
 
 ## Test stack
 
-| Layer         | Tool              | Coverage                                          |
-| ------------- | ----------------- | ------------------------------------------------- |
-| Unit tests    | Vitest            | Release validation schemas, URL validators, utils |
-| Browser tests | Playwright        | Page rendering, navigation, accessibility, download flow |
+| Layer         | Tool       | Coverage                                                 |
+| ------------- | ---------- | -------------------------------------------------------- |
+| Unit tests    | Vitest     | Release validation schemas, URL validators, utils        |
+| Browser tests | Playwright | Page rendering, navigation, accessibility, download flow |
 
 ## Run all tests
 
@@ -17,7 +17,7 @@ pnpm test
 ## Unit tests only
 
 ```powershell
-pnpm test:unit
+pnpm test
 # or directly:
 npx vitest run
 ```
@@ -32,17 +32,19 @@ pnpm test:e2e
 npx playwright test
 ```
 
-Browser test files live in `tests/browser/`.
+Browser test files live in `tests/e2e/`.
 
 ## What is tested
 
 ### Unit (Vitest)
+
 - Zod schema validation for `release.generated.json`
 - `isTrustedReleasePageUrl()` — rejects non-GitHub URLs, wrong repos, custom ports
 - `isTrustedApkDownloadUrl()` — tag matching, path traversal rejection, extension validation
 - `ReleaseState` discriminated union narrowing
 
 ### Browser (Playwright)
+
 - Homepage renders H1 and primary CTA button
 - Navigation links work across all pages
 - Download page shows "pending" state when no release is available

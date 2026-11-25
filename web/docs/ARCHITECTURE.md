@@ -6,16 +6,16 @@ The Retenqo website is a **fully static site** built with [Astro](https://astro.
 
 ## Technology stack
 
-| Layer        | Choice                        | Rationale                                       |
-| ------------ | ----------------------------- | ----------------------------------------------- |
-| Framework    | Astro 4 (static output)       | Zero JS by default, island architecture, fast   |
-| Language     | TypeScript (strictest mode)   | Type safety, maintainability                    |
-| Styling      | Tailwind CSS v4               | Utility-first, design tokens, purged output     |
-| Validation   | Zod                           | Schema-validated release metadata at build time |
-| Testing      | Vitest + Playwright           | Unit + end-to-end browser coverage              |
-| Package mgr  | pnpm (frozen lockfile)        | Reproducible installs                           |
-| Hosting      | Cloudflare Pages              | Edge CDN, free HTTPS, no server                 |
-| Deployment   | Wrangler CLI                  | `wrangler pages deploy web/dist`                |
+| Layer       | Choice                      | Rationale                                       |
+| ----------- | --------------------------- | ----------------------------------------------- |
+| Framework   | Astro 4 (static output)     | Zero JS by default, island architecture, fast   |
+| Language    | TypeScript (strictest mode) | Type safety, maintainability                    |
+| Styling     | Tailwind CSS v4             | Utility-first, design tokens, purged output     |
+| Validation  | Zod                         | Schema-validated release metadata at build time |
+| Testing     | Vitest + Playwright         | Unit + end-to-end browser coverage              |
+| Package mgr | pnpm (frozen lockfile)      | Reproducible installs                           |
+| Hosting     | Cloudflare Pages            | Edge CDN, free HTTPS, no server                 |
+| Deployment  | Wrangler CLI                | `wrangler pages deploy web/dist`                |
 
 ## Data flow
 
@@ -43,20 +43,20 @@ User browser (zero backend)
 
 ## Page map
 
-| Route              | Purpose                                      |
-| ------------------ | -------------------------------------------- |
-| `/`                | Hero, feature grid, download CTA             |
-| `/download`        | APK download with release metadata           |
-| `/features`        | Full capability listing                      |
-| `/how-it-works`    | Step-by-step user journey                   |
-| `/permissions`     | Android permission transparency              |
-| `/privacy`         | Privacy policy                               |
-| `/security`        | Security architecture                        |
-| `/accessibility`   | WCAG 2.2 AA statement                        |
-| `/faq`             | Frequently asked questions                   |
-| `/installation`    | APK sideload guide                           |
-| `/support`         | Contact and bug report links                 |
-| `/404`             | Custom not-found page                        |
+| Route            | Purpose                            |
+| ---------------- | ---------------------------------- |
+| `/`              | Hero, feature grid, download CTA   |
+| `/download`      | APK download with release metadata |
+| `/features`      | Full capability listing            |
+| `/how-it-works`  | Step-by-step user journey          |
+| `/permissions`   | Android permission transparency    |
+| `/privacy`       | Privacy policy                     |
+| `/security`      | Security architecture              |
+| `/accessibility` | WCAG 2.2 AA statement              |
+| `/faq`           | Frequently asked questions         |
+| `/installation`  | APK sideload guide                 |
+| `/support`       | Contact and bug report links       |
+| `/404`           | Custom not-found page              |
 
 ## Security headers
 

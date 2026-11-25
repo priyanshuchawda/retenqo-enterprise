@@ -1,4 +1,4 @@
-import { writeFile } from 'node:fs/promises';
+import { rename, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { z } from 'zod';
 import {
@@ -8,7 +8,8 @@ import {
   type ReleaseState,
 } from '../src/lib/releases/validation';
 
-const GITHUB_API_URL = 'https://api.github.com/repos/priyanshuchawda/retenqo-enterprise/releases/latest';
+const GITHUB_API_URL =
+  'https://api.github.com/repos/priyanshuchawda/retenqo-enterprise/releases/latest';
 const GITHUB_TAG_API_URL = (tag: string) =>
   `https://api.github.com/repos/priyanshuchawda/retenqo-enterprise/releases/tags/${tag}`;
 const OUTPUT_PATH = resolve(process.cwd(), 'src/data/release.generated.json');
@@ -28,6 +29,12 @@ const githubReleaseSchema = z.object({
   html_url: z.string(),
   assets: z.array(githubAssetSchema),
 });
+
+async function writeAtomicJson(filePath: string, data: unknown): Promise<void> {
+  const tmpPath = `${filePath}.tmp`;
+  await writeFile(tmpPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+  await rename(tmpPath, filePath);
+}
 
 async function main(): Promise<void> {
   const now = new Date().toISOString();
@@ -49,7 +56,7 @@ async function main(): Promise<void> {
       syncedAt: now,
       reason: 'Awaiting first official public release on GitHub Releases.',
     };
-    await writeFile(OUTPUT_PATH, `${JSON.stringify(pending, null, 2)}\n`, 'utf8');
+    await writeAtomicJson(OUTPUT_PATH, pending);
     console.log('No public release found (404). Wrote pending state.');
     return;
   }
@@ -61,20 +68,31 @@ async function main(): Promise<void> {
   const parsed = githubReleaseSchema.parse(await response.json());
   // Allow pre-releases when explicitly syncing a specific tag
   if (!targetTag && (parsed.draft || parsed.prerelease)) {
-    throw new Error('Latest release is draft or prerelease; use RELEASE_TAG=<tag> to sync a specific release.');
+    throw new Error(
+      'Latest release is draft or prerelease; use RELEASE_TAG=<tag> to sync a specific release.'
+    );
   }
 
-  const apkAssets = parsed.assets.filter((asset) => asset.name.endsWith('.apk') && !asset.name.includes('debug'));
+  const apkAssets = parsed.assets.filter(
+    (asset) => asset.name.endsWith('.apk') && !asset.name.includes('debug')
+  );
   if (apkAssets.length !== 1 || !apkAssets[0]) {
-    throw new Error(`Expected exactly 1 release APK asset, found ${apkAssets.length}.`);
+    throw new Error(
+      `Expected exactly 1 release APK asset, found ${apkAssets.length}.`
+    );
   }
   const apkAsset = apkAssets[0];
 
-  if (!isTrustedReleasePageUrl(parsed.html_url) || !isTrustedApkDownloadUrl(apkAsset.browser_download_url, parsed.tag_name)) {
+  if (
+    !isTrustedReleasePageUrl(parsed.html_url) ||
+    !isTrustedApkDownloadUrl(apkAsset.browser_download_url, parsed.tag_name)
+  ) {
     throw new Error('Untrusted release or APK URL detected.');
   }
 
-  const digestHex = apkAsset.digest?.startsWith('sha256:') ? apkAsset.digest.slice(7) : '';
+  const digestHex = apkAsset.digest?.startsWith('sha256:')
+    ? apkAsset.digest.slice(7)
+    : '';
   if (!/^[a-fA-F0-9]{64}$/.test(digestHex)) {
     throw new Error('Missing or invalid SHA-256 digest on APK asset.');
   }
@@ -102,7 +120,7 @@ async function main(): Promise<void> {
     },
   });
 
-  await writeFile(OUTPUT_PATH, `${JSON.stringify(state, null, 2)}\n`, 'utf8');
+  await writeAtomicJson(OUTPUT_PATH, state);
   if (state.status === 'available') {
     console.log(`Synced release ${state.release.version}`);
   }

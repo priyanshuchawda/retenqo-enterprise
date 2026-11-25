@@ -7,20 +7,34 @@ const { label, sublabel } = Astro.props;
 ---
 
 <!-- Illustrative phone frame — replace inner content with real screenshots when available -->
-<div class="relative mx-auto w-[260px]" aria-label={label ?? 'Retenqo app on Android'}>
+<div
+  class="relative mx-auto w-[260px]"
+  aria-label={label ?? 'Retenqo app on Android'}
+>
   <!-- Phone shell -->
-  <div class="relative rounded-[2.5rem] border-4 border-[var(--border-subtle)] bg-[var(--bg-secondary)] shadow-2xl" style="box-shadow: 0 32px 80px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);">
+  <div
+    class="relative rounded-[2.5rem] border-4 border-[var(--border-subtle)] bg-[var(--bg-secondary)] shadow-2xl"
+    style="box-shadow: 0 32px 80px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);"
+  >
     <!-- Notch -->
-    <div class="mx-auto mt-3 h-6 w-20 rounded-full bg-[var(--bg-primary)] opacity-80"></div>
+    <div
+      class="mx-auto mt-3 h-6 w-20 rounded-full bg-[var(--bg-primary)] opacity-80"
+    >
+    </div>
     <!-- Screen -->
-    <div class="mx-3 mb-3 overflow-hidden rounded-[1.5rem]" style="height:460px; background: var(--bg-primary);">
+    <div
+      class="mx-3 mb-3 overflow-hidden rounded-[1.5rem]"
+      style="height:460px; background: var(--bg-primary);"
+    >
       <slot />
     </div>
   </div>
   <!-- Floating badge -->
-  {sublabel && (
-    <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1 text-xs font-medium text-[var(--text-muted)] shadow-sm">
-      {sublabel}
-    </div>
-  )}
+  {
+    sublabel && (
+      <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-[var(--border-subtle)] bg-[var(--bg-secondary)] px-3 py-1 text-xs font-medium text-[var(--text-muted)] shadow-sm">
+        {sublabel}
+      </div>
+    )
+  }
 </div>

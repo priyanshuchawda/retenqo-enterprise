@@ -6,20 +6,20 @@ The website uses the **Midnight/Clean Intelligence** palette — a dark-first de
 
 ### CSS custom properties (defined in `src/styles/global.css`)
 
-| Token                   | Dark value   | Purpose                        |
-| ----------------------- | ------------ | ------------------------------ |
-| `--bg-primary`          | `#080D16`    | Page background                |
-| `--bg-secondary`        | `#0D1420`    | Card backgrounds               |
-| `--bg-tertiary`         | `#121B2E`    | Hover states                   |
-| `--text-primary`        | `#F0F4FF`    | Headings, body text            |
-| `--text-secondary`      | `#8892A4`    | Muted supporting text          |
-| `--text-muted`          | `#4A5568`    | Timestamps, labels             |
-| `--accent-primary`      | `#67D8FF`    | Interactive elements, accents  |
-| `--accent-secondary`    | `#5EEAD4`    | Secondary highlights           |
-| `--accent-hover`        | `#89E4FF`    | Hover on accent elements       |
-| `--accent-soft`         | `rgba(...)`  | Soft accent badge backgrounds  |
-| `--border-subtle`       | `#1E2D45`    | Card borders                   |
-| `--status-success`      | `#4ADE80`    | Success indicators             |
+| Token                | Dark value  | Purpose                       |
+| -------------------- | ----------- | ----------------------------- |
+| `--bg-primary`       | `#080D16`   | Page background               |
+| `--bg-secondary`     | `#0D1420`   | Card backgrounds              |
+| `--bg-tertiary`      | `#121B2E`   | Hover states                  |
+| `--text-primary`     | `#F0F4FF`   | Headings, body text           |
+| `--text-secondary`   | `#8892A4`   | Muted supporting text         |
+| `--text-muted`       | `#4A5568`   | Timestamps, labels            |
+| `--accent-primary`   | `#67D8FF`   | Interactive elements, accents |
+| `--accent-secondary` | `#5EEAD4`   | Secondary highlights          |
+| `--accent-hover`     | `#89E4FF`   | Hover on accent elements      |
+| `--accent-soft`      | `rgba(...)` | Soft accent badge backgrounds |
+| `--border-subtle`    | `#1E2D45`   | Card borders                  |
+| `--status-success`   | `#4ADE80`   | Success indicators            |
 
 ## Typography
 
@@ -33,6 +33,7 @@ The website uses the **Midnight/Clean Intelligence** palette — a dark-first de
 ## Components
 
 ### `Button.astro`
+
 Props: `href`, `variant` (`primary` | `secondary` | `ghost`), `size` (`sm` | `md` | `lg`), `disabled`, `type`
 
 ```astro
@@ -40,6 +41,7 @@ Props: `href`, `variant` (`primary` | `secondary` | `ghost`), `size` (`sm` | `md
 ```
 
 ### `SectionHeading.astro`
+
 Props: `eyebrow`, `heading`, `subheading`
 
 ```astro
@@ -51,17 +53,18 @@ Props: `eyebrow`, `heading`, `subheading`
 ```
 
 ### `PhoneFrame.astro`
+
 Props: `label` (aria-label), `sublabel`
 Renders a CSS phone frame with a slot for screen content.
 
 ## Utility classes
 
-| Class          | Effect                                              |
-| -------------- | --------------------------------------------------- |
-| `card-hover`   | Subtle lift + border glow on hover                 |
-| `glow-bg-blue` | Radial cyan glow overlay (hero accent)             |
-| `glow-bg-teal` | Radial teal glow overlay (CTA accent)              |
-| `grid-texture` | Subtle dot-grid background texture                 |
+| Class          | Effect                                 |
+| -------------- | -------------------------------------- |
+| `card-hover`   | Subtle lift + border glow on hover     |
+| `glow-bg-blue` | Radial cyan glow overlay (hero accent) |
+| `glow-bg-teal` | Radial teal glow overlay (CTA accent)  |
+| `grid-texture` | Subtle dot-grid background texture     |
 
 ## Accessibility targets
 

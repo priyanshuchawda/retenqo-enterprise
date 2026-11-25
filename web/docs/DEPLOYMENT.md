@@ -47,10 +47,10 @@ This calls `scripts/sync-release.ts` which fetches the latest release from the G
 
 ## Environment variables
 
-| Variable                    | Purpose                                              |
-| --------------------------- | ---------------------------------------------------- |
+| Variable                      | Purpose                                                                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `RETENQO_SIGNING_CERT_SHA256` | SHA-256 of the APK signing certificate (not the file digest). Used by `sync-release.ts`. Optional — if unset, the cert fingerprint field is omitted from metadata. |
-| `CLOUDFLARE_API_TOKEN`      | Alternative to interactive `wrangler login`. Use in automated/non-interactive environments. |
+| `CLOUDFLARE_API_TOKEN`        | Alternative to interactive `wrangler login`. Use in automated/non-interactive environments.                                                                        |
 
 ## Notes
 

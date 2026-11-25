@@ -4,92 +4,202 @@ import Button from '../ui/Button.astro';
 import PhoneFrame from '../ui/PhoneFrame.astro';
 ---
 
-<section class="relative overflow-hidden" style="background: var(--bg-primary);">
+<section
+  class="relative overflow-hidden"
+  style="background: var(--bg-primary);"
+>
   <!-- Subtle grid + glow -->
-  <div class="pointer-events-none absolute inset-0 grid-texture" aria-hidden="true"></div>
-  <div class="pointer-events-none absolute inset-0 glow-bg-blue" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute inset-0 grid-texture"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-0 glow-bg-blue"
+    aria-hidden="true"
+  >
+  </div>
 
-  <div class="relative mx-auto grid max-w-7xl gap-16 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-28">
+  <div
+    class="relative mx-auto grid max-w-7xl gap-16 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-28"
+  >
     <!-- Left: copy -->
     <div>
-      <p class="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-widest uppercase"
-         style="border-color: var(--border-subtle); color: var(--accent-primary); background: var(--accent-soft);">
+      <p
+        class="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-widest uppercase"
+        style="border-color: var(--border-subtle); color: var(--accent-primary); background: var(--accent-soft);"
+      >
         Open Source · On-Device Intelligence
       </p>
 
-      <h1 class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl" style="color: var(--text-primary); line-height: 1.08;">
-        Your life.<br/>Your memories.<br/>
+      <h1
+        class="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl"
+        style="color: var(--text-primary); line-height: 1.08;"
+      >
+        Your life.<br />Your memories.<br />
         <span style="color: var(--accent-primary);">Your intelligence.</span>
       </h1>
 
-      <p class="mt-6 max-w-xl text-lg leading-relaxed sm:text-xl" style="color: var(--text-secondary);">
-        The personal AI that remembers what matters and helps you follow through — right on your Android device.
-        No cloud. No tracking. Just you.
+      <p
+        class="mt-6 max-w-xl text-lg leading-relaxed sm:text-xl"
+        style="color: var(--text-secondary);"
+      >
+        The personal AI that remembers what matters and helps you follow through
+        — right on your Android device. No cloud. No tracking. Just you.
       </p>
 
       <div class="mt-10 flex flex-wrap items-center gap-4">
         <Button href="/download" variant="primary" size="lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"
+            ></path><circle cx="12" cy="9" r="2.5"></circle></svg
+          >
           Get Retenqo for Android
         </Button>
         <Button href={SITE_CONFIG.appRepoUrl} variant="secondary" size="lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.66-.22.66-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.93 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.7.115 2.5.337 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.83-2.34 4.68-4.57 4.92.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+            ><path
+              d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.66-.22.66-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.93 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.56 9.56 0 0 1 12 6.8c.85.004 1.7.115 2.5.337 1.9-1.29 2.74-1.02 2.74-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.83-2.34 4.68-4.57 4.92.36.31.68.92.68 1.85v2.74c0 .27.16.58.67.48A10.01 10.01 0 0 0 22 12c0-5.52-4.48-10-10-10z"
+            ></path></svg
+          >
           Explore source
         </Button>
       </div>
 
       <div class="mt-10 flex flex-wrap items-center gap-6">
-        {[
-          { icon: '🔒', label: 'Local inference only' },
-          { icon: '✋', label: 'Consent first' },
-          { icon: '⚖️', label: 'Apache 2.0' },
-        ].map(({ icon, label }) => (
-          <div class="flex items-center gap-2">
-            <span aria-hidden="true">{icon}</span>
-            <span class="text-sm font-medium" style="color: var(--text-secondary);">{label}</span>
-          </div>
-        ))}
+        {
+          [
+            { icon: '🔒', label: 'Local inference only' },
+            { icon: '✋', label: 'Consent first' },
+            { icon: '⚖️', label: 'Apache 2.0' },
+          ].map(({ icon, label }) => (
+            <div class="flex items-center gap-2">
+              <span aria-hidden="true">{icon}</span>
+              <span
+                class="text-sm font-medium"
+                style="color: var(--text-secondary);"
+              >
+                {label}
+              </span>
+            </div>
+          ))
+        }
       </div>
     </div>
 
     <!-- Right: Phone mockup + floating cards -->
     <div class="relative flex justify-center lg:justify-end">
-      <PhoneFrame label="Retenqo app UI on Android" sublabel="Illustrative — replace with real screenshot">
+      <PhoneFrame
+        label="Retenqo app UI on Android"
+        sublabel="Illustrative — replace with real screenshot"
+      >
         <!-- App screen content -->
-        <div class="flex flex-col h-full px-4 pt-6 pb-4" style="background: var(--bg-primary);">
-          <p class="text-xs font-bold tracking-widest uppercase mb-4" style="color: var(--accent-primary);">Retenqo</p>
+        <div
+          class="flex flex-col h-full px-4 pt-6 pb-4"
+          style="background: var(--bg-primary);"
+        >
+          <p
+            class="text-xs font-bold tracking-widest uppercase mb-4"
+            style="color: var(--accent-primary);"
+          >
+            Retenqo
+          </p>
           <!-- Commitment card -->
-          <div class="mb-3 rounded-2xl border p-4" style="border-color: var(--border-subtle); background: var(--bg-secondary);">
-            <p class="text-[10px] font-bold tracking-wider uppercase mb-1" style="color: var(--accent-primary);">Upcoming Commitment</p>
-            <p class="text-sm font-semibold" style="color: var(--text-primary);">Send slides by Friday</p>
-            <p class="text-xs mt-0.5" style="color: var(--text-muted);">Friday · 5:00 PM · from: Team chat</p>
+          <div
+            class="mb-3 rounded-2xl border p-4"
+            style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+          >
+            <p
+              class="text-[10px] font-bold tracking-wider uppercase mb-1"
+              style="color: var(--accent-primary);"
+            >
+              Upcoming Commitment
+            </p>
+            <p
+              class="text-sm font-semibold"
+              style="color: var(--text-primary);"
+            >
+              Send slides by Friday
+            </p>
+            <p class="text-xs mt-0.5" style="color: var(--text-muted);">
+              Friday · 5:00 PM · from: Team chat
+            </p>
           </div>
           <!-- Memory card -->
-          <div class="mb-3 rounded-2xl border p-4" style="border-color: var(--border-subtle); background: var(--bg-secondary);">
-            <p class="text-[10px] font-bold tracking-wider uppercase mb-1" style="color: var(--text-muted);">Saved Memory</p>
-            <p class="text-sm font-medium" style="color: var(--text-primary);">Meeting notes — project kickoff</p>
+          <div
+            class="mb-3 rounded-2xl border p-4"
+            style="border-color: var(--border-subtle); background: var(--bg-secondary);"
+          >
+            <p
+              class="text-[10px] font-bold tracking-wider uppercase mb-1"
+              style="color: var(--text-muted);"
+            >
+              Saved Memory
+            </p>
+            <p class="text-sm font-medium" style="color: var(--text-primary);">
+              Meeting notes — project kickoff
+            </p>
           </div>
           <!-- AI input -->
-          <div class="mt-auto rounded-2xl border px-4 py-3 text-sm" style="border-color: var(--border-subtle); background: var(--bg-secondary); color: var(--text-muted);">
+          <div
+            class="mt-auto rounded-2xl border px-4 py-3 text-sm"
+            style="border-color: var(--border-subtle); background: var(--bg-secondary); color: var(--text-muted);"
+          >
             Ask your memory...
           </div>
         </div>
       </PhoneFrame>
 
       <!-- Floating context card: notification -->
-      <div class="absolute -left-8 top-20 hidden w-44 rounded-2xl border p-3 shadow-xl sm:block"
-           style="background: var(--bg-secondary); border-color: var(--border-subtle); backdrop-filter: blur(12px);">
-        <p class="text-[9px] font-bold tracking-wider uppercase" style="color: var(--accent-secondary);">Captured</p>
-        <p class="mt-1 text-xs font-medium" style="color: var(--text-primary);">"Can you send me the slides?"</p>
-        <p class="mt-0.5 text-[9px]" style="color: var(--text-muted);">WhatsApp · just now</p>
+      <div
+        class="absolute -left-8 top-20 hidden w-44 rounded-2xl border p-3 shadow-xl sm:block"
+        style="background: var(--bg-secondary); border-color: var(--border-subtle); backdrop-filter: blur(12px);"
+      >
+        <p
+          class="text-[9px] font-bold tracking-wider uppercase"
+          style="color: var(--accent-secondary);"
+        >
+          Captured
+        </p>
+        <p class="mt-1 text-xs font-medium" style="color: var(--text-primary);">
+          "Can you send me the slides?"
+        </p>
+        <p class="mt-0.5 text-[9px]" style="color: var(--text-muted);">
+          WhatsApp · just now
+        </p>
       </div>
 
       <!-- Floating context card: AI answer -->
-      <div class="absolute -right-4 bottom-28 hidden w-44 rounded-2xl border p-3 shadow-xl sm:block"
-           style="background: var(--bg-secondary); border-color: var(--border-subtle);">
-        <p class="text-[9px] font-bold tracking-wider uppercase" style="color: var(--accent-primary);">AI Answer</p>
-        <p class="mt-1 text-xs font-medium" style="color: var(--text-primary);">Deadline detected: Friday 5 PM</p>
-        <p class="mt-0.5 text-[9px]" style="color: var(--status-success);">Source: Team chat · verified</p>
+      <div
+        class="absolute -right-4 bottom-28 hidden w-44 rounded-2xl border p-3 shadow-xl sm:block"
+        style="background: var(--bg-secondary); border-color: var(--border-subtle);"
+      >
+        <p
+          class="text-[9px] font-bold tracking-wider uppercase"
+          style="color: var(--accent-primary);"
+        >
+          AI Answer
+        </p>
+        <p class="mt-1 text-xs font-medium" style="color: var(--text-primary);">
+          Deadline detected: Friday 5 PM
+        </p>
+        <p class="mt-0.5 text-[9px]" style="color: var(--status-success);">
+          Source: Team chat · verified
+        </p>
       </div>
     </div>
   </div>

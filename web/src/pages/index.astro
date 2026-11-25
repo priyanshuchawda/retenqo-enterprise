@@ -21,7 +21,11 @@ import { SITE_CONFIG } from '../config/site';
         url: SITE_CONFIG.url,
         downloadUrl: SITE_CONFIG.appReleasesUrl,
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        publisher: { '@type': 'Organization', name: 'Retenqo', url: SITE_CONFIG.url },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Retenqo',
+          url: SITE_CONFIG.url,
+        },
       })}
     />
   </Fragment>

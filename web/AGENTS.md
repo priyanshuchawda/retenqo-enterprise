@@ -43,14 +43,14 @@ web/
 
 ## Commands (run from `web/`)
 
-| Task        | Command                        |
-| ----------- | ------------------------------ |
-| Install     | `pnpm install --frozen-lockfile` |
-| Lint        | `pnpm lint`                    |
-| Type check  | `pnpm typecheck`               |
-| Test        | `pnpm test`                    |
-| Build       | `pnpm build`                   |
-| Sync release| `pnpm release:sync`            |
+| Task         | Command                          |
+| ------------ | -------------------------------- |
+| Install      | `pnpm install --frozen-lockfile` |
+| Lint         | `pnpm lint`                      |
+| Type check   | `pnpm typecheck`                 |
+| Test         | `pnpm test`                      |
+| Build        | `pnpm build`                     |
+| Sync release | `pnpm release:sync`              |
 
 ## Deploy (run from monorepo root `../`)
 

@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFileSync } from 'node:fs';
+import { parseReleaseState } from '../../src/lib/releases/validation';
+
+const releaseData: unknown = JSON.parse(
+  readFileSync(
+    new URL('../../src/data/release.generated.json', import.meta.url),
+    'utf8'
+  )
+);
 
 const ROUTES = [
   '/',
@@ -128,9 +137,14 @@ test('site requests no third-party resources and does not overflow at target wid
   page,
 }) => {
   const externalOrigins = new Set<string>();
+  let localOrigin: string | null = null;
   page.on('request', (request) => {
     const url = new URL(request.url());
-    if (url.origin !== 'http://localhost:4321') externalOrigins.add(url.origin);
+    if (localOrigin === null && request.isNavigationRequest()) {
+      localOrigin = url.origin;
+    } else if (url.origin !== localOrigin) {
+      externalOrigins.add(url.origin);
+    }
   });
   for (const width of [320, 768, 1920]) {
     await page.setViewportSize({ width, height: 900 });
@@ -158,8 +172,8 @@ test('all internal links resolve and external links use secure schemes', async (
       })
     );
     for (const href of links) {
-      const url = new URL(href, 'http://localhost:4321');
-      if (url.origin === 'http://localhost:4321') {
+      const url = new URL(href, page.url());
+      if (url.origin === new URL(page.url()).origin) {
         internalPaths.add(`${url.pathname}${url.search}`);
       } else {
         expect(['https:', 'mailto:']).toContain(url.protocol);
@@ -201,17 +215,20 @@ test('sitemap, robots, canonical, and software metadata are present', async ({
 });
 
 test('download link points to the verified release asset', async ({ page }) => {
+  const state = parseReleaseState(releaseData);
   await page.goto('/download');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     'Retenqo for Android'
   );
-  const downloadLink = page.getByRole('link', {
-    name: /Download v0\.1\.3 APK/,
-  });
-  await expect(downloadLink).toHaveAttribute(
-    'href',
-    /^https:\/\/github\.com\/priyanshuchawda\/retenqo-enterprise\/releases\/download\/v0\.1\.3\/Retenqo-v0\.1\.3-arm64-v8a\.apk$/
-  );
+  if (state.status === 'pending') {
+    await expect(page.getByText('Awaiting first release')).toBeVisible();
+    return;
+  }
+
+  const downloadLink = page
+    .getByRole('link')
+    .filter({ hasText: `Download ${state.release.version} APK` });
+  await expect(downloadLink).toHaveAttribute('href', state.release.apkUrl);
 });
 
 test('404 page renders with a not-found response', async ({ page }) => {

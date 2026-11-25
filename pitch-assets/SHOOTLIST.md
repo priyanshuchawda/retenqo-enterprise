@@ -1,5 +1,7 @@
 # Shoot list — remaining demo proofs (you on the phone)
 
+> Historical development record. Current implementation and release evidence: [engineering status](../docs/IMPLEMENTATION_STATUS.md), [verification](../docs/TESTING.md), [research index](../docs/RESEARCH_INDEX.md).
+
 These cannot be fully automated: MediaProjection consent, airplane toggle, and Gallery are human taps. Film on the **Redmi** for Round 1. Caption every clip: **daily phone · no Hexagon**.
 
 ## A. Ephemeral Pulse (sensitive dummy → empty gallery)

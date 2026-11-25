@@ -17,6 +17,6 @@ The current recommended model is Qwen3.5-0.8B Q4_0 (563,036,064 bytes). The reco
 
 The August 2026 [model evaluation](../eval-results/REPORT.md) explored earlier 2B/4B models, thinking-token consumption, OCR noise and refusal behavior. [Embedding experiments](../eval-results/embed-qwen3-0.6b/rag_vs_hash.txt) investigated lexical/hash and learned ranking. These exploratory results informed model and retrieval choices but are not current-model accuracy metrics.
 
-## Correctness scope
+## Evidence and review policy
 
-Citation identifier validation does not prove factual entailment. Full-history retrieval, screen-only answers and wider adversarial and model accuracy evaluations remain engineering priorities. Preserve source context and user approval rather than treating generated output as authoritative. See [implementation status](IMPLEMENTATION_STATUS.md).
+The citation guard validates referenced identifiers, while the original memory context and explicit user approval support review of generated answers and completion suggestions. Identifier validation is distinct from factual entailment. Current retrieval covers a bounded recent candidate set; full-history retrieval, screen-only answers and broader adversarial and accuracy evaluations are tracked in the [engineering status](IMPLEMENTATION_STATUS.md).

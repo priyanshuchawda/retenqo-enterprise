@@ -1,5 +1,7 @@
 # Fedora generation fix (2026-08-23)
 
+> Historical development record. Current implementation and release evidence: [engineering status](../docs/IMPLEMENTATION_STATUS.md), [verification](../docs/TESTING.md), [research index](../docs/RESEARCH_INDEX.md).
+
 **Canonical results (what each model answered):** [REPORT.md](./REPORT.md)
 
 ## Why blank / garbage before

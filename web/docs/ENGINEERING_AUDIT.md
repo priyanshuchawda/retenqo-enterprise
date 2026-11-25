@@ -1,5 +1,9 @@
 # Website engineering audit
 
+## Current release distribution
+
+[Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) is the signed stable Android release. [Generated release metadata](../src/data/release.generated.json) was refreshed on 25 November 2026 for version code 5, package `com.mneme.app`, ARM64, 39,374,307 bytes and the published SHA-256. The pinned single signer was verified in the release record. The detailed website verification results below describe the earlier v0.1.3-era baseline; they remain useful evidence of the distribution architecture and are not a fresh browser or Lighthouse run for v0.1.4.
+
 **Review date:** 2026-11-25<br>
 **Scope:** Static Astro website, release metadata and APK synchronization scripts, accessibility, browser behavior, security headers, and search metadata.<br>
 **Status key:** **Implemented** means a code change exists; **Verified** means a named automated or live check passed; **Pending** means evidence is still required. Targets are not presented as achieved results.
@@ -13,7 +17,7 @@ This document tracks every website finding and improvement ID supplied for the a
 | WEB-01 | Implemented       | Theme script applies the initial theme immediately and binds the selector after DOM readiness.                                                                       |
 | WEB-02 | Implemented       | System, light, and dark modes share CSS tokens and the selector. Browser theme tests cover routes and persistence.                                                   |
 | WEB-03 | Implemented       | Theme storage reads/writes are guarded; browser test simulates storage exceptions.                                                                                   |
-| WEB-04 | Verified          | Release synchronization inspects the downloaded APK's manifest metadata and signer; `pnpm release:sync` validated current GitHub release v0.1.3.                     |
+| WEB-04 | Verified          | Release synchronization inspects the downloaded APK's manifest metadata and signer; `pnpm release:sync` validated GitHub release v0.1.3 at the recorded baseline.                     |
 | WEB-05 | Implemented       | Synchronization writes metadata atomically only after validation; failure regression tests assert the previous metadata is preserved.                                |
 | WEB-06 | Implemented       | Product and release constants live in `src/config/product.ts`.                                                                                                       |
 | WEB-07 | Implemented       | Shared configuration replaces repeated app ID, API, architecture, model size and trusted release values. Continue consolidating only when a real duplicate is found. |

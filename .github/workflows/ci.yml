@@ -45,7 +45,7 @@ jobs:
 
       - name: Run Android unit tests, lint, and debug builds
         working-directory: android/mneme
-        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --max-workers=2
+        run: bash ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --max-workers=2
 
   website:
     name: Website verification and browser tests

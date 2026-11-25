@@ -1,0 +1,7 @@
+Answer ONLY using CONTEXT. Cite like [1]. One short sentence.
+Question: When and where is my meeting with Priya?
+
+CONTEXT:
+[1] WhatsApp Priya
+Meeting shifted to Thursday 4pm at cafe near gate 2. Bring laptop.
+/no_think

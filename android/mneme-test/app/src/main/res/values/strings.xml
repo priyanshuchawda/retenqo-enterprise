@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Retenqo Model Test</string>
+    <string name="status_idle">Tap Run All Tests</string>
+    <string name="run_all_tests">Run All Tests</string>
+</resources>

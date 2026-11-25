@@ -1,0 +1,5 @@
+Answer ONLY using CONTEXT. Cite [1]. One short sentence.
+Question: How much was my airport Uber?
+
+CONTEXT:
+[1] Uber receipt — Airport drop ₹620 paid via UPI to driver Ramesh

@@ -1,0 +1,21 @@
+{
+"title": "Meeting Planning Discussion",
+"summary": "Participants discuss scheduling a meeting at 9:30 AM for future possibilities.",
+"facts": [
+  "Sneha proposed meeting at 9:30",
+  "Meeting scheduled for 2026-08-25",
+  "Aditya, Sneha, Vaishnavi, You are participants",
+  "Discussion about meeting possibilities",
+  "Meeting time proposed as 9:30 AM"
+],
+"entities": [
+  "Sneha",
+  "Aditya",
+  "Vaishnavi",
+  "You"
+],
+"due_date": "2026-08-25",
+"embed_text": "Participants discussed scheduling a meeting at 9:30 AM for future possibilities. The group includes Aditya, Sneha, Vaishnavi, and You. They are considering the situation and potential outcomes of the meeting."
+} [end of text]
+
+

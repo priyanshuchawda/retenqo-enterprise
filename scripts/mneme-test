@@ -1,0 +1,19 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# Mneme test runner — uses ~/mneme-test (always accessible via SSH)
+set -euo pipefail
+export PATH="$PREFIX/bin:$PATH"
+MNEME="$HOME/mneme-test"
+mkdir -p "$MNEME"/{llm,whisper,embed,test-assets,logs}
+
+# Sync from sdcard if accessible
+if ls "$HOME/storage/shared/Mneme/models/phone1/llm/"*.gguf >/dev/null 2>&1; then
+  echo "[mneme-test] Syncing from /sdcard/Mneme..."
+  cp -n "$HOME/storage/shared/Mneme/models/phone1/llm/"*.gguf "$MNEME/llm/" 2>/dev/null || true
+  cp -n "$HOME/storage/shared/Mneme/models/phone1/whisper/"*.bin "$MNEME/whisper/" 2>/dev/null || true
+  cp -n "$HOME/storage/shared/Mneme/models/phone1/embed/litert/"*.tflite "$MNEME/embed/" 2>/dev/null || true
+  cp -n "$HOME/storage/shared/Mneme/test-assets/"*.wav "$MNEME/test-assets/" 2>/dev/null || true
+else
+  echo "[mneme-test] Using ~/mneme-test (internal storage)"
+fi
+
+exec proot-distro login ubuntu --bind "$MNEME:/mneme" -- bash /mneme/run-test.sh

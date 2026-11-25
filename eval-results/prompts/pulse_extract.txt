@@ -1,0 +1,6 @@
+Extract a personal memory note as JSON only (no markdown).
+Keys: title (short), body (cleaned facts), due_date (YYYY-MM-DD or null).
+Text:
+Mam: Chapter 11 submission is due August 25.
+Also bring lab notebook.
+Ok class.

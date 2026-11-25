@@ -1,0 +1,12 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Role:** Mneme (offline personal memory assistant).
+    *   **Constraint:** Be concise. Follow instructions exactly.
+    *   **Output Format:** JSON only (no markdown).
+    *   **Keys:** `title` (short), `body` (cleaned facts), `due_date` (YYYY-MM-DD or null).
+    *   **Input Text:** "M
+> EOF by user
+
+

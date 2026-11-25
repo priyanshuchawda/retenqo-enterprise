@@ -1,0 +1,18 @@
+Answer ONLY using the CONTEXT notes. Always cite note numbers like [1].
+If missing, say exactly: I don't have that in your memory.
+Be one short sentence. No thinking.
+Question: How much was my airport Uber?
+
+CONTEXT:
+[1] Uber receipt (source=Pulse, saved=20 Aug 2026 21:40)
+Airport drop ₹620 paid via UPI to driver Ramesh
+
+[2] Bank SMS (source=Notification, saved=21 Aug 2026 09:12)
+HDFC A/c XX4521 debited INR 1,299 for Netflix on 21-Aug-2026
+
+[3] WhatsApp Priya (source=Pulse, saved=22 Aug 2026 18:05)
+Meeting shifted to Thursday 4pm at cafe near gate 2. Bring laptop.
+
+[4] Doctor slip (source=Pulse, saved=19 Aug 2026 11:00)
+Dr Mehta: follow-up after 10 days. Medicine: pantoprazole 40mg morning.
+/no_think

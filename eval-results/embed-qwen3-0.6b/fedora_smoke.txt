@@ -1,0 +1,21 @@
+Qwen3-Embedding-0.6B Fedora smoke test
+Timestamp: 2026-08-23T14:39:04.201320
+Model: /home/priyanshuchawda/retenqo/models/phone1/embed/qwen3/Qwen3-Embedding-0.6B-Q8_0.gguf
+Size: 639150592 bytes (expected 639150592)
+Size OK: True
+
+Text 1: 'Uber airport drop ₹620'
+  dim=1024
+Text 2: 'How much was my airport Uber?'
+  dim=1024
+Text 3: 'Meeting with Priya Thursday 4pm'
+  dim=1024
+
+Cosine similarities:
+  [1] vs [2]: 0.7899  — Uber receipt vs airport Uber question (expect HIGH)
+  [1] vs [3]: 0.4081  — Uber receipt vs meeting note (expect LOWER)
+  [2] vs [3]: 0.3258  — airport Uber question vs meeting note
+
+Semantic check: sim(uber,uber_q)=0.7899 > sim(uber,meeting)=0.4081 and uber pair > 0.5: True
+
+RESULT: PASS

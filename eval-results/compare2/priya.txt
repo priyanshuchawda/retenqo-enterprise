@@ -1,0 +1,15 @@
+Answer ONLY using CONTEXT. Cite like [1]. One short sentence. If missing say: I don't have that in your memory.
+Question: When and where is my meeting with Priya?
+
+CONTEXT:
+[1] Uber receipt
+Airport drop ₹620 paid via UPI to driver Ramesh
+
+[2] Bank SMS
+HDFC A/c XX4521 debited INR 1,299 for Netflix on 21-Aug-2026
+
+[3] WhatsApp Priya
+Meeting shifted to Thursday 4pm at cafe near gate 2. Bring laptop.
+
+[4] Doctor slip
+Dr Mehta: follow-up after 10 days. Medicine: pantoprazole 40mg morning.

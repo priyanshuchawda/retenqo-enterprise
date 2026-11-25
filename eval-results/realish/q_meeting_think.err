@@ -1,0 +1,48 @@
+0.00.009.630 I llama_completion: llama backend init
+0.00.009.651 I llama_completion: load the model and apply lora adapter, if any
+0.01.453.826 W load: control-looking token: 248064 '<|repo_name|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.453.832 W load: control-looking token: 248061 '<|fim_middle|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.459.812 W load: control-looking token: 248065 '<|file_sep|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.469.575 W load: control-looking token: 248060 '<|fim_prefix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.491.727 W load: control-looking token: 248062 '<|fim_suffix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.494.228 W load: control-looking token: 248063 '<|fim_pad|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.782.070 I cmn          init: llama threadpool init, n_threads = 6
+0.02.954.380 I llama_completion: chat template is available, enabling conversation mode (disable it with -no-cnv)
+0.02.954.633 I llama_completion: chat template example:
+<|im_start|>system
+You are a helpful assistant<|im_end|>
+<|im_start|>user
+Hello<|im_end|>
+<|im_start|>assistant
+Hi there<|im_end|>
+<|im_start|>user
+How are you?<|im_end|>
+<|im_start|>assistant
+
+0.02.954.635 I 
+0.02.954.722 I system_info: n_threads = 6 (n_threads_batch = 6) / 12 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | 
+0.02.954.723 I 
+0.02.955.897 I llama_completion: interactive mode on.
+0.02.955.906 I sampler seed: 4070783227
+0.02.955.923 I sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 64
+	top_k = 40, top_p = 0.950, min_p = 0.050, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.200
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+0.02.955.933 I sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> min-p -> ?xtc -> temp-ext -> dist 
+0.02.955.934 I generate: n_ctx = 2048, n_batch = 2048, n_predict = 200, n_keep = 0
+0.02.955.935 I 
+0.02.955.935 I == Running in interactive mode. ==
+0.02.955.935 I  - Press Ctrl+C to interject at any time.
+0.02.955.936 I  - Press Return to return control to the AI.
+ - To return control without starting a new line, end your input with '/'.
+ - If you want to submit another line, end your input with '\'.
+0.02.955.936 I 
+0.38.057.577 I common_perf_print:    sampling time =     293.84 ms
+0.38.057.584 I common_perf_print:    samplers time =     110.41 ms /   485 tokens
+0.38.057.596 I common_perf_print:        load time =    1807.37 ms
+0.38.057.599 I common_perf_print: prompt eval time =    8319.47 ms /   285 tokens (   29.19 ms per token,    34.26 tokens per second)
+0.38.057.603 I common_perf_print:        eval time =   26346.15 ms /   199 runs   (  132.39 ms per token,     7.55 tokens per second)
+0.38.057.605 I common_perf_print:       total time =   35103.22 ms /   484 tokens
+0.38.057.607 I common_perf_print: unaccounted time =     143.76 ms /   0.4 %      (total - sampling - prompt eval - eval) / (total)
+0.38.057.608 I common_perf_print:    graphs reused =        199

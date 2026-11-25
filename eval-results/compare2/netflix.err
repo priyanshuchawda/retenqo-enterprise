@@ -1,0 +1,33 @@
+0.00.004.533 I llama_completion: llama backend init
+0.00.004.545 I llama_completion: load the model and apply lora adapter, if any
+0.01.345.176 W load: control-looking token: 248064 '<|repo_name|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.345.184 W load: control-looking token: 248061 '<|fim_middle|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.350.907 W load: control-looking token: 248065 '<|file_sep|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.360.611 W load: control-looking token: 248060 '<|fim_prefix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.386.569 W load: control-looking token: 248062 '<|fim_suffix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.01.389.417 W load: control-looking token: 248063 '<|fim_pad|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.634.587 I cmn          init: llama threadpool init, n_threads = 6
+0.02.809.967 I llama_completion: chat template is available, enabling conversation mode (disable it with -no-cnv)
+0.02.812.901 I llama_completion: chat template example:
+<|im_start|>system
+You are a helpful assistant<|im_end|>
+<|im_start|>user
+Hello<|im_end|>
+<|im_start|>assistant
+Hi there<|im_end|>
+<|im_start|>user
+How are you?<|im_end|>
+<|im_start|>assistant
+<think>
+
+0.02.812.907 I 
+0.02.813.000 I system_info: n_threads = 6 (n_threads_batch = 6) / 12 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | 
+0.02.813.001 I 
+⚠️ warning: The current terminal doesn't support styling.  Styled output might not appear as expected.
+terminate called after throwing an instance of 'jinja::rethrown_exception'
+  what():  
+------------
+While executing CallExpression at line 79, column 24 in source:
+...lti_step_tool %}↵    {{- raise_exception('No user query found in messages.') }}↵...
+                                           ^
+Error: Jinja Exception: No user query found in messages.

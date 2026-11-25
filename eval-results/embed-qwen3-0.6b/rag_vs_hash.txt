@@ -1,0 +1,17 @@
+Qwen3-Embedding vs HashEmbedder RAG ranking
+
+Q: When is the Scrape-Verse meet?
+  Qwen top1: Wemade Devs video model discussion (0.591) | top2: Priya meeting Thursday (0.432)
+  Hash top1: Wemade Devs video model discussion (0.097) | top2: Uber airport receipt (-0.003)
+
+Q: How much was my airport Uber?
+  Qwen top1: Uber airport receipt (0.750) | top2: Priya meeting Thursday (0.425)
+  Hash top1: Uber airport receipt (0.267) | top2: Wemade Devs video model discussion (0.029)
+
+Q: Where is my meeting with Priya?
+  Qwen top1: Priya meeting Thursday (0.827) | top2: Wemade Devs video model discussion (0.476)
+  Hash top1: Wemade Devs video model discussion (0.042) | top2: Priya meeting Thursday (0.039)
+
+Q: What did Sneha say about the meeting?
+  Qwen top1: Wemade Devs video model discussion (0.591) | top2: Priya meeting Thursday (0.425)
+  Hash top1: Wemade Devs video model discussion (0.296) | top2: Uber airport receipt (0.068)

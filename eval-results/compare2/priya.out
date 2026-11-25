@@ -1,0 +1,39 @@
+[New LWP 140113]
+[New LWP 140112]
+[New LWP 140111]
+[New LWP 140110]
+[New LWP 140109]
+[New LWP 140108]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <ima:enforcing>
+  <https://debuginfod.fedoraproject.org/>
+  <ima:ignore>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+0x00007f2d19882312 in __syscall_cancel_arch () from /lib64/libc.so.6
+#0  0x00007f2d19882312 in __syscall_cancel_arch () from /lib64/libc.so.6
+#1  0x00007f2d1987652c in __internal_syscall_cancel () from /lib64/libc.so.6
+#2  0x00007f2d19876574 in __syscall_cancel () from /lib64/libc.so.6
+#3  0x00007f2d198e614f in wait4 () from /lib64/libc.so.6
+#4  0x00007f2d1a8a505b in ggml_print_backtrace () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libggml-base.so.0
+#5  0x00007f2d1a8b87c9 in ggml_uncaught_exception() () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libggml-base.so.0
+#6  0x00007f2d19a1fabc in __cxxabiv1::__terminate(void (*)()) () from /lib64/libstdc++.so.6
+#7  0x00007f2d19a09199 in std::terminate() () from /lib64/libstdc++.so.6
+#8  0x00007f2d19a091b2 in __cxa_rethrow.cold () from /lib64/libstdc++.so.6
+#9  0x00007f2d1a439ae4 in jinja::statement::execute(jinja::context&) [clone .cold] () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#10 0x00007f2d1a51e543 in common_chat_template_direct_apply_impl(common_chat_template const&, autoparser::generation_params const&, std::optional<common_json> const&, std::optional<common_json> const&, std::optional<common_json> const&) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#11 0x00007f2d1a52c30b in common_chat_params_init_qwen3_coder(common_chat_template const&, autoparser::generation_params const&) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#12 0x00007f2d1a531cc3 in common_chat_try_specialized_template(common_chat_template const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, autoparser::generation_params&) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#13 0x00007f2d1a533f46 in common_chat_templates_apply_jinja(common_chat_templates const*, common_chat_templates_inputs const&) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#14 0x00007f2d1a5363dd in common_chat_templates_apply(common_chat_templates const*, common_chat_templates_inputs const&) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#15 0x00007f2d1a53816f in common_chat_format_single[abi:cxx11](common_chat_templates const*, std::vector<common_chat_msg, std::allocator<common_chat_msg> > const&, common_chat_msg const&, bool, bool) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-common.so.0
+#16 0x00007f2d1a9852e8 in llama_completion(int, char**)::{lambda(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)#1}::operator()(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-completion-impl.so
+#17 0x00007f2d1a98794f in llama_completion(int, char**) () from /home/priyanshuchawda/iqoo-hackathon/tools/llama.cpp/build-host/bin/libllama-completion-impl.so
+#18 0x00007f2d1980a681 in __libc_start_call_main () from /lib64/libc.so.6
+#19 0x00007f2d1980a798 in __libc_start_main_impl () from /lib64/libc.so.6
+#20 0x00000000004003b5 in _start ()
+[Inferior 1 (process 140105) detached]

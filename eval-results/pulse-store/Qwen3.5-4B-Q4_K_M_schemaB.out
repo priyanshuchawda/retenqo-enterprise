@@ -1,0 +1,14 @@
+```json
+{
+  "title": "Wemade Devs video model discussion",
+  "kind": "chat",
+  "people": ["Aditya", "Sneha", "Vaishnavi"],
+  "chat_with": "Aditya, Sneha, Vaishnavi",
+  "body": "The team discussed showing future possibilities in a video. Sneha suggested a quick meeting at 9:30 to finalize the plan.",
+  "when_text": "9:30",
+  "due_date": null,
+  "tags": ["Wemade", "video", "model", "meeting"],
+  "important": true,
+  "ask_hints": ["What is the meeting time?", "Did they agree on the video plan?", "Who is attending the meeting?"]
+}
+```

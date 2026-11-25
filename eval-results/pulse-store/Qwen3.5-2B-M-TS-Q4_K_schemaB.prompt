@@ -1,0 +1,58 @@
+<|im_start|>system
+You extract personal memory cards from phone screenshot OCR for a RAG memory app. JSON only. No markdown.<|im_end|>
+<|im_start|>user
+Rich memory card for later Ask/RAG. JSON keys ONLY:
+title (short searchable),
+kind (one of: meeting, deadline, receipt, chat, reminder, other),
+people (array of names),
+chat_with (person or group name),
+body (2-4 short cleaned sentences: who said what that matters — no OCR junk),
+when_text (human time like '9:30' or 'Thu 4pm' or null),
+due_date (YYYY-MM-DD if calendar date known else null),
+tags (array of 2-5 keywords),
+important (true if meet/deadline/money else false),
+ask_hints (array of 1-3 questions a user might ask later that this note answers).
+Today is 2026-08-25.
+OCR:
+13:49 tl! GOO 4
+
+< Gm Scrape-Verse Ex
+
+Aditya, Sneha, Vaishnavi, You
+i https://www.wemakedevs.org/...
+
+can tell in video its future
+possibilities 11:56
+
+Yo 11:56 w
+MPS
+
+@% Vaishnavi Repal A Div
+Cool..considering the
+situation | get it ...
+
+- | just thought if our
+model does this it might
+be different from other
+| existing tools - Edited 12:07
+
+21 Sneha ce af
+brs Ok if its not possible we %
+
+| can tellin video itsfuture
+‘| possibilities vee
+_ Yeswecandothisthen 5
+é . 12:07
+
+Be
+
+ao Sneha Barge 7
+Guys lets do a quick meet
+at 9:30 ,ok? 20:04
+
+é
+e Pn vo ® @ Ps<|im_end|>
+<|im_start|>assistant
+<think>
+</think>
+

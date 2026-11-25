@@ -1,0 +1,12 @@
+<|im_start|>system
+Mneme. JSON only.<|im_end|>
+<|im_start|>user
+Extract a personal memory note as JSON only (no markdown).
+Keys: title (short), body (cleaned facts), due_date (YYYY-MM-DD or null).
+Today is 2026-08-23. If date has no year use 2026.
+Text:
+Uber Trip Receipt Altportdrop Total P8620 Paid via UPL Driver: Ramesh<|im_end|>
+<|im_start|>assistant
+<think>
+</think>
+

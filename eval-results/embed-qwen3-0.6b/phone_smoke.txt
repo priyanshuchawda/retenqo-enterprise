@@ -1,0 +1,25 @@
+Qwen3-Embedding-0.6B Phone smoke test
+Timestamp: 2026-08-23T14:47:49.886212
+Device serial: 1431df87
+Model: /sdcard/Mneme/models/phone1/embed/qwen3/Qwen3-Embedding-0.6B-Q8_0.gguf
+Size: 639150592 bytes (expected 639150592)
+Size OK: True
+Binary: /data/local/tmp/llama-embedding (build-android-static, GGML_OPENMP=OFF)
+MemAvailable: 2854568 kB
+
+Text 1: 'Uber airport drop ₹620'
+  dim=1024
+Text 2: 'How much was my airport Uber?'
+  dim=1024
+Text 3: 'Meeting with Priya Thursday 4pm'
+  dim=1024
+
+Cosine similarities:
+  [1] vs [2]: 0.7902  — Uber receipt vs airport Uber question (expect HIGH)
+  [1] vs [3]: 0.4035  — Uber receipt vs meeting note (expect LOWER)
+  [2] vs [3]: 0.3207  — airport Uber question vs meeting note
+
+Semantic check: sim(uber,uber_q)=0.7902 > sim(uber,meeting)=0.4035 and uber pair > 0.5: True
+
+RESULT: PASS
+Live inference: YES (adb shell llama-embedding on device)

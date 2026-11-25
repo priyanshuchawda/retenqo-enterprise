@@ -1,0 +1,7 @@
+Answer ONLY using CONTEXT. Cite like [1]. One short sentence. If missing say: I don't have that in your memory.
+Question: When and where is my meeting with Priya?
+
+CONTEXT:
+[1] Uber receipt — Airport drop ₹620 UPI
+[2] WhatsApp Priya — Meeting shifted to Thursday 4pm at cafe near gate 2. Bring laptop.
+[3] Doctor — pantoprazole 40mg morning

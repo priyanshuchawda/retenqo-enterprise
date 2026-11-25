@@ -1,0 +1,12 @@
+Extract a personal memory note as JSON only (no markdown).
+Keys: title (short), body (cleaned facts), due_date (YYYY-MM-DD or null).
+Text:
+9:41 AM  LTE  67%
+WhatsApp
+Mam CS301
+Yesterday
+hi
+pls submit ch-11 by 25/08
+and viva next week monday
+You
+ok mam

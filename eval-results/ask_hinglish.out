@@ -1,0 +1,11 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   **Role:** Mneme (offline personal memory assistant).
+    *   **Constraint 1:** Answer ONLY using the CONTEXT notes.
+    *   **Constraint 2:** Cite note numbers like [1].
+    *   **Constraint 3:** If missing, say: I don't
+> EOF by user
+
+

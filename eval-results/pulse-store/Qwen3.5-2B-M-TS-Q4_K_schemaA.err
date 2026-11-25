@@ -1,0 +1,29 @@
+0.00.009.887 I llama_completion: llama backend init
+0.00.009.908 I llama_completion: load the model and apply lora adapter, if any
+0.02.054.556 W load: control-looking token: 248064 '<|repo_name|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.054.565 W load: control-looking token: 248061 '<|fim_middle|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.060.030 W load: control-looking token: 248065 '<|file_sep|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.071.141 W load: control-looking token: 248060 '<|fim_prefix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.100.442 W load: control-looking token: 248062 '<|fim_suffix|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.103.826 W load: control-looking token: 248063 '<|fim_pad|>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.05.856.507 I cmn          init: llama threadpool init, n_threads = 6
+0.06.003.424 I 
+0.06.003.571 I system_info: n_threads = 6 (n_threads_batch = 6) / 12 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | 
+0.06.003.572 I 
+0.06.005.073 I sampler seed: 1023117099
+0.06.005.100 I sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 64
+	top_k = 40, top_p = 0.950, min_p = 0.050, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.100
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+0.06.005.114 I sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> min-p -> ?xtc -> temp-ext -> dist 
+0.06.005.115 I generate: n_ctx = 2048, n_batch = 2048, n_predict = 160, n_keep = 0
+0.06.005.116 I 
+0.38.488.841 I common_perf_print:    sampling time =     238.31 ms
+0.38.488.844 I common_perf_print:    samplers time =      90.33 ms /   474 tokens
+0.38.488.851 I common_perf_print:        load time =    4238.16 ms
+0.38.488.855 I common_perf_print: prompt eval time =   10497.45 ms /   314 tokens (   33.43 ms per token,    29.91 tokens per second)
+0.38.488.858 I common_perf_print:        eval time =   21734.88 ms /   159 runs   (  136.70 ms per token,     7.32 tokens per second)
+0.38.488.859 I common_perf_print:       total time =   32485.44 ms /   473 tokens
+0.38.488.862 I common_perf_print: unaccounted time =      14.80 ms /   0.0 %      (total - sampling - prompt eval - eval) / (total)
+0.38.488.863 I common_perf_print:    graphs reused =        158

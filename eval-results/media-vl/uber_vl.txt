@@ -1,0 +1,14 @@
+=== UBER RECEIPT ===
+
+```json
+{
+  "kind": "Uber Trip Receipt",
+  "title": "Airportdrop",
+  "amount": "1920",
+  "date": "",
+  "people": "Driver: Ramesh",
+  "embed_text": "Uber Trip Receipt\nAirportdrop\nTotal 1920\nPaid via UPI\nDriver: Ramesh"
+}
+```
+
+

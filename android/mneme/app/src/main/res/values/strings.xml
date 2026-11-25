@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Retenqo</string>
+    <string name="projection_notification">Pulse needs a brief screen capture</string>
+    <string name="accessibility_service_description">Allow Retenqo to understand the foreground app when you explicitly enable it.</string>
+    <string name="widget_title">Your follow-ups</string>
+    <string name="widget_no_followups">No active follow-ups</string>
+    <string name="widget_open_tasks">Tap to review today’s priorities.</string>
+    <string name="widget_privacy_hint">Private summary · details stay in Retenqo.</string>
+    <plurals name="widget_followups_count">
+        <item quantity="one">%1$d active follow-up</item>
+        <item quantity="other">%1$d active follow-ups</item>
+    </plurals>
+</resources>

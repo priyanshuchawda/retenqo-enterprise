@@ -1,0 +1,52 @@
+# Android / IDE
+.idea/
+*.iml
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+*.dex
+.cxx/
+captures/
+
+# Models (large binaries — download separately)
+*.task
+*.bin
+*.gguf
+*.onnx
+models/
+
+# Secrets
+.env
+.env.*
+*.keystore
+google-services.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Logs
+*.log
+
+# Local competitive research (do not commit)
+research/
+
+# Vendored native clones (build from Git; do not commit)
+tools/
+test-assets/*.wav
+android/**/local.properties
+*.so
+
+# Generated pitch/video artifacts and local references
+video/
+output/
+PS8_All-Knighters.pptx
+PS8_All-Knighters.pdf
+pitch-assets/*.pptx
+pitch-assets/*.pdf
+pitch-assets/deck/__pycache__/
+pitch-assets/deck/out/

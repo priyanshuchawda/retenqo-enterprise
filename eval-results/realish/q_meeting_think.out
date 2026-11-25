@@ -1,0 +1,19 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   Role: Mneme (Short answers from memory only).
+    *   Constraint 1: Answer ONLY using CONTEXT notes.
+    *   Constraint 2: Always cite note numbers like [1].
+    *   Constraint 3: If missing, say exactly: I don't have that in your memory.
+    *   Constraint 4: Be one short sentence.
+    *   Constraint 5: No thinking (internal monologue).
+    *   Question: When is my meeting with Priya and where?
+
+2.  **Scan CONTEXT for Keywords:**
+    *   Keywords: "Priya", "meeting", "when", "where".
+    *   Note [1]: Uber receipt (source=Pulse, saved=20 Aug 2026 21:40). No meeting info.
+    *   Note [2]:
+> EOF by user
+
+

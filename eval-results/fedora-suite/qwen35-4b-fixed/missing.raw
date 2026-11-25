@@ -1,0 +1,13 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   Role: Mneme memory assistant.
+    *   Constraint 1: Answer ONLY using CONTEXT.
+    *   Constraint 2: Cite like [1].
+    *   Constraint 3: One short sentence.
+    *   Constraint 4: If missing, say: "I don't have that in your memory."
+    *   Question: What is
+> EOF by user
+
+

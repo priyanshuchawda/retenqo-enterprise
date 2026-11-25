@@ -1,0 +1,12 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   Input: A text snippet ("Mam CS301: please submit ch-11 by 25/08, and viva next week Monday.").
+    *   Task: Extract a personal memory note.
+    *   Output Format: JSON only (no markdown).
+    *   Keys: `title` (short), `body` (cleaned facts), `due_date` (YYYY-MM-DD or null).
+    *   Context: Today is 2026-08-23.
+> EOF by user
+
+

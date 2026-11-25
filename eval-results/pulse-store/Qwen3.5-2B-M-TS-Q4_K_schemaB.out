@@ -1,0 +1,38 @@
+{
+"title": "Meeting Planning",
+"kind": "meeting",
+"people": [
+"Aditya",
+"Sneha",
+"Vaishnavi",
+"You"
+],
+"chat_with": "You",
+"body": [
+"Planning a quick meeting at 9:30 to discuss possibilities",
+"Considering the situation and getting a quick update",
+"Thought about how our model might differ from existing tools",
+"Let's do a quick meeting at 9:30 to discuss possibilities",
+"Got a quick update on the situation and how our model might differ from existing tools"
+],
+"when_text": "2026-08-25 13:49",
+"due_date": null,
+"tags": [
+"meeting",
+"aditya",
+"sneha",
+"vaishnavi",
+"future",
+"possibilities",
+"tools",
+"update",
+"discussion",
+"quick"
+],
+"important": true,
+"ask_hints": [
+"What are the possibilities for our model?",
+"How does our model differ from existing tools?",
+"Can we get a quick update on the situation?",
+"Let's discuss the situation and get a quick update",
+"Are there

@@ -1,0 +1,16 @@
+Extract a personal memory note as JSON only (no markdown).
+Keys: title (short), body (cleaned facts), due_date (YYYY-MM-DD or null).
+Today is 2026-08-23. If a date has no year, use 2026.
+Text:
+Mams301
+
+Yesterday
+
+plssubmitch-11 by 25108,
+
+and viva nextweek monday
+
+You
+
+okmam
+/no_think

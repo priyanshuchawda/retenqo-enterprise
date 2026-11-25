@@ -1,0 +1,48 @@
+<|im_start|>system
+You extract personal memory cards from phone screenshot OCR for a RAG memory app. JSON only. No markdown.<|im_end|>
+<|im_start|>user
+Current schema. JSON keys: title, body, due_date (YYYY-MM-DD or null).
+Today is 2026-08-25. Time-only events stay due_date null; put time in body.
+OCR:
+13:49 tl! GOO 4
+
+< Gm Scrape-Verse Ex
+
+Aditya, Sneha, Vaishnavi, You
+i https://www.wemakedevs.org/...
+
+can tell in video its future
+possibilities 11:56
+
+Yo 11:56 w
+MPS
+
+@% Vaishnavi Repal A Div
+Cool..considering the
+situation | get it ...
+
+- | just thought if our
+model does this it might
+be different from other
+| existing tools - Edited 12:07
+
+21 Sneha ce af
+brs Ok if its not possible we %
+
+| can tellin video itsfuture
+‘| possibilities vee
+_ Yeswecandothisthen 5
+é . 12:07
+
+Be
+
+ao Sneha Barge 7
+Guys lets do a quick meet
+at 9:30 ,ok? 20:04
+
+é
+e Pn vo ® @ Ps<|im_end|>
+<|im_start|>assistant
+<think>
+</think>
+

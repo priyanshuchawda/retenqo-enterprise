@@ -1,0 +1,43 @@
+0.00.004.056 I llama_completion: llama backend init
+0.00.004.073 I llama_completion: load the model and apply lora adapter, if any
+0.00.750.347 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.02.440.597 I cmn          init: llama threadpool init, n_threads = 6
+0.02.709.088 I llama_completion: chat template is available, enabling conversation mode (disable it with -no-cnv)
+0.02.720.202 I llama_completion: chat template example:
+<|im_start|>system
+You are a helpful assistant<|im_end|>
+<|im_start|>user
+Hello<|im_end|>
+<|im_start|>assistant
+Hi there<|im_end|>
+<|im_start|>user
+How are you?<|im_end|>
+<|im_start|>assistant
+
+0.02.720.210 I 
+0.02.720.315 I system_info: n_threads = 6 (n_threads_batch = 6) / 12 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX_VNNI = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | 
+0.02.720.315 I 
+0.02.757.693 I llama_completion: interactive mode on.
+0.02.757.705 I sampler seed: 1926435403
+0.02.757.721 I sampler params: 
+	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
+	dry_multiplier = 0.000, dry_base = 1.750, dry_allowed_length = 2, dry_penalty_last_n = 64
+	top_k = 40, top_p = 0.950, min_p = 0.050, xtc_probability = 0.000, xtc_threshold = 0.100, typical_p = 1.000, top_n_sigma = -1.000, temp = 0.300
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000, adaptive_target = -1.000, adaptive_decay = 0.900
+0.02.757.732 I sampler chain: logits -> ?penalties -> ?dry -> ?top-n-sigma -> top-k -> ?typical -> top-p -> min-p -> ?xtc -> temp-ext -> dist 
+0.02.757.733 I generate: n_ctx = 1024, n_batch = 2048, n_predict = 40, n_keep = 0
+0.02.757.733 I 
+0.02.757.734 I == Running in interactive mode. ==
+0.02.757.734 I  - Press Ctrl+C to interject at any time.
+0.02.757.735 I  - Press Return to return control to the AI.
+ - To return control without starting a new line, end your input with '/'.
+ - If you want to submit another line, end your input with '\'.
+0.02.757.735 I 
+0.11.982.017 I common_perf_print:    sampling time =      24.18 ms
+0.11.982.020 I common_perf_print:    samplers time =       9.22 ms /    81 tokens
+0.11.982.026 I common_perf_print:        load time =    2097.84 ms
+0.11.982.028 I common_perf_print: prompt eval time =    2735.82 ms /    41 tokens (   66.73 ms per token,    14.99 tokens per second)
+0.11.982.030 I common_perf_print:        eval time =    6310.01 ms /    39 runs   (  161.80 ms per token,     6.18 tokens per second)
+0.11.982.031 I common_perf_print:       total time =    9272.95 ms /    80 tokens
+0.11.982.032 I common_perf_print: unaccounted time =     202.94 ms /   2.2 %      (total - sampling - prompt eval - eval) / (total)
+0.11.982.033 I common_perf_print:    graphs reused =         39

@@ -13,8 +13,8 @@
 
 | Metric | Result and scope |
 | --- | --- |
-| Published v0.1.3 APK | 39,374,311 bytes (~37.55 MiB) |
+| Published v0.1.4 APK | 39,374,307 bytes (~37.55 MiB) |
 | Historical Galaxy M32 model run | About 831 MB process PSS, not remeasured for this revision |
 | Website Lighthouse 13.6.0, one mobile-simulated production run | Performance 92, LCP 1.263 s, CLS 0, TBT 244 ms, Speed Index 4.971 s |
 
-Sources: [release](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3), [implementation history](IMPLEMENTATION_STATUS.md), [website audit](../web/docs/ENGINEERING_AUDIT.md). The website performance target is 95; current field INP, battery and thermal measurements are not established. Future benchmarks should record device, model, revision, cold/warm state, workloads, latency distribution, peak memory and failures.
+Sources: [release](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4), [implementation history](IMPLEMENTATION_STATUS.md), [website audit](../web/docs/ENGINEERING_AUDIT.md). The website performance target is 95; current field INP, battery and thermal measurements are not established. Future benchmarks should record device, model, revision, cold/warm state, workloads, latency distribution, peak memory and failures.

@@ -1,5 +1,7 @@
 # Retenqo Website (`retenqo-web`)
 
+**Current distribution:** [Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) · Android 13+ ARM64 · [release metadata](src/data/release.generated.json) · [engineering verification](docs/ENGINEERING_AUDIT.md).
+
 Official static website and verified Android APK distribution platform for **Retenqo** — a private, on-device AI personal memory assistant for Android.
 
 ## Architecture

@@ -4,7 +4,7 @@ Retenqo focuses on authorized personal memory and commitment follow-through. See
 
 | Priority | Direction |
 | --- | --- |
-| Release reliability | Verify pooled-connection fix on API 33 and signed upgrades |
+| Release reliability | Extend v0.1.4 signed-upgrade verification from API 36 to API 33 and additional devices |
 | Privacy and capture | Encrypted durable queue, race-safe deletion and consent revocation |
 | Recall | Full-history indexed retrieval and screen-evidence handling |
 | Workflow verification | Reminders, backup restore, media and voice on supported devices |

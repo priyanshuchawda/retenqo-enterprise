@@ -1,5 +1,7 @@
 # Media ladder (Fedora checks 2026-08-25)
 
+> Historical development record. Current implementation and release evidence: [engineering status](../../docs/IMPLEMENTATION_STATUS.md), [verification](../../docs/TESTING.md), [research index](../../docs/RESEARCH_INDEX.md).
+
 ## Proven
 - **Qwen3-VL-2B** on Uber receipt image → structured JSON (~2 min CPU).
 - **WhatsApp media path exists:** `/sdcard/Android/media/com.whatsapp/WhatsApp/Media/{WhatsApp Images,WhatsApp Documents}/`

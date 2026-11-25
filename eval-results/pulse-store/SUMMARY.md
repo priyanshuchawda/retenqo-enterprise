@@ -1,5 +1,7 @@
 # Best Pulse storage format (Fedora eval 2026-08-25)
 
+> Historical development record. Current implementation and release evidence: [engineering status](../../docs/IMPLEMENTATION_STATUS.md), [verification](../../docs/TESTING.md), [research index](../../docs/RESEARCH_INDEX.md).
+
 Screenshot OCR → LLM memory card → Room note. Goal: Ask later (“when is the meet?”) without OCR junk.
 
 ## Schemas tested (WhatsApp Scrape-Verse OCR)

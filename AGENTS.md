@@ -25,4 +25,4 @@ These rules apply to human and AI-assisted changes. Read the nearest relevant pr
 
 ## Evidence and release
 
-Update relevant docs with actual findings. Report exact commands and outcomes; a test source file is not proof of a passing test. Do not claim a feature is device-verified without executing it. Follow [release guidance](docs/RELEASE_PROCESS.md) and [security policy](SECURITY.md). Do not introduce CI/CD workflows unless requested by the maintainer.
+Update relevant docs with actual findings. Report exact commands and outcomes; a test source file is not proof of a passing test. Do not claim a feature is device-verified without executing it. Follow [release guidance](docs/RELEASE_PROCESS.md) and [security policy](SECURITY.md). CI workflows may run repository verification checks but must not publish releases or deploy without explicit maintainer authorization.

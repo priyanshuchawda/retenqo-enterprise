@@ -1,6 +1,6 @@
 # Release process
 
-Retenqo v0.1.2 is the current stable APK release. This document records the manual release gate; no CI/CD is required or configured by this document.
+Retenqo v0.1.3 is the current stable APK release. The previous stable release, v0.1.2, is superseded. This document records the manual release gate; no CI/CD is required or configured by this document.
 
 1. Select an approved commit; update version name/code and changelog. Confirm app identity, supported Android versions and architectures.
 2. Run local JVM tests, lint, debug/release build and device tests. Verify permissions, migration, backup/restore, capture, reminders, AI behavior and accessibility. Record actual results and blockers.

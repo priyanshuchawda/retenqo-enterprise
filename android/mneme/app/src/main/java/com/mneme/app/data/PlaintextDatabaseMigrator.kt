@@ -103,28 +103,35 @@ internal object PlaintextDatabaseMigrator {
             null,
             SQLiteDatabase.OPEN_READWRITE,
         )
+        var schemaVersion = 0
+        var applicationId = 0
         try {
             source.rawQuery("PRAGMA wal_checkpoint(TRUNCATE)", emptyArray()).use { cursor ->
                 if (!cursor.moveToFirst() || cursor.getInt(0) != 0) {
                     throw IllegalStateException("The existing database is busy and cannot be safely encrypted yet.")
                 }
             }
-            val schemaVersion = source.version
-            val applicationId = source.rawQuery("PRAGMA application_id", emptyArray()).use { cursor ->
+            schemaVersion = source.version
+            applicationId = source.rawQuery("PRAGMA application_id", emptyArray()).use { cursor ->
                 if (cursor.moveToFirst()) cursor.getInt(0) else 0
-            }
-            source.rawExecSQL(
-                "ATTACH DATABASE ${sqlLiteral(destinationFile.absolutePath)} AS encrypted KEY ${sqlLiteral(key)}",
-            )
-            try {
-                source.rawExecSQL("SELECT sqlcipher_export('encrypted')")
-                source.rawExecSQL("PRAGMA encrypted.user_version = $schemaVersion")
-                source.rawExecSQL("PRAGMA encrypted.application_id = $applicationId")
-            } finally {
-                source.rawExecSQL("DETACH DATABASE encrypted")
             }
         } finally {
             source.close()
+        }
+
+        // Open the destination as the keyed main database, then export the plaintext attachment
+        // into it. This avoids depending on keyed attached-database metadata pragmas.
+        SQLiteDatabase.openOrCreateDatabase(destinationFile, key, null, null).use { encrypted ->
+            encrypted.rawExecSQL(
+                "ATTACH DATABASE ${sqlLiteral(sourceFile.absolutePath)} AS plaintext KEY ''",
+            )
+            try {
+                encrypted.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')")
+            } finally {
+                encrypted.rawExecSQL("DETACH DATABASE plaintext")
+            }
+            encrypted.version = schemaVersion
+            encrypted.rawExecSQL("PRAGMA application_id = $applicationId")
         }
     }
 

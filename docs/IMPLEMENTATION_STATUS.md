@@ -1,7 +1,7 @@
 # Implementation status
 
 **Updated:** 2026-11-25
-**Branch:** `main` (`f87ba62` baseline plus local implementation changes)
+**Branch:** `main` (Retenqo v0.1.2 release candidate)
 
 **Product target:** [Personal follow-through plan](FOLLOW_THROUGH_PLAN.md) — source-backed commitments, user-reviewed updates, and verified local actions.
 
@@ -13,11 +13,13 @@
 | Capture pipelines | Partial; notifications, one-shot screen context, SAF import, Android sharing, and scoped WhatsApp photo scan | Pulse/OCR, notification ingest, a MediaStore query limited to recent WhatsApp images, and seven notification source toggles exist. Notification capture starts paused until the user selects sources. A user-enabled AccessibilityService keeps a bounded volatile snapshot of visible external-app text; Ask includes it only after the user switches on screen context for that question. Password nodes, Retenqo, keyboard, and system UI are excluded. Settings offers Android document/photo selection and Retenqo accepts shared text, images, and PDFs from other apps. Picked files are copied into bounded app-private cache, OCR/extraction stays local, and temporary files are deleted. All-files and media-audio permissions have been removed. Accessibility remains disabled; device validation, broad document support, and screen extraction/model inference remain. |
 | Voice and actions | Partial | Whisper bridge, tap-to-talk, TTS, deterministic command routing, alarms, and reminders exist. Real-device offline voice/TTS, relative-date reminders, and action confirmation/error coverage remain. |
 | Product experience | Partial; task workbench, decision history, encrypted backup, direct capture, and privacy-preserving widget summary | Memory, Tasks, Ask, Settings, permission setup, and pitch/demo paths exist. Tasks groups pending review, completion evidence, active, due-soon, and completed commitments; supports accept/dismiss/edit/done/snooze/reopen. Task edits refresh hash/embedding and due reminders. Passphrase-encrypted backup/additive restore, durable decision history, selected media/share intake, and a widget count of confirmed active follow-ups are implemented; encrypted backup round-trip, privacy retention controls, and labeling demo content remain. |
-| Testing and release | In progress | The latest Android unit-test run passes 74 tests; debug assembly and Android Lint pass. One Android crypto instrumentation test passes on the Galaxy M32 (SM-M325F, Android 13, ARM64). Galaxy M34 tests and capture/voice/action checks remain. |
+| Testing and release | Stable v0.1.2 published | 79 JVM tests pass; Android Lint has 0 errors (33 warnings, 1 hint); all 5 encrypted-database instrumentation tests passed on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64. Signed release APK v0.1.2 built and verified; broader device, capture, voice, and accessibility checks remain. |
 
 ## Current verification
 
-- `:app:testDebugUnitTest :app:assembleDebug :app:lintDebug` — passed: 74 tests, 0 failures, 0 errors/skips; debug APK assembled and installed (Gradle 8.14.3, OpenJDK 21, Android SDK at `/home/anti/android-sdk`).
+- `:app:testDebugUnitTest :app:lintDebug :app:assembleDebug` — passed: 79 tests, 0 failures; 0 lint errors (33 warnings, 1 hint), using Gradle 8.14.3 and OpenJDK 21.
+- `:app:connectedDebugAndroidTest` — passed: 5/5 on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64; includes plaintext migration, preserved row, wrong-key rejection, Keystore key handling, and fail-closed missing-key checks.
+- `:app:assembleRelease` — passed; v0.1.2 APK signed and verified with the maintainer release certificate.
 - `git diff --check` — passed after the rubric changes.
 - Device — Samsung SM-M325F (Galaxy M32), Android 13 / API 33, ARM64; this is not the Galaxy M34 target.
 - Model — Qwen3.5-0.8B Q4_0 GGUF, 563,036,064 bytes; app model path is `active.gguf`. Native logs show `Backend initiated`, CPU NEON/FMA support, and `Model loaded`.

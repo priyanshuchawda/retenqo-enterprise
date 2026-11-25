@@ -12,7 +12,7 @@ Retenqo is a local-first AI memory and commitment assistant for Android. It turn
 ![Architecture: ARM64](https://img.shields.io/badge/architecture-ARM64-475569)
 ![AI: local inference](https://img.shields.io/badge/AI-on--device-0f766e)
 
-> **Development status:** Actively developed Apache-2.0 open-source project. A signed ARM64 engineering preview is available from GitHub Releases as a pre-release. The core Room database uses SQLCipher with an Android Keystore-protected key. The notification processing queue remains in app-private preferences without application-level encryption; this build is not a production privacy certification. See the implementation report and open engineering issues for current limitations.
+> **Release status:** Retenqo v0.1.2 is the current stable ARM64 release, available from GitHub Releases. The core Room database uses SQLCipher with an Android Keystore-protected key. The notification processing queue remains in app-private preferences without application-level encryption; this release is not a security certification. See the implementation report and open engineering issues for current limitations.
 
 ## Official website
 
@@ -206,8 +206,8 @@ cd android/mneme
 | JVM unit tests | 79 passed, 0 failures |
 | Debug assembly | Passed |
 | Android Lint | 0 errors, 33 warnings, 1 hint |
-| App instrumentation | Encrypted database instrumentation source compiled; execution was not completed because Android's install confirmation was canceled |
-| Encrypted database smoke check | Debug app launched on the attached Android 16 device; database header did not match plaintext SQLite format |
+| App instrumentation | 5 passed on attached Android 16 device, including encrypted migration, row preservation, wrong-key rejection, and missing-key failure |
+| Release APK | v0.1.2, signed, aligned, ARM64; SHA-256 `70a92143713051bad3e5c76ac9f7938c4a36aae79a44305ce3e806aaac68a2b9` |
 | Offline local generation | A short general question answered with connectivity disabled |
 | Historical device observation | Galaxy M32, Android 13 / ARM64; approximately 831 MB process PSS in one model run; not re-measured for this revision |
 
@@ -222,11 +222,11 @@ Engineering priorities include durable capture, source and citation correctness,
 - The local model is not a reliable general-purpose autonomous planner. AI output and proposed task updates need human review.
 - Broad multilingual extraction, real-world retrieval accuracy, battery and thermal behavior are not yet comprehensively benchmarked.
 - Real-device end-to-end capture, voice, reminders, backup restore, permission behavior, and additional device compatibility need further verification.
-- Room database encryption uses SQLCipher and a random passphrase wrapped by Android Keystore. Legacy plaintext Room databases are converted before Room opens them; the plaintext migration copy is removed only after Room opens successfully. Back up important data before updating. If the device Keystore key is unavailable, the database fails closed and is not automatically replaced. The migration instrumentation test compiled but has not yet run.
+- Room database encryption uses SQLCipher and a random passphrase wrapped by Android Keystore. Legacy plaintext Room databases are converted before Room opens them; the plaintext migration copy is removed only after Room opens successfully. Back up important data before updating. If the device Keystore key is unavailable, the database fails closed and is not automatically replaced. The migration instrumentation suite passed 5/5 on the connected Android 16 device for this release revision.
 - New backup exports are encrypted; legacy JSON is not. Backup encryption is distinct from database encryption at rest.
 - Notification queue data remains in unencrypted app-private preferences until it is migrated to encrypted durable storage.
 - Manual screen-reader and switch-control testing remains outstanding.
-- No official stable release or verified production security certification is currently documented.
+- The stable release designation describes the published app version; it does not imply a security certification. Queue encryption, broad device coverage, and accessibility verification remain open work.
 
 See [implementation audit](docs/IMPLEMENTATION_AUDIT.md) and [roadmap](docs/ROADMAP.md) for additional detail.
 

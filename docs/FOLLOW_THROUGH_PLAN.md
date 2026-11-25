@@ -1,5 +1,8 @@
 # Retenqo personal follow-through plan
 
+> Historical engineering record. For current release behavior, configuration and verification, see [implementation status](IMPLEMENTATION_STATUS.md), [testing](TESTING.md) and [offline models](OFFLINE_MODELS.md).
+
+
 ## Product outcome
 
 Retenqo helps a person keep commitments made and received across the phone. It notices actionable context from sources the user enabled, turns it into a traceable commitment, keeps the commitment current as new evidence arrives, and helps complete it with a reliable action. It runs inference locally after model setup.

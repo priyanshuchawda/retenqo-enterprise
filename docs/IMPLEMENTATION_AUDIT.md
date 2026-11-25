@@ -1,5 +1,8 @@
 # Implementation audit
 
+> Historical engineering record. For current release behavior, configuration and verification, see [implementation status](IMPLEMENTATION_STATUS.md), [testing](TESTING.md) and [offline models](OFFLINE_MODELS.md).
+
+
 **Audited:** 2026-11-24
 **Checkout:** `main` at `f87ba62` (`origin/main` matched this commit at audit time)
 **Working tree at start:** clean

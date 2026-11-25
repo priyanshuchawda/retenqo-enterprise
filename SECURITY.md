@@ -4,7 +4,7 @@ Retenqo handles sensitive personal context. We welcome responsible disclosure an
 
 ## Supported versions
 
-The latest published stable release is [v0.1.3](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.3). The subsequent SQLCipher pooled-connection fix has not yet shipped as a signed replacement. No guaranteed security support window is offered. Report issues affecting current main or any published release; include the commit or version. A fix in main does not imply that an installed APK has been updated.
+The latest published stable release is [v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4). No guaranteed security support window is offered. Report issues affecting current main or any published release; include the commit or version. A fix in main does not imply that an installed APK has been updated.
 
 ## Reporting a vulnerability
 

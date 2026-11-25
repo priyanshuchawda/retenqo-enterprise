@@ -2,12 +2,12 @@
 
 ## Current baseline — 25 November 2026
 
-Published v0.1.3 reports 114 JVM tests, 5 instrumentation tests and zero lint errors (34 warnings, 1 hint). The later SQLCipher fix reports 6 instrumentation passes and successful debug startup on API 36; signed replacement and API 33 verification remain open. See [Testing](TESTING.md). Website results are recorded separately in the [website audit](../web/docs/ENGINEERING_AUDIT.md).
+Published v0.1.4 contains the SQLCipher pooled-connection fix. Its signed APK was verified against the pinned publisher certificate and installed as an in-place upgrade on Android 16 / API 36. The source revision passed 114 JVM tests, six instrumentation tests and lint with zero errors. See [Testing](TESTING.md). Website results are recorded separately in the [website audit](../web/docs/ENGINEERING_AUDIT.md).
 
 Current engineering priorities: signed-device verification, encrypted notification queue, consent/deletion races, full-history retrieval, screen-only answers and full backup/voice/reminder workflows. The following dated entries preserve earlier evidence; older counts are not the current test baseline.
 
 **Updated:** 2026-11-25
-**Branch:** `main` (post-v0.1.3 engineering update)
+**Branch:** `main` (v0.1.4 stable release)
 
 **Product target:** [Personal follow-through plan](FOLLOW_THROUGH_PLAN.md) — source-backed commitments, user-reviewed updates, and verified local actions.
 
@@ -19,14 +19,16 @@ Current engineering priorities: signed-device verification, encrypted notificati
 | Capture pipelines | Partial; notifications, one-shot screen context, SAF import, Android sharing, and scoped WhatsApp photo scan | Pulse/OCR, notification ingest, a MediaStore query limited to recent WhatsApp images, and seven notification source toggles exist. Notification capture starts paused until the user selects sources. A user-enabled AccessibilityService keeps a bounded volatile snapshot of visible external-app text; Ask includes it only after the user switches on screen context for that question. Password nodes, Retenqo, keyboard, and system UI are excluded. Settings offers Android document/photo selection and Retenqo accepts shared text, images, and PDFs from other apps. Picked files are copied into bounded app-private cache, OCR/extraction stays local, and temporary files are deleted. All-files and media-audio permissions have been removed. Accessibility remains disabled; device validation, broad document support, and screen extraction/model inference remain. |
 | Voice and actions | Partial | Whisper bridge, tap-to-talk, TTS, deterministic command routing, alarms, and reminders exist. Real-device offline voice/TTS, relative-date reminders, and action confirmation/error coverage remain. |
 | Product experience | Partial; task workbench, decision history, encrypted backup, direct capture, and privacy-preserving widget summary | Memory, Tasks, Ask, Settings, permission setup, and pitch/demo paths exist. Tasks groups pending review, completion evidence, active, due-soon, and completed commitments; supports accept/dismiss/edit/done/snooze/reopen. Task edits refresh hash/embedding and due reminders. Passphrase-encrypted backup/additive restore, durable decision history, selected media/share intake, and a widget count of confirmed active follow-ups are implemented; encrypted backup round-trip, privacy retention controls, and labeling demo content remain. |
-| Testing and release | Stable v0.1.2 published | 79 JVM tests pass; Android Lint has 0 errors (33 warnings, 1 hint); all 5 encrypted-database instrumentation tests passed on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64. Signed release APK v0.1.2 built and verified; broader device, capture, voice, and accessibility checks remain. |
+| Testing and release | Stable v0.1.4 published | 114 JVM tests passed; Android Lint reported 0 errors; all 6 instrumentation tests passed on Xiaomi 2406ERN9CI (Android 16 / API 36 / ARM64). The signed v0.1.4 APK matches the pinned publisher certificate and upgraded the existing installation in place. |
 
 ## Current verification
 
-- `:app:testDebugUnitTest :app:lintDebug :app:assembleDebug` — passed: 79 tests, 0 failures; 0 lint errors (33 warnings, 1 hint), using Gradle 8.14.3 and OpenJDK 21.
-- `:app:connectedDebugAndroidTest` — passed: 5/5 on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64; includes plaintext migration, preserved row, wrong-key rejection, Keystore key handling, and fail-closed missing-key checks.
-- `:app:assembleRelease` — passed; v0.1.2 APK signed and verified with the maintainer release certificate.
-- `git diff --check` — passed after the rubric changes.
+- `:app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest` — passed: 114 JVM tests, 0 failures; lint reported 0 errors. The suite ran on the v0.1.4 source revision before its version-only release metadata change.
+- `:app:connectedDebugAndroidTest` — passed: 6/6 on Xiaomi 2406ERN9CI, Android 16 / API 36 / ARM64, including concurrent SQLCipher pooled-connection access.
+- `:app:assembleRelease` — passed for v0.1.4; `apksigner` verified one signer with the pinned certificate `b975fe4b5d929586e9bf0133ebde25c03d0acf990ddbba5c14f0f2b31ae38cca`.
+- Published APK SHA-256: `b31770666bf7b860e9dc3e562a97de7286c6ad31347f67a1ce8fa96fdabf8f98` (39,374,307 bytes; package `com.mneme.app`; version code 5; minimum API 33; ARM64).
+- Device upgrade — `adb install -r` succeeded over the existing production package; Android reports version 0.1.4 and the original first-install timestamp. The app launched, and the captured log window contained no SQLCipher startup exception or fatal application exception.
+- `git diff --check` — passed before release publication.
 - Device — Samsung SM-M325F (Galaxy M32), Android 13 / API 33, ARM64; this is not the Galaxy M34 target.
 - Model — Qwen3.5-0.8B Q4_0 GGUF, 563,036,064 bytes; app model path is `active.gguf`. Native logs show `Backend initiated`, CPU NEON/FMA support, and `Model loaded`.
 - Device run — `What is two plus two` returned `Two plus two equals four.` with no memory citation. Repeated successfully after Wi-Fi and mobile data were disabled. One generation process used about 831 MB PSS; observed load times ranged from about 1.1 to 3.7 seconds. These are single-device observations, not a benchmark.
@@ -45,13 +47,19 @@ Current engineering priorities: signed-device verification, encrypted notificati
 - Security milestone: removed `MANAGE_EXTERNAL_STORAGE`, `READ_EXTERNAL_STORAGE`, unused `READ_MEDIA_AUDIO`, and `requestLegacyExternalStorage`. Automatic WhatsApp scanning now queries recent image rows only under WhatsApp/WhatsApp Business media paths in MediaStore. PDFs remain available through explicit picker/share selection. Notification capture defaults to paused; existing explicit source selections are preserved. Current build and unit tests pass; OEM MediaStore and picker/share behavior still require device validation.
 - Accessibility milestone: the voice microphone is now a labeled 48 dp button that works through standard click accessibility actions; expandable Settings groups expose button role and expanded/collapsed state. Screen-reader and switch-control use still need hands-on device validation.
 
+## Stable release v0.1.4 — 2026-11-25
+
+- Published [Retenqo v0.1.4](https://github.com/priyanshuchawda/retenqo-enterprise/releases/tag/v0.1.4) as the latest stable Android release. The signed APK is available for Android 13+ ARM64 devices.
+- Release metadata has been synchronized from the published GitHub asset and verified by the website release-validation pipeline.
+- The existing production installation upgraded in place on the connected Android 16 / API 36 device; no uninstall or data reset was performed.
+
 ## SQLCipher pooled-connection startup fix — 2026-11-25
 
 - Root cause: SQLCipher 4.20.0's `SupportOpenHelperFactory` retains the supplied passphrase byte array and reuses it when its WAL connection pool opens additional connections. `MnemeDatabase` zeroed that same array immediately after the first Room connection opened, so later pooled connections attempted to authenticate with a zeroed key and failed with `SQLiteNotADatabaseException`.
 - Fix: keep the SQLCipher-owned passphrase array alive for the Room database lifetime and zero it after `RoomDatabase.close()`. The transient Keystore-decrypted array is still zeroed after database initialization; encryption and existing database files remain intact.
 - Regression evidence: the concurrent-read instrumentation test failed before the fix with `SQLiteNotADatabaseException` while opening a second connection. After the fix, all 6 instrumentation tests passed on the connected Xiaomi 2406ERN9CI (Android 16 / API 36 / ARM64), invoked with `adb shell am instrument -w com.mneme.app.debug.test/androidx.test.runner.AndroidJUnitRunner`.
 - Device launch: updated debug APK started on the same handset (`am start -W` returned `Status: ok`; process remained present), with no matching SQLCipher or fatal exception in the captured log window.
-- Scope: this verifies the pooled-connection failure on one API 36 device. A signed release update with the existing production database, Android API 33 device, and additional OEMs still need verification before publishing an updated release.
+- Release verification: the v0.1.4 signed APK upgraded and launched over the existing app installation on the same API 36 device while preserving its first-install timestamp.
 
 ## Rubric hardening — 2026-11-25
 

@@ -8,6 +8,8 @@ Retenqo is a local-first Android AI memory and commitment assistant. It turns au
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
+> **Latest stable:** [Retenqo v0.1.4 for Android 13+ (ARM64)](https://github.com/priyanshuchawda/retenqo-enterprise/releases/latest). It includes the SQLCipher pooled-connection fix, verified against the pinned publisher certificate and installed as an in-place upgrade on Android 16.
+
 ## Engineering highlights
 
 | Capability | Engineering achievement |

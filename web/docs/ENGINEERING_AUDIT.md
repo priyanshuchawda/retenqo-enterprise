@@ -1,7 +1,7 @@
 # Website engineering audit
 
-**Review date:** 2026-11-25  
-**Scope:** Static Astro website, release metadata and APK synchronization scripts, accessibility, browser behavior, security headers, and search metadata.  
+**Review date:** 2026-11-25<br>
+**Scope:** Static Astro website, release metadata and APK synchronization scripts, accessibility, browser behavior, security headers, and search metadata.<br>
 **Status key:** **Implemented** means a code change exists; **Verified** means a named automated or live check passed; **Pending** means evidence is still required. Targets are not presented as achieved results.
 
 This document tracks every website finding and improvement ID supplied for the audit. It is a status ledger, not a claim that every item has been independently certified. Exact command results should be appended after the final run in the release commit.

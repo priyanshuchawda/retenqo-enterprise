@@ -102,6 +102,7 @@ fun MnemeHomeScreen(
     onExportBackup: () -> Unit,
     onRestoreBackup: () -> Unit,
     onImportMedia: () -> Unit,
+    onDeleteAllPersonalData: () -> Unit,
 ) {
     val notes by viewModel.timeline.collectAsStateWithLifecycle()
     val followThroughSuggestions by viewModel.followThroughSuggestions.collectAsStateWithLifecycle()
@@ -329,6 +330,7 @@ fun MnemeHomeScreen(
                     onOpenAppDetails = viewModel::openAppDetails,
                     onExportBackup = onExportBackup,
                     onRestoreBackup = onRestoreBackup,
+                    onDeleteAllPersonalData = onDeleteAllPersonalData,
                 )
             }
         }

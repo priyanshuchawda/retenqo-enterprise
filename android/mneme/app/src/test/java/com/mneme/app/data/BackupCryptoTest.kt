@@ -35,6 +35,14 @@ class BackupCryptoTest {
     }
 
     @Test
+    fun rejectsUnboundedKdfIterations() {
+        val encrypted = BackupCrypto.encrypt(plaintext, password)
+        assertThrows(IllegalArgumentException::class.java) {
+            BackupCrypto.decrypt(encrypted, password, iterations = 100_000_000)
+        }
+    }
+
+    @Test
     fun exportRequiresAMinimumLengthPassword() {
         assertThrows(IllegalArgumentException::class.java) {
             BackupCrypto.encrypt(plaintext, "too-short".toCharArray())

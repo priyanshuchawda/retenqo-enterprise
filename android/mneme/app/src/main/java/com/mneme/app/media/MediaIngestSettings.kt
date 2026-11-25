@@ -17,4 +17,13 @@ object MediaIngestSettings {
             putBoolean(KEY_PERIODIC_ENABLED, enabled)
         }
     }
+
+}
+
+object MediaIngestHistory {
+    private const val PREFS = "mneme_media_ingest"
+
+    fun clear(context: Context) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().clear().apply()
+    }
 }

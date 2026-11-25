@@ -28,6 +28,8 @@ import com.mneme.app.media.MediaIngestSettings
 import com.mneme.app.media.MnemePowerGates
 import com.mneme.app.notif.MnemeNotificationListener
 import com.mneme.app.notif.NotificationCaptureSettings
+import com.mneme.app.notif.NotifIngestQueue
+import com.mneme.app.notif.NotifIngestWorker
 import com.mneme.app.pulse.PulsePipeline
 import com.mneme.app.pulse.PulseResult
 import com.mneme.app.remind.DueReminderScheduler
@@ -169,6 +171,13 @@ class MnemeViewModel(
     fun setNotificationSourceEnabled(sourceId: String, enabled: Boolean) {
         val app = getApplication<Application>()
         NotificationCaptureSettings.setEnabled(app, sourceId, enabled)
+        if (!enabled) {
+            NotifIngestQueue.removeDisabledSources(app)
+            if (NotifIngestQueue.size(app) == 0) {
+                androidx.work.WorkManager.getInstance(app)
+                    .cancelUniqueWork(NotifIngestWorker.UNIQUE)
+            }
+        }
         _ui.value = _ui.value.copy(
             notificationSources = NotificationCaptureSettings.sources.associate { source ->
                 source.id to (source.id in NotificationCaptureSettings.enabledSources(app))
@@ -450,14 +459,14 @@ class MnemeViewModel(
         if (!_ui.value.listening) return
         pumpJob?.cancel()
         pumpJob = null
-        val samples = mic.stopAndGetSamples()
         _ui.value = _ui.value.copy(listening = false)
-        if (!submit) return
-        if (samples.size < MicRecorder.SAMPLE_RATE / 2) {
-            _ui.value = _ui.value.copy(status = "Too short — hold longer")
-            return
-        }
         viewModelScope.launch {
+            val samples = mic.stopAndGetSamples()
+            if (!submit) return@launch
+            if (samples.size < MicRecorder.SAMPLE_RATE / 2) {
+                _ui.value = _ui.value.copy(status = "Too short — hold longer")
+                return@launch
+            }
             _ui.value = _ui.value.copy(askBusy = true, status = "Transcribing…")
             val text = try {
                 whisper.transcribe(samples)
@@ -801,8 +810,29 @@ class MnemeViewModel(
 
     fun deleteNote(id: Long) {
         viewModelScope.launch {
-            DueReminderScheduler.cancel(getApplication(), id)
             notes.delete(id)
+            DueReminderScheduler.cancel(getApplication(), id)
+        }
+    }
+
+    fun deleteAllPersonalData() {
+        viewModelScope.launch {
+            val app = getApplication<Application>()
+            notes.getAll().asSequence().filter { it.dueAt != null }.forEach { note ->
+                DueReminderScheduler.cancel(app, note.id)
+            }
+            notes.deleteAll()
+            NotifIngestQueue.clear(app)
+            androidx.work.WorkManager.getInstance(app).cancelAllWorkByTag("mneme_notif")
+            androidx.work.WorkManager.getInstance(app).cancelAllWorkByTag("mneme_media")
+            app.cacheDir.listFiles()?.filter { it.name.startsWith("selected-media-") || it.name.endsWith(".partial") }
+                ?.forEach { it.delete() }
+            media.clearHistory()
+            com.mneme.app.accessibility.RetenqoAccessibilityService.clearSnapshot()
+            NotificationCaptureSettings.sources.forEach { NotificationCaptureSettings.setEnabled(app, it.id, false) }
+            MediaIngestSettings.setPeriodicEnabled(app, false)
+            (app as? com.mneme.app.MnemeApp)?.refreshMediaIngest()
+            _ui.value = _ui.value.copy(status = "All saved personal data deleted")
         }
     }
 

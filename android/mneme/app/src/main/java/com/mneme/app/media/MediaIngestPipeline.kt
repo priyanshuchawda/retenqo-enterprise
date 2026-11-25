@@ -44,6 +44,10 @@ class MediaIngestPipeline(
         context.getSharedPreferences("mneme_media_ingest", Context.MODE_PRIVATE)
     }
 
+    fun clearHistory() {
+        prefs.edit().clear().apply()
+    }
+
     suspend fun scanWhatsAppRecent(limit: Int = 8): MediaScanResult = mutex.withLock {
         withContext(Dispatchers.IO) {
             val candidates = WhatsAppMediaPaths.listRecentCandidates(context, limit = limit)
@@ -64,8 +68,8 @@ class MediaIngestPipeline(
                 val result = try {
                     ingestSelected(candidate.uri, sourceLabel = "WhatsApp photo · ${candidate.displayName}")
                 } catch (e: Exception) {
-                    Log.w(TAG, "ingest failed for a WhatsApp photo: ${e.message}")
-                    PulseResult(null, "Could not read a WhatsApp photo: ${e.message}", false)
+                    Log.w(TAG, "media OCR failed (${e.javaClass.simpleName})")
+                    PulseResult(null, "Could not read a WhatsApp photo", false)
                 }
                 if (result.noteId != null) {
                     saved++
@@ -164,7 +168,16 @@ class MediaIngestPipeline(
     }
 
     private suspend fun ocrImage(file: File): String = withContext(Dispatchers.IO) {
-        val bmp = BitmapFactory.decodeFile(file.absolutePath)
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.absolutePath, bounds)
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0 ||
+            bounds.outWidth.toLong() * bounds.outHeight.toLong() > MAX_IMAGE_PIXELS
+        ) return@withContext ""
+        val sample = calculateInSampleSize(bounds.outWidth, bounds.outHeight, MAX_IMAGE_DIMENSION)
+        val bmp = BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply {
+            inSampleSize = sample
+            inPreferredConfig = Bitmap.Config.RGB_565
+        })
             ?: return@withContext ""
         try {
             recognize(bmp)
@@ -198,6 +211,16 @@ class MediaIngestPipeline(
     companion object {
         private const val TAG = "MediaIngest"
         private const val MAX_SELECTED_FILE_BYTES = 40L * 1024 * 1024
+        private const val MAX_IMAGE_PIXELS = 40_000_000L
+        private const val MAX_IMAGE_DIMENSION = 2048
         private val SUPPORTED_EXTENSIONS = setOf("pdf", "jpg", "jpeg", "png", "webp", "heic")
+
+        private fun calculateInSampleSize(width: Int, height: Int, maxDimension: Int): Int {
+            var sample = 1
+            while (width / sample > maxDimension || height / sample > maxDimension) {
+                sample *= 2
+            }
+            return sample
+        }
     }
 }

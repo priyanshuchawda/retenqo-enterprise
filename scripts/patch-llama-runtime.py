@@ -54,9 +54,16 @@ insert_before_once(
     "                throw error\n"
     "            }\n"
     "            _state.value = InferenceEngine.State.ModelReady\n"
-    "        }\n\n"
-    "    /**\n     * Send plain text user prompt to LLM, which starts generating tokens in a [Flow]\n",
+    "        }\n\n",
     "override suspend fun resetConversation(systemPrompt: String)",
+)
+
+# Repair sources affected by the earlier duplicated KDoc marker.
+replace_once(
+    "src/main/java/com/arm/aichat/internal/InferenceEngineImpl.kt",
+    "    /**\n     * Send plain text user prompt to LLM, which starts generating tokens in a [Flow]\n"
+    "    /**\n     * Send plain text user prompt to LLM, which starts generating tokens in a [Flow]\n",
+    "    /**\n     * Send plain text user prompt to LLM, which starts generating tokens in a [Flow]\n",
 )
 
 replace_once(

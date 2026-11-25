@@ -10,7 +10,7 @@ import javax.crypto.spec.SecretKeySpec
 
 /** Portable password encryption for user-exported backups. Never persists the password or key. */
 internal object BackupCrypto {
-    const val ITERATIONS = 210_000
+    const val ITERATIONS = 600_000
     const val SALT_BYTES = 16
     const val NONCE_BYTES = 12
     private const val KEY_BITS = 256
@@ -33,12 +33,13 @@ internal object BackupCrypto {
         }
     }
 
-    fun decrypt(payload: EncryptedPayload, password: CharArray): ByteArray {
+    fun decrypt(payload: EncryptedPayload, password: CharArray, iterations: Int = ITERATIONS): ByteArray {
         require(password.isNotEmpty()) { "Enter the password used when this backup was exported" }
         require(payload.salt.size == SALT_BYTES) { "Backup salt is invalid" }
         require(payload.nonce.size == NONCE_BYTES) { "Backup encryption metadata is invalid" }
         require(payload.ciphertext.size >= TAG_BITS / 8) { "Backup data is incomplete" }
-        val keyBytes = deriveKey(password, payload.salt)
+        require(iterations in MIN_ITERATIONS..MAX_ITERATIONS) { "Unsupported backup password settings" }
+        val keyBytes = deriveKey(password, payload.salt, iterations)
         return try {
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(keyBytes, "AES"), GCMParameterSpec(TAG_BITS, payload.nonce))
@@ -50,8 +51,8 @@ internal object BackupCrypto {
         }
     }
 
-    private fun deriveKey(password: CharArray, salt: ByteArray): ByteArray {
-        val spec = PBEKeySpec(password, salt, ITERATIONS, KEY_BITS)
+    private fun deriveKey(password: CharArray, salt: ByteArray, iterations: Int = ITERATIONS): ByteArray {
+        val spec = PBEKeySpec(password, salt, iterations, KEY_BITS)
         return try {
             SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
                 .generateSecret(spec)
@@ -62,4 +63,6 @@ internal object BackupCrypto {
     }
 
     private const val MIN_PASSWORD_LENGTH = 12
+    private const val MIN_ITERATIONS = 150_000
+    private const val MAX_ITERATIONS = 1_000_000
 }

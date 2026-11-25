@@ -87,17 +87,25 @@ class MnemeBackupManager(context: Context) {
             require(envelope.optString("cipher") == CIPHER && envelope.optString("kdf") == KDF) {
                 "Encrypted backup uses an unsupported algorithm"
             }
-            require(envelope.optInt("iterations") == BackupCrypto.ITERATIONS) {
+            val iterations = envelope.optInt("iterations")
+            require(iterations in MIN_IMPORT_KDF_ITERATIONS..MAX_IMPORT_KDF_ITERATIONS) {
                 "Encrypted backup uses unsupported password settings"
             }
             val suppliedPassword = password ?: error("Enter the password used when this backup was exported")
             val decrypted = BackupCrypto.decrypt(
                 BackupCrypto.EncryptedPayload(
-                    salt = Base64.getDecoder().decode(envelope.getString("salt")),
-                    nonce = Base64.getDecoder().decode(envelope.getString("nonce")),
-                    ciphertext = Base64.getDecoder().decode(envelope.getString("ciphertext")),
+                    salt = Base64.getDecoder().decode(envelope.getString("salt")).also {
+                        require(it.size == BackupCrypto.SALT_BYTES) { "Backup salt is invalid" }
+                    },
+                    nonce = Base64.getDecoder().decode(envelope.getString("nonce")).also {
+                        require(it.size == BackupCrypto.NONCE_BYTES) { "Backup encryption metadata is invalid" }
+                    },
+                    ciphertext = Base64.getDecoder().decode(envelope.getString("ciphertext")).also {
+                        require(it.size <= MAX_BACKUP_BYTES && it.size >= 16) { "Backup data is incomplete or too large" }
+                    },
                 ),
                 suppliedPassword,
+                iterations,
             )
             require(decrypted.size <= MAX_BACKUP_BYTES) { "Backup data exceeds the 80 MB import limit" }
             try {
@@ -274,6 +282,8 @@ class MnemeBackupManager(context: Context) {
         private const val CIPHER = "AES-256-GCM"
         private const val KDF = "PBKDF2WithHmacSHA256"
         private const val MAX_BACKUP_BYTES = 80 * 1024 * 1024
+        private const val MIN_IMPORT_KDF_ITERATIONS = 150_000
+        private const val MAX_IMPORT_KDF_ITERATIONS = 1_000_000
         private const val MAX_FIELD_CHARS = 20_000
     }
 }

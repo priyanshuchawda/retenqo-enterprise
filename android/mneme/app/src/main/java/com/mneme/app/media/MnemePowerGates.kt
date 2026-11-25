@@ -68,7 +68,7 @@ object MnemePowerGates {
                 line.split(Regex("\\s+")).getOrNull(1)?.toLongOrNull() ?: -1L
             }
         } catch (e: Exception) {
-            Log.w(TAG, "meminfo: ${e.message}")
+            Log.w(TAG, "memory check failed (${e.javaClass.simpleName})")
             -1L
         }
     }

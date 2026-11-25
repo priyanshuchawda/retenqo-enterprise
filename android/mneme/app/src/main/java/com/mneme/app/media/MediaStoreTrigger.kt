@@ -51,7 +51,7 @@ class MediaStoreTrigger(private val context: Context) {
             registered = true
             Log.i(TAG, "MediaStore observers registered (images + files)")
         } catch (e: Exception) {
-            Log.w(TAG, "observer failed: ${e.message}")
+            Log.w(TAG, "observer registration failed (${e.javaClass.simpleName})")
         }
     }
 

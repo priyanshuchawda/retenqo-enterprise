@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Build Retenqo product APK (arm64, JDK 21).
+# Build Retenqo product APK (arm64, JDK 17 or 21).
 # Usage: ./scripts/build-mneme.sh [assembleDebug|assembleRelease]
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 APP_DIR="$ROOT/android/mneme"
-# Fedora system JDK may be 25; Gradle 8.14 needs ≤21. Prefer Temurin 21 always.
-JAVA_HOME="${MNEME_JAVA_HOME:-${JAVA_HOME:-$HOME/.local/jdk-21}}"
+# Prefer Temurin 17; the Android and Kotlin build toolchain supports it consistently.
+JAVA_HOME="${MNEME_JAVA_HOME:-${JAVA_HOME:-$HOME/.local/jdk-17}}"
 if [[ ! -x "$JAVA_HOME/bin/java" ]]; then
   JAVA_BIN="$(command -v java || true)"
   if [[ -n "$JAVA_BIN" ]]; then

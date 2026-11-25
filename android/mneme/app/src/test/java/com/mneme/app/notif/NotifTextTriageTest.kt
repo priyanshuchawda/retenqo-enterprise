@@ -29,6 +29,14 @@ class NotifTextTriageTest {
     }
 
     @Test
+    fun filtersSensitiveOneTimeCodesButKeepsOrdinaryMessages() {
+        assertNull(NotifTextTriage.candidate("Bank", "Your OTP: 123456"))
+        assertNull(NotifTextTriage.candidate("Service", "Verification code 884201"))
+        assertNull(NotifTextTriage.candidate("Login", "Your login pin is 4219"))
+        assertNotNull(NotifTextTriage.candidate("Sam", "Can you share the 6 digit number for our meeting?"))
+    }
+
+    @Test
     fun keepsDeadlineMessageWithSource() {
         val c = NotifTextTriage.candidate(
             "com.google.android.gm",
@@ -42,6 +50,23 @@ class NotifTextTriageTest {
 }
 
 class NotifQueueLogicTest {
+    @Test
+    fun interruptedClaimIsRecoveredBeforeNewWorkIsClaimed() {
+        val interrupted = NotifQueueLogic.encodeEntries(
+            listOf(
+                NotifQueueLogic.encode("WA", "first"),
+                NotifQueueLogic.encode("Gmail", "second"),
+            ),
+        )
+        val pending = NotifQueueLogic.encodeEntries(listOf(NotifQueueLogic.encode("Slack", "third")))
+
+        val claim = NotifQueueLogic.claim(pending, interrupted, limit = 2)
+
+        assertEquals(listOf("WA" to "first", "Gmail" to "second"), claim.batch.map(NotifQueueLogic::decode))
+        assertEquals(1, NotifQueueLogic.size(claim.pending))
+        assertEquals(2, NotifQueueLogic.size(claim.inFlight))
+    }
+
     @Test
     fun offerDrainRoundTripWithSource() {
         var json = "[]"

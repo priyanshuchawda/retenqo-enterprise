@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import androidx.room.RoomDatabase.Callback
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [NoteEntity::class, FollowThroughSuggestion::class, CommitmentHistoryEvent::class], version = 7, exportSchema = false)
+@Database(entities = [NoteEntity::class, FollowThroughSuggestion::class, CommitmentHistoryEvent::class], version = 7, exportSchema = true)
 abstract class MnemeDatabase : RoomDatabase() {
     abstract fun notes(): NoteDao
     abstract fun followThrough(): FollowThroughDao
@@ -102,6 +103,12 @@ abstract class MnemeDatabase : RoomDatabase() {
                     .addMigrations(MIGRATION_4_5)
                     .addMigrations(MIGRATION_5_6)
                     .addMigrations(MIGRATION_6_7)
+                    .addCallback(object : Callback() {
+                        override fun onOpen(db: SupportSQLiteDatabase) {
+                            super.onOpen(db)
+                            db.query("PRAGMA secure_delete = ON").use { it.moveToFirst() }
+                        }
+                    })
                     .build()
                     .also { instance = it }
             }

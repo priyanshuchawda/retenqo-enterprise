@@ -8,6 +8,8 @@ object NotifQueueLogic {
 
     data class Entry(val source: String, val text: String, val sourceEventId: String? = null)
 
+    data class Claim(val batch: List<String>, val pending: String, val inFlight: String)
+
     fun encode(source: String, text: String, sourceEventId: String? = null): String =
         if (sourceEventId.isNullOrBlank()) "$source$SEP$text" else "$source$SEP$text$SEP$sourceEventId"
 
@@ -50,7 +52,18 @@ object NotifQueueLogic {
         return out to encodeList(rest)
     }
 
+    /** Requeues an interrupted claim before atomically assigning the next batch. */
+    fun claim(pendingJson: String, inFlightJson: String, limit: Int): Claim {
+        val recovered = (entries(inFlightJson) + entries(pendingJson)).distinct()
+        val (batch, pending) = drain(encodeEntries(recovered), limit)
+        return Claim(batch, pending, encodeEntries(batch))
+    }
+
     fun size(existingJson: String): Int = parse(existingJson).size
+
+    fun entries(existingJson: String): List<String> = parse(existingJson)
+
+    fun encodeEntries(items: List<String>): String = encodeList(items)
 
     private fun encodeList(items: List<String>): String =
         items.joinToString(prefix = "[", postfix = "]", separator = ",") { "\"${escape(it)}\"" }

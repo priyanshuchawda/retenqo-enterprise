@@ -106,7 +106,12 @@ Java_com_arm_aichat_EmbeddingEngine_nativeEmbed(JNIEnv * env, jobject /*unused*/
 
     llama_batch batch = llama_batch_init((int32_t) tokens.size(), 0, 1);
     for (int i = 0; i < (int) tokens.size(); i++) {
-        common_batch_add(batch, tokens[i], i, {0}, true);
+        batch.token[i] = tokens[i];
+        batch.pos[i] = i;
+        batch.n_seq_id[i] = 1;
+        batch.seq_id[i][0] = 0;
+        batch.logits[i] = true;
+        ++batch.n_tokens;
     }
 
     llama_memory_clear(llama_get_memory(g_embed_ctx), true);

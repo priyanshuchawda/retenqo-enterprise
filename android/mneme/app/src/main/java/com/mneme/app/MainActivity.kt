@@ -195,17 +195,18 @@ class MainActivity : ComponentActivity() {
                     onExportBackup = ::promptBackupExportPassword,
                     onRestoreBackup = { backupImportLauncher.launch(arrayOf("application/vnd.retenqo.backup", "application/json", "text/json", "application/octet-stream")) },
                     onImportMedia = { mediaImportLauncher.launch(arrayOf("image/*", "application/pdf")) },
+                    onDeleteAllPersonalData = viewModel::deleteAllPersonalData,
                 )
             }
         }
-        applyPitchFromIntent(intent)
+        if (BuildConfig.DEBUG) applyPitchFromIntent(intent)
         consumeShareIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        applyPitchFromIntent(intent)
+        if (BuildConfig.DEBUG) applyPitchFromIntent(intent)
         consumeShareIntent(intent)
     }
 
@@ -223,17 +224,41 @@ class MainActivity : ComponentActivity() {
         } else {
             intent.getParcelableExtra<android.net.Uri>(Intent.EXTRA_STREAM)?.let(uris::add)
         }
-        if (uris.isNotEmpty()) viewModel.ingestSelectedMedia(uris.toList())
+        val safeUris = uris.filter { it.scheme == "content" }.take(MAX_SHARED_URIS)
         val sharedText = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
-        if (sharedText != null && uris.isEmpty()) viewModel.ingestSharedText(sharedText)
+            ?.take(MAX_SHARED_TEXT_CHARS)
+        val declaredMime = intent.type.orEmpty()
+        val validMediaMime = declaredMime == "application/pdf" || declaredMime.startsWith("image/")
+        if (safeUris.isNotEmpty() && validMediaMime) {
+            AlertDialog.Builder(this)
+                .setTitle("Import shared content?")
+                .setMessage("Retenqo will process ${safeUris.size} selected item(s) on this device.")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Import") { _, _ -> viewModel.ingestSelectedMedia(safeUris) }
+                .show()
+        } else if (sharedText != null && sharedText.length >= MIN_SHARED_TEXT_CHARS && declaredMime == "text/plain") {
+            AlertDialog.Builder(this)
+                .setTitle("Save shared text?")
+                .setMessage("This text will be processed and saved on this device.")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Save") { _, _ -> viewModel.ingestSharedText(sharedText) }
+                .show()
+        }
         // Prevent this payload from being consumed again after activity recreation.
         intent.action = null
     }
 
     private fun applyPitchFromIntent(intent: Intent?) {
+        if (!BuildConfig.DEBUG) return
         val shot = intent?.getStringExtra("pitch") ?: return
         if (shot.isBlank()) return
         viewModel.applyPitchShot(shot)
+    }
+
+    private companion object {
+        const val MAX_SHARED_URIS = 5
+        const val MAX_SHARED_TEXT_CHARS = 20_000
+        const val MIN_SHARED_TEXT_CHARS = 8
     }
 
     override fun onResume() {

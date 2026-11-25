@@ -26,7 +26,7 @@ object NotifTextTriage {
     )
 
     private val SYSTEM_NOISE = Regex(
-        """(?i)(checking for new messages|backup in progress|whatsapp web is currently|missed (voice|video) call|ongoing (voice|video) call|calling…|ringing…|you may have new (notifications|messages)|tap to (load|download)|this message was deleted|waiting for this message|download complete|charging|battery (full|low)|screenshot captured|connected to|wifi|bluetooth|software update|otp is|is your (otp|code)|verification code|one[- ]time (password|code))""",
+        """(?i)(checking for new messages|backup in progress|whatsapp web is currently|missed (voice|video) call|ongoing (voice|video) call|calling…|ringing…|you may have new (notifications|messages)|tap to (load|download)|this message was deleted|waiting for this message|download complete|charging|battery (full|low)|screenshot captured|connected to|wifi|bluetooth|software update|\b(?:otp|one[- ]time (?:password|code)|verification|security|login|auth(?:entication)?)\s*(?:is|:|code|pin|token)?\s*[:#-]?\s*\d{4,10}\b|\b\d{4,10}\s+(?:is your|as your)\s+(?:otp|code|pin)\b)""",
     )
 
     private val MEDIA_ONLY = Regex(

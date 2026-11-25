@@ -17,7 +17,7 @@ class WhisperBridge(private val context: Context) {
         try {
             ctx?.release()
         } catch (e: Exception) {
-            Log.w(TAG, "unload: ${e.message}")
+            Log.w(TAG, "Whisper unload failed (${e.javaClass.simpleName})")
         }
         ctx = null
     }
@@ -27,7 +27,7 @@ class WhisperBridge(private val context: Context) {
             val model = withContext(Dispatchers.IO) {
                 ModelPaths.ensureWhisperAccessible(context.applicationContext)
             }
-            Log.i(TAG, "Loading Whisper ${model.absolutePath}")
+            Log.i(TAG, "Loading local Whisper model")
             ctx = WhisperContext.createContextFromFile(model.absolutePath)
         }
         val c = ctx ?: error("Whisper not loaded")

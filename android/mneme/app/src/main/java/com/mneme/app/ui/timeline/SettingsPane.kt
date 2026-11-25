@@ -61,6 +61,7 @@ fun SettingsPane(
     onOpenAppDetails: () -> Unit,
     onExportBackup: () -> Unit,
     onRestoreBackup: () -> Unit,
+    onDeleteAllPersonalData: () -> Unit,
 ) {
     var modelOpen by remember { mutableStateOf(true) }
     var backupOpen by remember { mutableStateOf(false) }
@@ -112,6 +113,21 @@ fun SettingsPane(
             Text("New backups are encrypted with a password you choose. Keep it safe: Retenqo cannot recover it. Older unencrypted JSON backups remain restorable. Model files are not included.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             SetupRow("Export backup", "Save a copy to a location you choose", false, "Export", onExportBackup, showStatus = false)
             SetupRow("Restore backup", "Merge with the data on this phone", false, "Choose file", onRestoreBackup, showStatus = false)
+            var confirmDelete by remember { mutableStateOf(false) }
+            SetupRow("Delete all personal data", "Remove memories, pending captures, and temporary files", false, "Delete", { confirmDelete = true }, showStatus = false)
+            if (confirmDelete) {
+                androidx.compose.material3.AlertDialog(
+                    onDismissRequest = { confirmDelete = false },
+                    title = { Text("Delete all personal data?") },
+                    text = { Text("This permanently removes saved memories and clears pending capture data on this phone.") },
+                    confirmButton = {
+                        TextButton(onClick = { confirmDelete = false; onDeleteAllPersonalData() }) { Text("Delete all") }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { confirmDelete = false }) { Text("Cancel") }
+                    },
+                )
+            }
         }
 
         SettingsGroup(

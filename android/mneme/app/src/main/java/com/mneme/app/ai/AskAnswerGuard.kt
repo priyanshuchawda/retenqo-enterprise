@@ -52,6 +52,7 @@ object AskAnswerGuard {
         Regex("""\[(\d+)]""").findAll(text)
             .mapNotNull { it.groupValues[1].toIntOrNull()?.takeIf { id -> id > 0 } }
             .distinct()
+            .toList()
 
     private fun stripNoise(raw: String): String =
         raw

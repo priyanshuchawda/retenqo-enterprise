@@ -32,7 +32,7 @@ class NoteRepository(
         val match = CompletionEvidenceAgent.find(llm, evidence, dao.getAll()) ?: return null
         val boundedEvidence = evidence.trim().take(1_200)
         val hash = IngestSources.contentFingerprint(source, boundedEvidence)
-        val suggestionId = store.insert(
+        val suggestionId = store.insertSuggestionWithHistory(
             FollowThroughSuggestion(
                 commitmentId = match.commitment.id,
                 evidenceSource = source.take(120),
@@ -42,15 +42,6 @@ class NoteRepository(
             ),
         )
         if (suggestionId <= 0L) return null
-        dao.insertHistoryEvent(
-            CommitmentHistoryEvent(
-                noteId = match.commitment.id,
-                eventType = CommitmentHistoryEvent.Type.COMPLETION_SUGGESTED,
-                summary = "Retenqo found possible completion evidence; review needed.",
-                source = source.take(120),
-                evidenceText = boundedEvidence,
-            ),
-        )
         return suggestionId
     }
 
@@ -62,7 +53,7 @@ class NoteRepository(
     }
 
     suspend fun dismissCompletionSuggestion(id: Long) {
-        followThroughDao?.dismissAndRecord(id, System.currentTimeMillis())
+        followThroughDao?.setSuggestionStateAndRecord(id, FollowThroughSuggestion.State.DISMISSED, System.currentTimeMillis())
     }
 
     suspend fun retrieve(query: String, limit: Int = 5): List<NoteEntity> =
@@ -82,7 +73,8 @@ class NoteRepository(
         // sentence embeddings. Their cosine scores collide on short queries,
         // so they must not be used to decide which personal cards to cite.
         val queryTokens = MemoryLexicalSearch.tokens(q)
-        val scored = dao.getAll().asSequence()
+        val candidateLimit = (limit.coerceAtLeast(1) * CANDIDATE_MULTIPLIER).coerceAtMost(MAX_RETRIEVAL_CANDIDATES)
+        val scored = dao.recentCandidates(candidateLimit).asSequence()
             .filter { it.review() != CardReviewState.PENDING }
             .mapNotNull { note ->
                 var score = MemoryLexicalSearch.score(
@@ -155,6 +147,8 @@ class NoteRepository(
     }
 
     suspend fun delete(id: Long) = dao.delete(id)
+
+    suspend fun deleteAll() = dao.deleteAllNotes()
 
     suspend fun acceptReview(id: Long): NoteEntity? {
         val note = dao.getById(id) ?: return null
@@ -295,6 +289,8 @@ class NoteRepository(
 
     companion object {
         private const val MIN_LEXICAL_SCORE = 0.25f
+        private const val CANDIDATE_MULTIPLIER = 20
+        private const val MAX_RETRIEVAL_CANDIDATES = 1_000
     }
 }
 

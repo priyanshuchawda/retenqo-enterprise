@@ -36,6 +36,9 @@ interface NoteDao {
     @Query("SELECT * FROM notes ORDER BY createdAt DESC")
     suspend fun getAll(): List<NoteEntity>
 
+    @Query("SELECT * FROM notes WHERE reviewState != 'pending' ORDER BY createdAt DESC LIMIT :limit")
+    suspend fun recentCandidates(limit: Int): List<NoteEntity>
+
     @Query("SELECT * FROM notes WHERE id = :id LIMIT 1")
     suspend fun getById(id: Long): NoteEntity?
 
@@ -107,6 +110,14 @@ interface NoteDao {
         changedAt: Long,
         snoozedUntil: Long?,
     )
+
+    @Query("DELETE FROM notes")
+    suspend fun deleteAllNotes()
+
+    @Transaction
+    suspend fun deleteAllPersonalData() {
+        deleteAllNotes()
+    }
 
     @Query(
         """

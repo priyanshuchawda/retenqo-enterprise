@@ -26,7 +26,7 @@ class RetenqoAccessibilityService : AccessibilityService() {
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && now - lastCaptureAt < CAPTURE_INTERVAL_MS) return
         val root = rootInActiveWindow ?: return
         val rootPackage = root.packageName?.toString()
-        if (rootPackage != pkg || rootPackage == packageName || rootPackage == "com.android.systemui" ||
+        if (rootPackage == null || rootPackage != pkg || rootPackage == packageName || rootPackage == "com.android.systemui" ||
             rootPackage.contains("inputmethod", ignoreCase = true) ||
             rootPackage.contains("keyboard", ignoreCase = true)
         ) {
@@ -47,6 +47,7 @@ class RetenqoAccessibilityService : AccessibilityService() {
     }
 
     private fun readVisibleText(root: AccessibilityNodeInfo): String {
+        if (isSensitivePackage(root.packageName?.toString())) return ""
         val queue = ArrayDeque<AccessibilityNodeInfo>()
         val lines = LinkedHashSet<String>()
         queue.add(root)
@@ -55,7 +56,11 @@ class RetenqoAccessibilityService : AccessibilityService() {
         while (queue.isNotEmpty() && visited < MAX_NODES && characters < MAX_CHARS) {
             val node = queue.removeFirst()
             visited++
-            if (node.isVisibleToUser && !node.isPassword) {
+            val className = node.className?.toString().orEmpty()
+            val sensitiveInput = node.isEditable ||
+                className.contains("EditText", ignoreCase = true) ||
+                className.contains("Password", ignoreCase = true)
+            if (node.isVisibleToUser && !node.isPassword && !sensitiveInput) {
                 val label = sequenceOf(node.text, node.contentDescription)
                     .mapNotNull { it?.toString()?.trim()?.takeIf(String::isNotBlank) }
                     .firstOrNull()
@@ -66,9 +71,10 @@ class RetenqoAccessibilityService : AccessibilityService() {
                         characters += bounded.length
                     }
                 }
-                for (index in 0 until node.childCount) {
-                    node.getChild(index)?.let(queue::addLast)
-                }
+            }
+            // Traverse children even when the parent itself is an editable field.
+            for (index in 0 until node.childCount) {
+                node.getChild(index)?.let(queue::addLast)
             }
         }
         return lines.joinToString("\n").take(MAX_CHARS)
@@ -86,10 +92,26 @@ class RetenqoAccessibilityService : AccessibilityService() {
 
         fun isConnected(): Boolean = instance != null
 
+        fun clearSnapshot() {
+            snapshot = null
+            lastCaptureAt = 0L
+        }
+
         /** Returns a fresh external-app snapshot only when the user explicitly requests it. */
         fun currentSnapshot(): ScreenContextSnapshot? {
             if (instance == null) return null
             return snapshot?.takeIf { System.currentTimeMillis() - it.capturedAt <= MAX_AGE_MS }
+        }
+
+        private val sensitivePackageMarkers = setOf(
+            "bank", "wallet", "pay", "payment", "authenticator", "password", "credential",
+            "1password", "bitwarden", "keepass", "vault", "login", "sbi", "hdfc", "icici",
+            "axis", "phonepe", "googlepay", "gpay", "paypal", "paytm",
+        )
+
+        private fun isSensitivePackage(packageName: String?): Boolean {
+            val normalized = packageName?.lowercase().orEmpty()
+            return sensitivePackageMarkers.any { marker -> normalized.contains(marker) }
         }
     }
 }

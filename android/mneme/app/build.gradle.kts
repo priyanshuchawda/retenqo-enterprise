@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.mneme.app"
     compileSdk = 36
-    ndkVersion = "29.0.14206865"
+    ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.mneme.app"

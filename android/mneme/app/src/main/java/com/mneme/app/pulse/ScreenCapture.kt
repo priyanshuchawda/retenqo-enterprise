@@ -17,6 +17,7 @@ import android.view.WindowManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -34,7 +35,11 @@ class ScreenCapture(
     suspend fun capture(resultCode: Int, data: Intent): Bitmap = withContext(Dispatchers.Main) {
         val projection = projectionManager.getMediaProjection(resultCode, data)
             ?: throw IllegalStateException("MediaProjection denied")
-        captureOnce(projection)
+        try {
+            withTimeout(CAPTURE_TIMEOUT_MILLIS) { captureOnce(projection) }
+        } finally {
+            runCatching { projection.stop() }
+        }
     }
 
     private suspend fun captureOnce(projection: MediaProjection): Bitmap =
@@ -51,12 +56,21 @@ class ScreenCapture(
             val handler = Handler(thread.looper)
             val reader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
             var virtualDisplay: VirtualDisplay? = null
+            lateinit var callback: MediaProjection.Callback
+            var cleaned = false
+            fun cleanup() {
+                if (cleaned) return
+                cleaned = true
+                runCatching { virtualDisplay?.release() }
+                runCatching { reader.close() }
+                runCatching { projection.unregisterCallback(callback) }
+                runCatching { thread.quitSafely() }
+            }
 
-            val callback = object : MediaProjection.Callback() {
+            callback = object : MediaProjection.Callback() {
                 override fun onStop() {
-                    virtualDisplay?.release()
-                    reader.close()
-                    thread.quitSafely()
+                    cleanup()
+                    if (cont.isActive) cont.resumeWithException(IllegalStateException("Screen capture permission ended"))
                 }
             }
             projection.registerCallback(callback, handler)
@@ -79,18 +93,13 @@ class ScreenCapture(
                     val cropped = Bitmap.createBitmap(bitmap, 0, 0, width, height)
                     if (cropped !== bitmap) bitmap.recycle()
 
-                    virtualDisplay?.release()
-                    reader.close()
-                    projection.unregisterCallback(callback)
+                    cleanup()
                     projection.stop()
-                    thread.quitSafely()
 
                     if (cont.isActive) cont.resume(cropped)
                 } catch (e: Exception) {
-                    virtualDisplay?.release()
-                    reader.close()
+                    cleanup()
                     projection.stop()
-                    thread.quitSafely()
                     if (cont.isActive) cont.resumeWithException(e)
                 }
             }, handler)
@@ -107,14 +116,13 @@ class ScreenCapture(
             )
 
             cont.invokeOnCancellation {
-                virtualDisplay?.release()
-                reader.close()
+                cleanup()
                 projection.stop()
-                thread.quitSafely()
             }
         }
 
     companion object {
         const val REQUEST_MEDIA_PROJECTION = 1001
+        private const val CAPTURE_TIMEOUT_MILLIS = 10_000L
     }
 }

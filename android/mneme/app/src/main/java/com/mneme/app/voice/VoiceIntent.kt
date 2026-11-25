@@ -102,7 +102,7 @@ class AlarmScheduler(private val context: Context) {
             context.startActivity(intent)
             "Alarm set for %02d:%02d".format(hour, minute)
         } catch (e: Exception) {
-            Log.w(TAG, "AlarmClock failed: ${e.message}")
+            Log.w(TAG, "alarm clock integration failed (${e.javaClass.simpleName})")
             scheduleExact(hour, minute, label)
         }
     }
@@ -138,7 +138,7 @@ class AlarmScheduler(private val context: Context) {
 class MnemeAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val label = intent.getStringExtra("label") ?: "Retenqo reminder"
-        Log.i("MnemeAlarm", "fired: $label")
+        Log.i("MnemeAlarm", "reminder alarm fired")
         DueReminderScheduler.ensureChannel(context)
         val open = PendingIntent.getActivity(
             context,
@@ -150,14 +150,14 @@ class MnemeAlarmReceiver : BroadcastReceiver() {
         val notif = NotificationCompat.Builder(context, DueReminderScheduler.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Retenqo reminder")
-            .setContentText(label)
+            .setContentText("Open Retenqo to view this reminder")
             .setContentIntent(open)
             .setAutoCancel(true)
             .build()
         try {
             NotificationManagerCompat.from(context).notify(3_001, notif)
         } catch (e: SecurityException) {
-            Log.w("MnemeAlarm", "notif permission: ${e.message}")
+            Log.w("MnemeAlarm", "notification permission unavailable")
         }
     }
 }

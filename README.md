@@ -59,6 +59,10 @@ flowchart TD
 
 **Approach and logic.** Deterministic rules handle straightforward extraction first. A compatible local model can assist with ambiguous text and candidate completion matching. Retrieval currently uses lexical matching rather than a learned semantic embedding model. The Ask pipeline attempts to ground memory answers in retrieved evidence; the model can still produce incorrect or unsupported output.
 
+On Windows, `./scripts/build-mneme.ps1 -Task verify` runs unit tests, Android Lint, and a debug APK build while printing only Gradle output plus a compact report summary. Use `-Task assembleDebug -Install` to build and install the debug APK on the connected device.
+
+Requires JDK 21 and the Android SDK. The debug APK targets ARM64. Device measurements are single-device observations, not performance guarantees.
+
 **Example workflow (illustrative, not a benchmark):**
 
 1. An enabled notification source receives: “Can you send me the slides by Friday?”

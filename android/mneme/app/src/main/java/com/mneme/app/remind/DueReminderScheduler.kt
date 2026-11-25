@@ -1,6 +1,7 @@
 package com.mneme.app.remind
 
 import android.app.AlarmManager
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -36,6 +37,7 @@ object DueReminderScheduler {
                 NotificationManager.IMPORTANCE_DEFAULT,
             ).apply {
                 description = "Retenqo reminders for notes with due dates"
+                lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             },
         )
     }
@@ -56,7 +58,7 @@ object DueReminderScheduler {
             }
             Log.i(TAG, "scheduled note=$noteId at $trigger")
         } catch (e: Exception) {
-            Log.w(TAG, "schedule failed: ${e.message}")
+            Log.w(TAG, "schedule failed (${e.javaClass.simpleName})")
             am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, trigger, pi)
         }
     }
@@ -64,6 +66,7 @@ object DueReminderScheduler {
     fun cancel(context: Context, noteId: Long) {
         val am = context.getSystemService(AlarmManager::class.java) ?: return
         am.cancel(pending(context, noteId, ""))
+        NotificationManagerCompat.from(context).cancel(2_000 + noteId.toInt())
     }
 
     /** Re-arm upcoming due notes after reboot (lightweight; no LLM). */
@@ -81,7 +84,7 @@ object DueReminderScheduler {
                 }
                 Log.i(TAG, "rescheduled $n due reminders")
             } catch (e: Exception) {
-                Log.w(TAG, "reschedule: ${e.message}")
+                Log.w(TAG, "reminder restore failed (${e.javaClass.simpleName})")
             }
         }
     }
@@ -114,7 +117,7 @@ class DueReminderReceiver : BroadcastReceiver() {
         val notif = NotificationCompat.Builder(context, DueReminderScheduler.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Due today")
-            .setContentText(title)
+            .setContentText("Open Retenqo to view this reminder")
             .setContentIntent(open)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -123,7 +126,7 @@ class DueReminderReceiver : BroadcastReceiver() {
             NotificationManagerCompat.from(context).notify(2_000 + noteId.toInt(), notif)
             Log.i("DueReminder", "reminder notification posted")
         } catch (e: SecurityException) {
-            Log.w("DueReminder", "notif permission: ${e.message}")
+            Log.w("DueReminder", "notification permission unavailable")
         }
     }
 }

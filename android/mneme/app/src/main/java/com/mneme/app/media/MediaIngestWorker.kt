@@ -51,10 +51,10 @@ class MediaIngestWorker(
         val media = MediaIngestPipeline(applicationContext, pulse)
         return try {
             val result = media.scanWhatsAppRecent(limit = limit)
-            Log.i(TAG, result.message)
+            Log.i(TAG, "media scan complete scanned=${result.scanned} saved=${result.saved} skipped=${result.skipped}")
             Result.success(workDataOf(KEY_MSG to result.message))
         } catch (e: Exception) {
-            Log.w(TAG, "ingest error: ${e.message}")
+            Log.w(TAG, "ingest failed (${e.javaClass.simpleName})")
             Result.retry()
         } finally {
             try {

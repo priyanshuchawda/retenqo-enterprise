@@ -1,30 +1,58 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const permissions = [
+interface Permission {
+  name: string;
+  purpose: string;
+  control: string;
+}
+
+const permissions: readonly Permission[] = [
   {
-    name: 'Notification Access (Optional)',
+    name: 'Accessibility Service (Optional)',
     purpose:
-      'Allows Retenqo to capture notifications only from apps you explicitly enable.',
+      'Reads notification text from apps you explicitly allow, using Android\'s Accessibility Service API. Retenqo captures only the notification text snapshot — it does not observe keystrokes, passwords, or any other screen content.',
     control:
-      'You can exclude sensitive apps or pause capture anytime in settings.',
+      'Disabled by default. You grant it in Android Accessibility Settings and can revoke it at any time. You control which apps are included.',
+  },
+  {
+    name: 'Screen Capture via MediaProjection (Optional)',
+    purpose:
+      'Powers the screenshot-understanding feature. When you explicitly initiate a capture, Android shows a one-time system consent dialog before any screen content is read.',
+    control:
+      'Requires explicit user consent on every session. Never runs in the background silently.',
   },
   {
     name: 'Microphone (Optional)',
-    purpose: 'Used only when you tap to record a voice-to-memory note.',
+    purpose:
+      'Used only when you tap the voice-note button to record a voice-to-memory. Transcription happens on-device.',
     control:
-      'Never records in the background; only active on explicit user action.',
+      'Never records in the background. Standard Android microphone permission; can be revoked in app settings.',
   },
   {
     name: 'Storage / Media (Optional)',
     purpose:
-      'Allows importing screenshots for on-device OCR and exporting/restoring encrypted backups.',
-    control: 'Scoped to user-selected files and backups.',
+      'Allows importing screenshots from your gallery for on-device OCR, and exporting or restoring encrypted backup files.',
+    control: 'Scoped to user-selected files only. No broad storage access.',
+  },
+  {
+    name: 'Internet Access',
+    purpose:
+      'Used only when you explicitly choose to download an on-device AI model or check for app updates. No personal data is ever uploaded.',
+    control:
+      'Network access does not run automatically. No background telemetry or tracking.',
   },
   {
     name: 'Post Notifications',
-    purpose: 'Delivers local reminders for your tracked commitments.',
-    control: 'Can be disabled in Android app settings.',
+    purpose:
+      'Delivers local commitment reminders created from your tracked memories. All notifications are generated on-device.',
+    control: 'Can be disabled in Android system notification settings.',
+  },
+  {
+    name: 'Schedule Exact Alarms',
+    purpose:
+      'Ensures reminder notifications fire at the exact time you scheduled them, even when the device is in a low-power state.',
+    control: 'Only used for user-created reminders. No background tracking.',
   },
 ];
 ---

@@ -1,152 +1,72 @@
 ---
 import { SITE_CONFIG } from '../../config/site';
 
-const currentYear = new Date().getFullYear();
+const year = new Date().getFullYear();
+const links = [
+  { heading: 'Product', items: [
+    { label: 'Features', href: '/features' },
+    { label: 'How It Works', href: '/how-it-works' },
+    { label: 'Download', href: '/download' },
+    { label: 'Installation', href: '/installation' },
+    { label: 'FAQ', href: '/faq' },
+  ]},
+  { heading: 'Trust', items: [
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Security', href: '/security' },
+    { label: 'Android Permissions', href: '/permissions' },
+    { label: 'Accessibility', href: '/accessibility' },
+  ]},
+  { heading: 'Open Source', items: [
+    { label: 'GitHub Repository', href: SITE_CONFIG.appRepoUrl, external: true },
+    { label: 'GitHub Releases', href: SITE_CONFIG.appReleasesUrl, external: true },
+    { label: 'Website Source', href: SITE_CONFIG.webRepoUrl, external: true },
+    { label: 'Support & Bugs', href: '/support' },
+  ]},
+];
 ---
 
-<footer class="border-t border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
-  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+<footer class="border-t" style="border-color: var(--border-subtle); background: var(--bg-secondary);">
+  <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Brand -->
       <div>
-        <a
-          href="/"
-          class="flex items-center gap-2 text-base font-bold text-[var(--text-primary)]"
-        >
-          <img
-            src="/favicon.svg"
-            alt=""
-            width="24"
-            height="24"
-            class="h-6 w-6 rounded"
-          />
-          <span>{SITE_CONFIG.name}</span>
+        <a href="/" class="flex items-center gap-2 text-base font-bold" style="color: var(--text-primary);">
+          <img src="/favicon.svg" alt="" width="26" height="26" class="h-[26px] w-[26px] rounded-lg"/>
+          <span>retenqo<span style="color: var(--accent-primary);">.</span></span>
         </a>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-          Private, on-device AI personal memory assistant for Android. No
-          tracking cookies, no cloud AI lock-in.
+        <p class="mt-3 text-sm leading-relaxed" style="color: var(--text-secondary);">
+          Private, on-device AI memory assistant for Android. No tracking cookies. No cloud lock-in. Apache 2.0.
         </p>
+        <a href={SITE_CONFIG.appReleasesUrl} target="_blank" rel="noopener noreferrer"
+           class="mt-4 inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors hover:opacity-80"
+           style="border-color: var(--border-subtle); background: var(--bg-tertiary); color: var(--text-primary);">
+          ⬇ Download APK
+        </a>
       </div>
 
-      <div>
-        <h2 class="text-sm font-semibold text-[var(--text-primary)]">
-          Product
-        </h2>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li>
-            <a
-              href="/features"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Features</a>
-          </li>
-          <li>
-            <a
-              href="/how-it-works"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >How It Works</a>
-          </li>
-          <li>
-            <a
-              href="/download"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Download APK</a>
-          </li>
-          <li>
-            <a
-              href="/installation"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Installation Guide</a>
-          </li>
-          <li>
-            <a
-              href="/faq"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >FAQ</a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h2 class="text-sm font-semibold text-[var(--text-primary)]">
-          Trust &amp; Security
-        </h2>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li>
-            <a
-              href="/privacy"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Privacy Policy</a>
-          </li>
-          <li>
-            <a
-              href="/security"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Security Architecture</a>
-          </li>
-          <li>
-            <a
-              href="/permissions"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Android Permissions</a>
-          </li>
-          <li>
-            <a
-              href="/accessibility"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Accessibility</a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h2 class="text-sm font-semibold text-[var(--text-primary)]">
-          Open Source
-        </h2>
-        <ul class="mt-3 space-y-2 text-sm">
-          <li>
-            <a
-              href={SITE_CONFIG.appRepoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            >
-              Android App Repository
-            </a>
-          </li>
-          <li>
-            <a
-              href={SITE_CONFIG.appReleasesUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            >
-              Official GitHub Releases
-            </a>
-          </li>
-          <li>
-            <a
-              href={SITE_CONFIG.webRepoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            >
-              Website Source
-            </a>
-          </li>
-          <li>
-            <a
-              href="/support"
-              class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-              >Support &amp; Bugs</a>
-          </li>
-        </ul>
-      </div>
+      {links.map(({ heading, items }) => (
+        <div>
+          <h2 class="text-xs font-bold tracking-widest uppercase" style="color: var(--text-primary);">{heading}</h2>
+          <ul class="mt-4 space-y-2.5" role="list">
+            {items.map(({ label, href, external }) => (
+              <li>
+                <a href={href}
+                   {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+                   class="text-sm transition-colors hover:opacity-90"
+                   style="color: var(--text-secondary);">
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
 
-    <div
-      class="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[var(--border-subtle)] pt-6 text-xs text-[var(--text-muted)] sm:flex-row sm:items-center"
-    >
-      <p>&copy; {currentYear} Retenqo. Built with privacy-first engineering.</p>
-      <p>Static distribution &middot; Zero tracking cookies</p>
+    <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t pt-6 text-xs sm:flex-row sm:items-center"
+         style="border-color: var(--border-subtle); color: var(--text-muted);">
+      <p>&copy; {year} Retenqo. Privacy-first engineering.</p>
+      <p>Static site · Zero tracking · Apache 2.0</p>
     </div>
   </div>
 </footer>

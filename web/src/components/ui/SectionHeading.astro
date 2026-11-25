@@ -1,0 +1,28 @@
+---
+export interface Props {
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  align?: 'left' | 'center';
+}
+const { eyebrow, heading, subheading, align = 'left' } = Astro.props;
+const centered = align === 'center';
+---
+
+<div class={centered ? 'text-center' : ''}>
+  {eyebrow && (
+    <p class={`mb-3 text-xs font-bold tracking-widest uppercase ${centered ? '' : ''}`}
+       style="color: var(--accent-primary);">
+      {eyebrow}
+    </p>
+  )}
+  <h2 class="text-3xl font-bold tracking-tight sm:text-4xl" style="color: var(--text-primary);">
+    {heading}
+  </h2>
+  {subheading && (
+    <p class={`mt-4 text-base leading-relaxed sm:text-lg ${centered ? 'mx-auto max-w-2xl' : 'max-w-2xl'}`}
+       style="color: var(--text-secondary);">
+      {subheading}
+    </p>
+  )}
+</div>

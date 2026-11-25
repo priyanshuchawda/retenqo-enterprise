@@ -5,13 +5,13 @@ export interface NavItem {
 
 export const SITE_CONFIG = {
   name: 'Retenqo',
-  tagline: 'Remember what matters. Privately.',
+  tagline: 'Your life. Your memories. Your intelligence.',
   description:
-    'Retenqo is a private, on-device AI personal memory assistant for Android. Capture important information, track commitments, and retrieve memories offline.',
+    'Retenqo is a private, on-device AI personal memory assistant for Android. Capture important information, track commitments, and retrieve memories locally.',
   url: 'https://retenqo.pages.dev',
   appRepoUrl: 'https://github.com/priyanshuchawda/retenqo-enterprise',
-  appReleasesUrl:
-    'https://github.com/priyanshuchawda/retenqo-enterprise/releases',
+  appReleasesUrl: 'https://github.com/priyanshuchawda/retenqo-enterprise/releases',
+  issuesUrl: 'https://github.com/priyanshuchawda/retenqo-enterprise/issues',
   webRepoUrl: 'https://github.com/priyanshuchawda/retenqo-enterprise/tree/main/web',
   contactEmail: 'priyanshuchawda20@gmail.com',
   nav: [

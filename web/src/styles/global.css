@@ -1,73 +1,114 @@
 @import 'tailwindcss';
 
+/* ─── Design Tokens ───────────────────────────────────────────────────── */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  /* Light theme – Clean Intelligence */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #64748b;
-  --border-subtle: #e2e8f0;
+  --border-subtle: #dce4ed;
   --accent-primary: #0369a1;
   --accent-hover: #075985;
   --accent-soft: #e0f2fe;
+  --accent-secondary: #047857;
+  --accent-secondary-soft: #d1fae5;
+  /* Buttons – light theme: dark enough for ≥ 4.5:1 on white text */
   --btn-primary-bg: #0369a1;
   --btn-primary-hover: #075985;
   --btn-primary-text: #ffffff;
+  /* Glow */
+  --glow-blue: rgba(3, 105, 161, 0.12);
+  --glow-teal: rgba(4, 120, 87, 0.08);
+  /* Status */
   --status-success: #059669;
   --status-warning: #d97706;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg-primary: #0b1120;
-    --bg-secondary: #111827;
-    --bg-tertiary: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --text-muted: #94a3b8;
-    --border-subtle: #1e293b;
-    --accent-primary: #38bdf8;
-    --accent-hover: #7dd3fc;
-    --accent-soft: #0c4a6e;
-    --btn-primary-bg: #38bdf8;
-    --btn-primary-hover: #7dd3fc;
-    --btn-primary-text: #0b1120;
+    /* Dark theme – Midnight Intelligence */
+    --bg-primary: #080d16;
+    --bg-secondary: #111a29;
+    --bg-tertiary: #1a2640;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-subtle: #233249;
+    --accent-primary: #67d8ff;
+    --accent-hover: #a5e8ff;
+    --accent-soft: #0c3a52;
+    --accent-secondary: #5ee8bd;
+    --accent-secondary-soft: #0a3028;
+    /* Buttons – dark theme: dark text on ice-blue ≥ 4.5:1 */
+    --btn-primary-bg: #67d8ff;
+    --btn-primary-hover: #a5e8ff;
+    --btn-primary-text: #080d16;
+    --glow-blue: rgba(103, 216, 255, 0.10);
+    --glow-teal: rgba(94, 232, 189, 0.08);
     --status-success: #34d399;
     --status-warning: #fbbf24;
   }
 }
 
+/* ─── Typography ──────────────────────────────────────────────────────── */
 html {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    sans-serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
   background-color: var(--bg-primary);
   color: var(--text-primary);
   scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
 
+/* ─── Focus ───────────────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Scrollbar (subtle) ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+
+/* ─── Selection ──────────────────────────────────────────────────────── */
+::selection { background: var(--accent-soft); color: var(--text-primary); }
+
+/* ─── Utilities ──────────────────────────────────────────────────────── */
+.glow-bg-blue {
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, var(--glow-blue), transparent 70%);
+}
+.glow-bg-teal {
+  background: radial-gradient(ellipse 50% 30% at 50% 100%, var(--glow-teal), transparent 70%);
+}
+.grid-texture {
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+.card-hover {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-hover:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary), 0 8px 32px var(--glow-blue);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-hover:hover { transform: none; }
 }

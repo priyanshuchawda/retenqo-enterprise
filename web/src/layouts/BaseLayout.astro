@@ -18,10 +18,9 @@ const {
   noindex = false,
 } = Astro.props;
 
-const fullTitle =
-  title === SITE_CONFIG.name
-    ? `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`
-    : `${title} | ${SITE_CONFIG.name}`;
+const fullTitle = title === SITE_CONFIG.name
+  ? `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`
+  : `${title} | ${SITE_CONFIG.name}`;
 const canonicalUrl = new URL(canonicalPath, SITE_CONFIG.url).toString();
 ---
 
@@ -41,19 +40,15 @@ const canonicalUrl = new URL(canonicalPath, SITE_CONFIG.url).toString();
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content={SITE_CONFIG.name} />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <slot name="head" />
   </head>
-  <body
-    class="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] antialiased selection:bg-[var(--accent-soft)] selection:text-[var(--text-primary)]"
-  >
-    <a
-      href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-[var(--accent-primary)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
-    >
+  <body class="flex min-h-screen flex-col antialiased" style="background: var(--bg-primary); color: var(--text-primary);">
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
+       style="background: var(--btn-primary-bg); color: var(--btn-primary-text);">
       Skip to main content
     </a>
 

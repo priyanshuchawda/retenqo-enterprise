@@ -1,0 +1,38 @@
+---
+import Button from '../ui/Button.astro';
+import { SITE_CONFIG } from '../../config/site';
+---
+
+<section class="relative overflow-hidden py-20 sm:py-28" style="background: var(--bg-secondary);">
+  <div class="pointer-events-none absolute inset-0 glow-bg-blue" aria-hidden="true"></div>
+  <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6">
+    <!-- Memory network SVG -->
+    <div class="mx-auto mb-10 w-full max-w-sm opacity-70" aria-hidden="true">
+      <img src="/illustrations/memory-network.svg" alt="" width="480" height="320" class="w-full" loading="lazy"/>
+    </div>
+
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl" style="color: var(--text-primary);">
+      Ready to own your personal memory?
+    </h2>
+    <p class="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg" style="color: var(--text-secondary);">
+      Download the official APK directly from GitHub Releases, verify its SHA-256 checksum, and run everything locally on your Android 13+ device.
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <Button href="/download" variant="primary" size="lg">
+        Download for Android →
+      </Button>
+      <Button href="/privacy" variant="secondary" size="lg">
+        Read Privacy Policy
+      </Button>
+    </div>
+
+    <p class="mt-6 text-xs" style="color: var(--text-muted);">
+      Requires Android 13 (API 33) · arm64-v8a · Apache 2.0 open source ·
+      <a href={SITE_CONFIG.appReleasesUrl} target="_blank" rel="noopener noreferrer"
+         class="underline underline-offset-2 hover:opacity-80" style="color: var(--accent-primary);">
+        Official GitHub Releases
+      </a>
+    </p>
+  </div>
+</section>

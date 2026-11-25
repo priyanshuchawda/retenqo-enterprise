@@ -1,0 +1,85 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+
+export interface Capability {
+  icon: string;
+  title: string;
+  description: string;
+  badge?: string;
+}
+
+export const CAPABILITIES: readonly Capability[] = [
+  {
+    icon: '🔔',
+    title: 'Opt-in Notification Capture',
+    description: 'Choose which apps contribute to your memory and pause capture anytime. Sensitive apps stay excluded by default.',
+  },
+  {
+    icon: '📷',
+    title: 'Screenshot Understanding',
+    description: 'On-device OCR extracts text, dates, and key details from screenshots without sending them to a server.',
+  },
+  {
+    icon: '🎙️',
+    title: 'Voice-to-Memory',
+    description: 'Record a voice note and convert it into a structured, searchable memory — transcribed locally.',
+  },
+  {
+    icon: '🧠',
+    title: 'Local AI Assistant',
+    description: 'Ask natural questions and get answers generated entirely on your Android device, offline.',
+  },
+  {
+    icon: '🔗',
+    title: 'Source-Referenced Answers',
+    description: 'AI answers reference the specific memory they were derived from, so you can review the original context.',
+  },
+  {
+    icon: '✅',
+    title: 'Commitment Tracking',
+    description: 'Automatically surface upcoming deadlines and turn confirmed commitments into smart local reminders.',
+  },
+  {
+    icon: '🔑',
+    title: 'Encrypted Backup Exports',
+    description: 'Export and restore your memory database with password-protected encryption. Your backup key stays with you.',
+  },
+  {
+    icon: '🛡️',
+    title: 'Granular Privacy Controls',
+    description: 'Inspect, edit, or delete any stored memory at any time. Use secure deletion and full local wipe when needed.',
+  },
+  {
+    icon: '📴',
+    title: 'Offline-First Processing',
+    description: 'Core capture, local search, and AI inference work without an internet connection.',
+  },
+];
+---
+
+<section class="py-20 sm:py-28" style="background: var(--bg-primary);">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <SectionHeading
+        eyebrow="Capabilities"
+        heading="Built for private, reliable recall."
+        subheading="Every feature is built around user consent and offline reliability."
+      />
+      <a href="/features" class="shrink-0 text-sm font-semibold transition-colors hover:opacity-80"
+         style="color: var(--accent-primary);">
+        All features →
+      </a>
+    </div>
+
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {CAPABILITIES.map((cap) => (
+        <article class="card-hover rounded-2xl border p-6"
+                 style="border-color: var(--border-subtle); background: var(--bg-secondary);">
+          <span class="text-2xl" aria-hidden="true">{cap.icon}</span>
+          <h3 class="mt-4 text-base font-semibold" style="color: var(--text-primary);">{cap.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed" style="color: var(--text-secondary);">{cap.description}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
